@@ -338,7 +338,7 @@ body {
 }
 
 .hero-title {
-    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    font-size: clamp(2rem, 5vw, 4.5rem);
     font-weight: 700;
     margin-bottom: var(--spacing-md);
     letter-spacing: -1px;
@@ -1208,7 +1208,7 @@ body {
     }
 
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.6rem;
         letter-spacing: -0.5px;
     }
     
