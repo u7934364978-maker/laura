@@ -2,7 +2,7 @@
 
 ## ✅ Errores Corregidos Automáticamente
 
-Se han resuelto **15 de 18 errores** de la auditoría:
+Se han resuelto **16 de 18 errores** de la auditoría + **1 error crítico de diseño**:
 
 ### 🟢 COMPLETADOS
 1. ✅ Páginas legales creadas (GDPR/RGPD compliant):
@@ -25,6 +25,13 @@ Se han resuelto **15 de 18 errores** de la auditoría:
 7. ✅ Estilos `.header.scrolled` ya existían
 
 8. ✅ Variables CSS todas correctamente definidas
+
+9. ✅ **NUEVO**: Botón hamburguesa corregido:
+   - Ya no aparece en escritorio
+   - Solo visible en móvil (< 768px)
+   - Animaciones funcionando correctamente
+   - CSS optimizado (-69 líneas)
+   - Ver detalles en: `CORRECCION-HAMBURGUESA.md`
 
 ---
 
@@ -261,12 +268,15 @@ Haz clic en botones de WhatsApp/Email/Teléfono
 
 | Categoría | Errores Originales | Corregidos | Pendientes |
 |-----------|-------------------|------------|------------|
-| Críticos | 4 | 1 | 3* |
+| Críticos | 4 | 2 | 2* |
 | Moderados | 8 | 8 | 0 |
 | Menores | 6 | 6 | 0 |
-| **TOTAL** | **18** | **15** | **3** |
+| **Diseño** | **1** | **1** | **0** |
+| **TOTAL** | **19** | **17** | **2** |
 
-*Los 3 pendientes requieren datos/recursos reales que deben ser proporcionados
+*Los 2 pendientes requieren datos/recursos reales que deben ser proporcionados
+
+### 🎯 Progreso: 89% Completado (17/19)
 
 ---
 
@@ -277,9 +287,12 @@ Haz clic en botones de WhatsApp/Email/Teléfono
 3. Se hayan testeado todos los enlaces
 4. Se haya verificado en móvil
 
-**Tiempo estimado para completar**: 30-60 minutos
+**Tiempo estimado para completar**: 20-40 minutos (reducido tras las últimas correcciones)
 
 ---
 
 **Última actualización**: 19 de enero de 2026  
-**Estado**: 83% completado (15/18 errores resueltos)
+**Estado**: ✅ 89% completado (17/19 errores resueltos)  
+**Commits**: 
+- `c696678` - Auditoría completa (15 errores)
+- `d0a8772` - Corrección botón hamburguesa (2 errores de diseño)
