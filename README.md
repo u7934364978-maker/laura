@@ -10,14 +10,54 @@
 
 ## ✨ Características
 
-- **Diseño Responsive**: Optimizado para todos los dispositivos (móvil, tablet, desktop)
-- **SEO Optimizado**: Configurado para máxima visibilidad en buscadores
-- **Performance**: Carga rápida y optimizada
-- **Programas de Entrenamiento**: 3 niveles diferentes adaptados a cada atleta
-- **Sección de Testimonios**: Historias reales de atletas
-- **📧 Formulario de Contacto Completo**: Sistema integrado con base de datos externa
-- **Gestión de Clientes**: Almacenamiento automático en Formspree o Google Sheets
-- **Animaciones Suaves**: Experiencia de usuario fluida y profesional
+- **🎨 Diseño UX Mejorado**: Experiencia de usuario intuitiva y visualmente agradable
+- **📱 Diseño Responsive**: Optimizado para todos los dispositivos (móvil, tablet, desktop)
+- **⚡ Performance Optimizada**: Carga rápida con animaciones fluidas
+- **🎭 Microinteracciones**: Feedback visual en cada interacción del usuario
+- **♿ Accesibilidad WCAG 2.1**: Navegación por teclado y lectores de pantalla
+- **📧 Formulario Inteligente**: Validación en tiempo real con iconos visuales
+- **🎯 Animaciones Suaves**: Transiciones CSS y JavaScript optimizadas
+- **🔄 Loading States**: Estados de carga claros en formularios y botones
+- **💾 Gestión de Clientes**: Almacenamiento automático en Formspree o Google Sheets
+- **🎨 Paleta Turquesa**: Colores modernos y profesionales
+- **🏷️ Badges de Credibilidad**: ROPEC, 50+ alumnos, contenido exclusivo
+- **📊 SEO Optimizado**: Configurado para máxima visibilidad en buscadores
+
+## 🎯 Mejoras de UX Implementadas
+
+### 🖱️ Interactividad
+- **Efectos Ripple**: Animación de onda en botones al hacer clic
+- **Hover States**: Respuesta visual inmediata en todos los elementos interactivos
+- **Scroll Suave**: Navegación fluida entre secciones
+- **Header Dinámico**: Se oculta/muestra automáticamente al hacer scroll
+
+### ✅ Formulario de Contacto
+- **Validación en Tiempo Real**: Feedback instantáneo mientras escribes
+- **Iconos de Validación**: Checkmarks verdes y X rojas
+- **Contador de Caracteres**: Para el campo de mensaje
+- **Estado de Carga**: Spinner animado al enviar
+- **Efecto Confetti**: Celebración al enviar con éxito
+- **Mensajes Animados**: Éxito y error con animaciones
+
+### 🎨 Animaciones
+- **Parallax Sutil**: Imagen del hero con zoom suave
+- **Fade In Up**: Secciones aparecen al hacer scroll
+- **Badge Bounce**: Los badges rebotan sutilmente
+- **Button Pulse**: El botón principal pulsa para llamar la atención
+- **Smooth Transitions**: Todas las transiciones son fluidas (cubic-bezier)
+
+### ♿ Accesibilidad
+- **Navegación por Teclado**: Tab, Enter, Escape funcionan correctamente
+- **Focus Visible**: Borde claro en elementos enfocados
+- **ARIA Labels**: Etiquetas para lectores de pantalla
+- **Contraste WCAG 2.1**: Todos los textos cumplen nivel AA
+- **Skip Links**: Saltar al contenido principal
+
+### 📱 Responsive
+- **Mobile First**: Diseñado primero para móvil
+- **Touch Friendly**: Botones grandes y espaciados
+- **Viewport Optimizado**: Funciona en pantallas desde 320px
+- **Imágenes Adaptativas**: Se ajustan al tamaño de pantalla
 
 ## 🚀 Tecnologías
 

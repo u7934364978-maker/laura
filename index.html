@@ -66,47 +66,65 @@
 </head>
 <body>
     <!-- Header with Navigation -->
-    <header class="header">
+    <header class="header" id="mainHeader">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
                     <a href="/" aria-label="Wild Fitness - Inici">
+                        <span class="logo-icon">🏔️</span>
                         <span class="logo-text">WILD FITNESS</span>
                     </a>
                 </div>
                 
                 <nav class="nav" id="mainNav" aria-label="Navegació principal">
                     <ul class="nav-list">
+                        <li><a href="#inici" class="nav-link">Inici</a></li>
+                        <li><a href="#beneficis" class="nav-link">Beneficis</a></li>
                         <li><a href="#horaris" class="nav-link">Horaris</a></li>
-                        <li><a href="#entrenament" class="nav-link">Entrenament</a></li>
                         <li><a href="#preus" class="nav-link">Preus</a></li>
                         <li><a href="blog.html" class="nav-link">Blog</a></li>
-                        <li><a href="#contacte" class="nav-link nav-cta">Contacta</a></li>
+                        <li><a href="#contacte" class="nav-link nav-cta">
+                            <span class="cta-text">Prova Gratuïta</span>
+                            <span class="cta-arrow">→</span>
+                        </a></li>
                     </ul>
                     <button class="nav-toggle" id="navToggle" aria-label="Menú de navegació" aria-expanded="false">
+                        <span class="hamburger"></span>
+                        <span class="hamburger"></span>
                         <span class="hamburger"></span>
                     </button>
                 </nav>
             </div>
         </div>
+        <!-- Progress Bar -->
+        <div class="scroll-progress" id="scrollProgress"></div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="inici">
         <div class="hero-image">
             <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=80" alt="Trail running a la muntanya" loading="eager">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
-            <h1 class="hero-title">Entrena fort per moure't segur a la muntanya</h1>
-            <p class="hero-subtitle">Guia de muntanya i entrenadora personal.<br>Força funcional, trail i sortides guiades a BCN i Girona.</p>
+            <div class="hero-text-wrapper fade-in-up">
+                <h1 class="hero-title">Entrena fort per moure't segur a la muntanya</h1>
+                <p class="hero-subtitle">Guia de muntanya i entrenadora personal.<br>Força funcional, trail i sortides guiades a BCN i Girona.</p>
+            </div>
             
-            <div class="hero-actions">
-                <a href="#contacte" class="btn-primary">🎁 Prova Gratuïta</a>
-                <a href="https://wa.me/34600000000" class="btn-whatsapp" rel="noopener">💬 WhatsApp</a>
+            <div class="hero-actions fade-in-up delay-1">
+                <a href="#contacte" class="btn-primary pulse-animation">
+                    <span class="btn-icon">🎁</span>
+                    <span class="btn-text">Prova Gratuïta</span>
+                    <span class="btn-shine"></span>
+                </a>
+                <a href="https://wa.me/34600000000" class="btn-whatsapp" rel="noopener">
+                    <span class="btn-icon">💬</span>
+                    <span class="btn-text">WhatsApp</span>
+                </a>
             </div>
 
-            <div class="hero-badges">
+            <div class="hero-badges fade-in-up delay-2">
                 <div class="badge badge-certification">
                     <span class="badge-icon">⛰️</span>
                     <span class="badge-text">ROPEC 062645 Entrenadora</span>
@@ -119,6 +137,69 @@
                     <span class="badge-icon">🎥</span>
                     <span class="badge-text">Contingut exclusiu</span>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <span class="scroll-text">Descobreix més</span>
+            <span class="scroll-arrow">↓</span>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="beneficis">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Per què Wild Fitness?</span>
+                <h2 class="section-title">Entrenem per a la Muntanya</h2>
+                <p class="section-description">Força, resistència i tècnica per gaudir de la muntanya amb seguretat</p>
+            </div>
+
+            <div class="benefits-grid">
+                <article class="benefit-card card-1">
+                    <div class="benefit-icon">💪</div>
+                    <h3 class="benefit-title">Força Funcional</h3>
+                    <p class="benefit-description">Entrenament específic per millorar la teva potència en pujades i baixades tècniques.</p>
+                    <ul class="benefit-list">
+                        <li>✓ Pujades més potents</li>
+                        <li>✓ Baixades controlades</li>
+                        <li>✓ Menys lesions</li>
+                    </ul>
+                </article>
+
+                <article class="benefit-card card-2">
+                    <div class="benefit-icon">🏃</div>
+                    <h3 class="benefit-title">Tècnica Trail</h3>
+                    <p class="benefit-description">Millora la teva eficiència en terreny tècnic amb exercicis especialitzats.</p>
+                    <ul class="benefit-list">
+                        <li>✓ Tècnica de carrera</li>
+                        <li>✓ Equilibri i agilitat</li>
+                        <li>✓ Adaptació al terreny</li>
+                    </ul>
+                </article>
+
+                <article class="benefit-card card-3">
+                    <div class="benefit-icon">⛰️</div>
+                    <h3 class="benefit-title">Sortides Guiades</h3>
+                    <p class="benefit-description">Descobreix les millors rutes de muntanya amb seguretat i en grup.</p>
+                    <ul class="benefit-list">
+                        <li>✓ Rutes per tot nivell</li>
+                        <li>✓ Seguretat garantida</li>
+                        <li>✓ Ambient motivador</li>
+                    </ul>
+                </article>
+
+                <article class="benefit-card card-4">
+                    <div class="benefit-icon">👥</div>
+                    <h3 class="benefit-title">Grup Reduït</h3>
+                    <p class="benefit-description">Màxim 12 persones per sessió per atenció personalitzada.</p>
+                    <ul class="benefit-list">
+                        <li>✓ Atenció individual</li>
+                        <li>✓ Progressió personalitzada</li>
+                        <li>✓ Ambient familiar</li>
+                    </ul>
+                </article>
             </div>
         </div>
     </section>
@@ -191,13 +272,34 @@
 
             <!-- Pricing -->
             <div class="pricing" id="preus">
-                <div class="pricing-highlight">
-                    <span class="pricing-label">Primera sessió GRATUÏTA</span>
-                    <span class="pricing-note">Prova sense compromís</span>
-                </div>
-                <div class="pricing-main">
-                    <span class="pricing-amount">35€/mes</span>
-                    <span class="pricing-details">2 sessions setmanals</span>
+                <div class="pricing-card">
+                    <div class="pricing-badge">
+                        <span class="badge-star">⭐</span>
+                        <span class="badge-label">Oferta de Llançament</span>
+                    </div>
+                    <div class="pricing-header">
+                        <div class="pricing-highlight">
+                            <span class="pricing-label">Primera sessió GRATUÏTA</span>
+                            <span class="pricing-note">Prova sense compromís</span>
+                        </div>
+                        <div class="pricing-main">
+                            <span class="pricing-currency">€</span>
+                            <span class="pricing-amount">35</span>
+                            <span class="pricing-period">/mes</span>
+                        </div>
+                        <span class="pricing-details">2 sessions setmanals · Grup reduït</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> Primera classe gratuïta</li>
+                        <li><span class="check-icon">✓</span> 8 sessions al mes</li>
+                        <li><span class="check-icon">✓</span> Màxim 12 persones</li>
+                        <li><span class="check-icon">✓</span> Progressió personalitzada</li>
+                        <li><span class="check-icon">✓</span> Material inclòs</li>
+                    </ul>
+                    <a href="#contacte" class="pricing-cta">
+                        <span>Reserva la Teva Plaça</span>
+                        <span class="cta-arrow">→</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -301,46 +403,99 @@
                 </div>
 
                 <div class="contact-form-side">
-                    <h3>Envia'ns un missatge</h3>
-                    <p>Omple el formulari i et respondrem en menys de 24h</p>
+                    <div class="form-header">
+                        <div class="form-icon">✉️</div>
+                        <h3>Envia'ns un missatge</h3>
+                        <p>Omple el formulari i et respondrem en menys de 24h</p>
+                    </div>
                     
-                    <form id="contactForm" class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                    <form id="contactForm" class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
                         <div class="form-group">
-                            <label for="name">Nom complet *</label>
-                            <input type="text" id="name" name="name" required placeholder="El teu nom">
+                            <label for="name">
+                                <span class="label-text">Nom complet</span>
+                                <span class="label-required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">👤</span>
+                                <input type="text" id="name" name="name" required placeholder="El teu nom" autocomplete="name">
+                                <span class="input-focus-border"></span>
+                            </div>
+                            <span class="form-error" id="name-error"></span>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required placeholder="el.teu.email@exemple.com">
+                            <label for="email">
+                                <span class="label-text">Email</span>
+                                <span class="label-required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">📧</span>
+                                <input type="email" id="email" name="email" required placeholder="el.teu.email@exemple.com" autocomplete="email">
+                                <span class="input-focus-border"></span>
+                            </div>
+                            <span class="form-error" id="email-error"></span>
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">Telèfon</label>
-                            <input type="tel" id="phone" name="phone" placeholder="+34 600 000 000">
+                            <label for="phone">
+                                <span class="label-text">Telèfon</span>
+                                <span class="label-optional">(opcional)</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">📱</span>
+                                <input type="tel" id="phone" name="phone" placeholder="+34 600 000 000" autocomplete="tel">
+                                <span class="input-focus-border"></span>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="level">Nivell d'experiència</label>
-                            <select id="level" name="level">
-                                <option value="">Selecciona el teu nivell</option>
-                                <option value="beginner">Principiant - Primera vegada</option>
-                                <option value="intermediate">Intermedi - Tinc experiència</option>
-                                <option value="advanced">Avançat - Trail runner</option>
-                            </select>
+                            <label for="level">
+                                <span class="label-text">Nivell d'experiència</span>
+                            </label>
+                            <div class="input-wrapper select-wrapper">
+                                <span class="input-icon">🎯</span>
+                                <select id="level" name="level">
+                                    <option value="">Selecciona el teu nivell</option>
+                                    <option value="beginner">🌱 Principiant - Primera vegada</option>
+                                    <option value="intermediate">🚀 Intermedi - Tinc experiència</option>
+                                    <option value="advanced">⭐ Avançat - Trail runner</option>
+                                </select>
+                                <span class="select-arrow">▼</span>
+                                <span class="input-focus-border"></span>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="message">Missatge *</label>
-                            <textarea id="message" name="message" required rows="5" placeholder="Explica'ns els teus objectius..."></textarea>
+                            <label for="message">
+                                <span class="label-text">Missatge</span>
+                                <span class="label-required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <textarea id="message" name="message" required rows="5" placeholder="Explica'ns els teus objectius, experiència prèvia, disponibilitat..."></textarea>
+                                <span class="input-focus-border"></span>
+                            </div>
+                            <span class="form-error" id="message-error"></span>
+                            <span class="char-counter"><span id="charCount">0</span>/500</span>
                         </div>
 
                         <div class="form-group form-checkbox">
                             <input type="checkbox" id="privacy" name="privacy" required>
-                            <label for="privacy">Accepto la <a href="/politica-privacitat.html" target="_blank">política de privacitat</a> *</label>
+                            <label for="privacy">
+                                <span class="checkbox-custom">
+                                    <span class="checkbox-check">✓</span>
+                                </span>
+                                <span class="checkbox-label">Accepto la <a href="/politica-privacitat.html" target="_blank">política de privacitat</a></span>
+                                <span class="label-required">*</span>
+                            </label>
                         </div>
 
-                        <button type="submit" class="btn-submit">Enviar missatge</button>
+                        <button type="submit" class="btn-submit">
+                            <span class="btn-text">Enviar missatge</span>
+                            <span class="btn-loading">
+                                <span class="spinner"></span>
+                            </span>
+                            <span class="btn-icon">✓</span>
+                        </button>
                         
                         <div id="formStatus" class="form-status"></div>
                     </form>
