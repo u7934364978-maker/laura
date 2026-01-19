@@ -42,6 +42,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Schema.org Structured Data -->
@@ -125,7 +126,16 @@
     <!-- Hero Section -->
     <section class="hero" id="inici">
         <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=80" alt="Trail running a la muntanya" loading="eager">
+            <img 
+                src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=80&fm=jpg&fit=crop" 
+                srcset="https://images.unsplash.com/photo-1551632811-561732d1e306?w=640&q=80&fm=jpg&fit=crop 640w,
+                        https://images.unsplash.com/photo-1551632811-561732d1e306?w=1024&q=80&fm=jpg&fit=crop 1024w,
+                        https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=80&fm=jpg&fit=crop 1920w"
+                sizes="100vw"
+                alt="Trail running a la muntanya"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
@@ -428,13 +438,34 @@
     <section class="gallery" aria-label="Galeria d'imatges">
         <div class="gallery-grid">
             <figure class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80" alt="Grup d'entrenament trail running" loading="lazy">
+                <img 
+                    src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80&fm=jpg&fit=crop" 
+                    srcset="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=400&q=80&fm=jpg&fit=crop 400w,
+                            https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80&fm=jpg&fit=crop 800w"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    alt="Grup d'entrenament trail running" 
+                    loading="lazy"
+                    decoding="async">
             </figure>
             <figure class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=80" alt="Runner en sendero de montaña" loading="lazy">
+                <img 
+                    src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=80&fm=jpg&fit=crop" 
+                    srcset="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=400&q=80&fm=jpg&fit=crop 400w,
+                            https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=80&fm=jpg&fit=crop 800w"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    alt="Runner en sendero de montaña" 
+                    loading="lazy"
+                    decoding="async">
             </figure>
             <figure class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80" alt="Entrenament de força funcional" loading="lazy">
+                <img 
+                    src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80&fm=jpg&fit=crop" 
+                    srcset="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=400&q=80&fm=jpg&fit=crop 400w,
+                            https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80&fm=jpg&fit=crop 800w"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    alt="Entrenament de força funcional" 
+                    loading="lazy"
+                    decoding="async">
             </figure>
         </div>
     </section>
@@ -450,7 +481,14 @@
             <div class="blog-grid">
                 <article class="blog-card">
                     <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Trail running als Pirineus Catalans" loading="lazy">
+                        <img 
+                            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80&fm=jpg&fit=crop" 
+                            srcset="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80&fm=jpg&fit=crop 400w,
+                                    https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80&fm=jpg&fit=crop 600w"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            alt="Trail running als Pirineus Catalans" 
+                            loading="lazy"
+                            decoding="async">
                     </div>
                     <div class="blog-content">
                         <span class="blog-category">Rutes ⭐ NOU</span>
@@ -462,7 +500,14 @@
                 
                 <article class="blog-card">
                     <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Preparació per trail running" loading="lazy">
+                        <img 
+                            src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80&fm=jpg&fit=crop" 
+                            srcset="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80&fm=jpg&fit=crop 400w,
+                                    https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80&fm=jpg&fit=crop 600w"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            alt="Preparació per trail running" 
+                            loading="lazy"
+                            decoding="async">
                     </div>
                     <div class="blog-content">
                         <span class="blog-category">Entrenament</span>
@@ -474,7 +519,14 @@
                 
                 <article class="blog-card">
                     <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&q=80" alt="Nutrició per runners" loading="lazy">
+                        <img 
+                            src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&q=80&fm=jpg&fit=crop" 
+                            srcset="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=400&q=80&fm=jpg&fit=crop 400w,
+                                    https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&q=80&fm=jpg&fit=crop 600w"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            alt="Nutrició per runners" 
+                            loading="lazy"
+                            decoding="async">
                     </div>
                     <div class="blog-content">
                         <span class="blog-category">Nutrició</span>
