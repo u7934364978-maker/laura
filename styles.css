@@ -282,13 +282,13 @@ body {
    ============================================ */
 .hero {
     position: relative;
-    height: 95vh;
-    min-height: 800px;
+    height: 100vh;
+    min-height: 850px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding-bottom: 120px; /* Espacio para el scroll indicator */
+    padding-bottom: 140px; /* Espacio para el scroll indicator */
 }
 
 .hero-image {
@@ -440,7 +440,8 @@ body {
     gap: var(--spacing-sm);
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
     animation: fadeInUp 1s ease-out 0.8s both;
 }
 
@@ -479,7 +480,7 @@ body {
 /* Scroll indicator */
 .scroll-indicator {
     position: absolute;
-    bottom: 60px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -1200,14 +1201,19 @@ body {
    ============================================ */
 @media (max-width: 768px) {
     .hero {
-        height: 85vh;
-        min-height: 650px;
-        padding-bottom: 100px;
+        height: 100vh;
+        min-height: 700px;
+        padding-bottom: 120px;
     }
 
     .hero-title {
         font-size: 2.2rem;
         letter-spacing: -0.5px;
+    }
+    
+    .hero-quote {
+        font-size: 1rem;
+        margin: var(--spacing-sm) auto;
     }
 
     .hero-subtitle {
@@ -1215,7 +1221,7 @@ body {
     }
     
     .scroll-indicator {
-        bottom: 40px;
+        bottom: 50px;
         padding: 0.75rem 1rem;
     }
     
@@ -1303,8 +1309,12 @@ body {
     }
     
     .hero {
-        min-height: 600px;
-        padding-bottom: 90px;
+        min-height: 650px;
+        padding-bottom: 110px;
+    }
+    
+    .hero-quote {
+        font-size: 0.95rem;
     }
 
     .pricing-amount {
@@ -1316,7 +1326,7 @@ body {
     }
     
     .scroll-indicator {
-        bottom: 30px;
+        bottom: 40px;
         padding: 0.6rem 0.9rem;
     }
     
@@ -2616,12 +2626,14 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .hero-quote {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-style: italic;
-    color: white;
-    margin-bottom: var(--spacing-md);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
+    margin: var(--spacing-md) auto;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    line-height: 1.7;
+    max-width: 700px;
+    font-weight: 300;
 }
 
 .certifications-box {
@@ -3003,7 +3015,8 @@ input[type="checkbox"]:checked + label .checkbox-check {
 
     .hero-quote {
         font-size: 1rem;
-        line-height: 1.5;
+        line-height: 1.6;
+        margin: var(--spacing-sm) auto;
     }
 
     .specialties-grid,
@@ -3806,8 +3819,8 @@ html {
     
     .hero-quote {
         font-size: 0.95rem;
-        line-height: 1.5;
-        margin-bottom: var(--spacing-md);
+        line-height: 1.6;
+        margin: var(--spacing-xs) auto var(--spacing-sm);
     }
     
     .hero-actions {
