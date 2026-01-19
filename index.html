@@ -42,7 +42,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://images.pexels.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Schema.org Structured Data -->
@@ -125,18 +125,21 @@
 
     <!-- Hero Section -->
     <section class="hero" id="inici">
-        <div class="hero-image">
-            <img 
-                src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1920&q=80" 
-                srcset="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=640&q=80 640w,
-                        https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1024&q=80 1024w,
-                        https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1920&q=80 1920w"
-                sizes="100vw"
-                alt="Trail running a la muntanya"
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-                crossorigin="anonymous">
+        <div class="hero-image" style="background: linear-gradient(135deg, #2d7d7d 0%, #3fb5b5 100%);">
+            <picture>
+                <source 
+                    srcset="https://images.pexels.com/photos/2422265/pexels-photo-2422265.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w,
+                            https://images.pexels.com/photos/2422265/pexels-photo-2422265.jpeg?auto=compress&cs=tinysrgb&w=1024 1024w,
+                            https://images.pexels.com/photos/2422265/pexels-photo-2422265.jpeg?auto=compress&cs=tinysrgb&w=640 640w"
+                    sizes="100vw"
+                    type="image/jpeg">
+                <img 
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1920' height='1080'%3E%3Cdefs%3E%3ClinearGradient id='herograd' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%232d7d7d'/%3E%3Cstop offset='100%25' style='stop-color:%233fb5b5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23herograd)' width='1920' height='1080'/%3E%3Ctext fill='white' font-family='Arial,sans-serif' font-size='64' font-weight='bold' x='50%25' y='48%25' text-anchor='middle' opacity='0.95'%3E%F0%9F%8F%94%EF%B8%8F Trail Running%3C/text%3E%3Ctext fill='white' font-family='Arial,sans-serif' font-size='32' x='50%25' y='55%25' text-anchor='middle' opacity='0.8'%3EWild Fitness%3C/text%3E%3C/svg%3E"
+                    alt="Trail running a la muntanya"
+                    loading="eager"
+                    fetchpriority="high"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+            </picture>
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
@@ -438,38 +441,47 @@
     <!-- Gallery Section -->
     <section class="gallery" aria-label="Galeria d'imatges">
         <div class="gallery-grid">
-            <figure class="gallery-item">
-                <img 
-                    src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?auto=format&fit=crop&w=800&q=80" 
-                    srcset="https://images.unsplash.com/photo-1682687982501-1e58ab814714?auto=format&fit=crop&w=400&q=80 400w,
-                            https://images.unsplash.com/photo-1682687982501-1e58ab814714?auto=format&fit=crop&w=800&q=80 800w"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    alt="Grup d'entrenament trail running" 
-                    loading="lazy"
-                    decoding="async"
-                    crossorigin="anonymous">
+            <figure class="gallery-item" style="background: linear-gradient(135deg, #e8f5f5 0%, #d0e8e8 100%);">
+                <picture>
+                    <source 
+                        srcset="https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=800 800w,
+                                https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=400 400w"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        type="image/jpeg">
+                    <img 
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Crect fill='%23e0f2f1' width='800' height='800'/%3E%3Ctext fill='%233fb5b5' font-family='Arial,sans-serif' font-size='96' x='50%25' y='50%25' text-anchor='middle' dy='0.3em'%3E%F0%9F%8F%83%E2%80%8D%E2%99%80%EF%B8%8F%3C/text%3E%3C/svg%3E"
+                        alt="Grup d'entrenament trail running" 
+                        loading="lazy"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                </picture>
             </figure>
-            <figure class="gallery-item">
-                <img 
-                    src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=800&q=80" 
-                    srcset="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=400&q=80 400w,
-                            https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=800&q=80 800w"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    alt="Runner en sendero de montaña" 
-                    loading="lazy"
-                    decoding="async"
-                    crossorigin="anonymous">
+            <figure class="gallery-item" style="background: linear-gradient(135deg, #e8f5f5 0%, #d0e8e8 100%);">
+                <picture>
+                    <source 
+                        srcset="https://images.pexels.com/photos/235990/pexels-photo-235990.jpeg?auto=compress&cs=tinysrgb&w=800 800w,
+                                https://images.pexels.com/photos/235990/pexels-photo-235990.jpeg?auto=compress&cs=tinysrgb&w=400 400w"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        type="image/jpeg">
+                    <img 
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Crect fill='%23e0f2f1' width='800' height='800'/%3E%3Ctext fill='%233fb5b5' font-family='Arial,sans-serif' font-size='96' x='50%25' y='50%25' text-anchor='middle' dy='0.3em'%3E%E2%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E"
+                        alt="Runner en sendero de montaña" 
+                        loading="lazy"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                </picture>
             </figure>
-            <figure class="gallery-item">
-                <img 
-                    src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80" 
-                    srcset="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=400&q=80 400w,
-                            https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80 800w"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    alt="Entrenament de força funcional" 
-                    loading="lazy"
-                    decoding="async"
-                    crossorigin="anonymous">
+            <figure class="gallery-item" style="background: linear-gradient(135deg, #e8f5f5 0%, #d0e8e8 100%);">
+                <picture>
+                    <source 
+                        srcset="https://images.pexels.com/photos/1552249/pexels-photo-1552249.jpeg?auto=compress&cs=tinysrgb&w=800 800w,
+                                https://images.pexels.com/photos/1552249/pexels-photo-1552249.jpeg?auto=compress&cs=tinysrgb&w=400 400w"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        type="image/jpeg">
+                    <img 
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Crect fill='%23e0f2f1' width='800' height='800'/%3E%3Ctext fill='%233fb5b5' font-family='Arial,sans-serif' font-size='96' x='50%25' y='50%25' text-anchor='middle' dy='0.3em'%3E%F0%9F%92%AA%3C/text%3E%3C/svg%3E"
+                        alt="Entrenament de força funcional" 
+                        loading="lazy"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                </picture>
             </figure>
         </div>
     </section>
@@ -484,16 +496,19 @@
             
             <div class="blog-grid">
                 <article class="blog-card">
-                    <div class="blog-image">
-                        <img 
-                            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80" 
-                            srcset="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80 400w,
-                                    https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80 600w"
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                            alt="Trail running als Pirineus Catalans" 
-                            loading="lazy"
-                            decoding="async"
-                            crossorigin="anonymous">
+                    <div class="blog-image" style="background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);">
+                        <picture>
+                            <source 
+                                srcset="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=600 600w,
+                                        https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=400 400w"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                                type="image/jpeg">
+                            <img 
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23f0f0f0' width='600' height='400'/%3E%3Ctext fill='%232d7d7d' font-family='Arial,sans-serif' font-size='72' x='50%25' y='50%25' text-anchor='middle' dy='0.3em'%3E%F0%9F%8F%94%EF%B8%8F%3C/text%3E%3C/svg%3E"
+                                alt="Trail running als Pirineus Catalans" 
+                                loading="lazy"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </picture>
                     </div>
                     <div class="blog-content">
                         <span class="blog-category">Rutes ⭐ NOU</span>
@@ -504,16 +519,19 @@
                 </article>
                 
                 <article class="blog-card">
-                    <div class="blog-image">
-                        <img 
-                            src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=600&q=80" 
-                            srcset="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=400&q=80 400w,
-                                    https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=600&q=80 600w"
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                            alt="Preparació per trail running" 
-                            loading="lazy"
-                            decoding="async"
-                            crossorigin="anonymous">
+                    <div class="blog-image" style="background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);">
+                        <picture>
+                            <source 
+                                srcset="https://images.pexels.com/photos/2422265/pexels-photo-2422265.jpeg?auto=compress&cs=tinysrgb&w=600 600w,
+                                        https://images.pexels.com/photos/2422265/pexels-photo-2422265.jpeg?auto=compress&cs=tinysrgb&w=400 400w"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                                type="image/jpeg">
+                            <img 
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23f0f0f0' width='600' height='400'/%3E%3Ctext fill='%232d7d7d' font-family='Arial,sans-serif' font-size='72' x='50%25' y='50%25' text-anchor='middle' dy='0.3em'%3E%F0%9F%8F%83%3C/text%3E%3C/svg%3E"
+                                alt="Preparació per trail running" 
+                                loading="lazy"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </picture>
                     </div>
                     <div class="blog-content">
                         <span class="blog-category">Entrenament</span>
@@ -524,16 +542,19 @@
                 </article>
                 
                 <article class="blog-card">
-                    <div class="blog-image">
-                        <img 
-                            src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=600&q=80" 
-                            srcset="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=400&q=80 400w,
-                                    https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=600&q=80 600w"
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                            alt="Nutrició per runners" 
-                            loading="lazy"
-                            decoding="async"
-                            crossorigin="anonymous">
+                    <div class="blog-image" style="background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);">
+                        <picture>
+                            <source 
+                                srcset="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600 600w,
+                                        https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400 400w"
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                                type="image/jpeg">
+                            <img 
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23f0f0f0' width='600' height='400'/%3E%3Ctext fill='%232d7d7d' font-family='Arial,sans-serif' font-size='72' x='50%25' y='50%25' text-anchor='middle' dy='0.3em'%3E%F0%9F%A5%97%3C/text%3E%3C/svg%3E"
+                                alt="Nutrició per runners" 
+                                loading="lazy"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </picture>
                     </div>
                     <div class="blog-content">
                         <span class="blog-category">Nutrició</span>
