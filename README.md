@@ -6,11 +6,11 @@
 
 ## 🏔️ Sobre el Proyecto
 
-**Wild Breathing** és la plataforma web professional de Laura Ramírez Lozano, entrenadora personal independent especialitzada en entrenament de força funcional i trail running. Certificada oficialment pel Govern de Catalunya (ROPEC 062645).
+**Wild Breathing** és la plataforma web professional de Laura Ramírez, entrenadora personal independent especialitzada en entrenament de força funcional i trail running. Certificada oficialment pel Govern de Catalunya (ROPEC 062645).
 
 ## 👤 Sobre Laura Ramírez
 
-Laura Ramírez Lozano és entrenadora personal independent i guia de muntanya certificada. Amb formació oficial homologada pel Govern de Catalunya, està especialitzada en entrenament de força funcional i trail running.
+Laura Ramírez és entrenadora personal independent i guia de muntanya certificada. Amb formació oficial homologada pel Govern de Catalunya, està especialitzada en entrenament de força funcional i trail running.
 
 **Certificacions Oficials:**
 - ROPEC 062645 (Registre Oficial de Professionals de l'Esport de Catalunya)
