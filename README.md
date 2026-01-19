@@ -1,12 +1,22 @@
-# Wild Fitness - Entrenamiento de Montaña Profesional
+# Wild Breathing - Laura Ramírez | Entrenadora Personal & Guia de Muntanya
 
-![Wild Fitness](https://img.shields.io/badge/Mountain-Training-2D5016?style=for-the-badge)
+![Wild Breathing](https://img.shields.io/badge/Mountain-Training-2D5016?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-4CAF50?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Web-D84315?style=for-the-badge)
 
 ## 🏔️ Sobre el Proyecto
 
-**Wild Fitness** es una plataforma web profesional dedicada al entrenamiento de montaña, trail running y fitness outdoor. Diseñada para atletas que buscan conquistar cumbres y mejorar su rendimiento en deportes de montaña.
+**Wild Breathing** és la plataforma web professional de Laura Ramírez Lozano, entrenadora personal independent especialitzada en entrenament de força funcional i trail running. Certificada oficialment pel Govern de Catalunya (ROPEC 062645).
+
+## 👤 Sobre Laura Ramírez
+
+Laura Ramírez Lozano és entrenadora personal independent i guia de muntanya certificada. Amb formació oficial homologada pel Govern de Catalunya, està especialitzada en entrenament de força funcional i trail running.
+
+**Certificacions Oficials:**
+- ROPEC 062645 (Registre Oficial de Professionals de l'Esport de Catalunya)
+- Certificat de Professionalitat - Govern de Catalunya
+- Guia Baixa i Mitjana Muntanya
+- Entrenadora Funcional
 
 ## ✨ Características
 
@@ -82,7 +92,7 @@ wild-fitness/
 
 ## 🌐 Despliegue
 
-El sitio está configurado para desplegarse automáticamente en GitHub Pages con el dominio personalizado **wild-fitness.com**.
+El sitio está configurado para desplegarse automáticamente en GitHub Pages con el dominio personalizado **wildbreathing.com**.
 
 ### Configuración DNS (Cloudflare)
 
@@ -223,12 +233,14 @@ Para agregar Google Analytics, añade antes de `</head>`:
 
 ## 👤 Contacto
 
-- **Email**: info@wild-fitness.com
-- **Web**: https://wild-fitness.com
-- **WhatsApp**: +34 600 000 000
+- **Email**: info@wildbreathing.com
+- **Web**: https://wildbreathing.com
+- **WhatsApp**: +34 640 915 772
+- **Bizum**: 640 915 772
+- **Ubicación**: Girona & Barcelona
 
 ---
 
 **Hecho con 💚 para los amantes de la montaña**
 
-🏔️ **Wild Fitness** - Conquista tus cumbres
+🏔️ **Wild Breathing** - Laura Ramírez | Entrenadora Personal & Guia de Muntanya
