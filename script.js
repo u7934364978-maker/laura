@@ -100,10 +100,12 @@ if (navToggle && navList) {
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const href = this.getAttribute('href');
+        const target = document.querySelector(href);
         
+        // Only prevent default and smooth scroll if target exists on current page
         if (target) {
+            e.preventDefault();
             const headerOffset = 80;
             const elementPosition = target.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -113,6 +115,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth'
             });
         }
+        // If target doesn't exist (e.g., blog.html#article-1 from index.html), let default behavior happen
     });
 });
 

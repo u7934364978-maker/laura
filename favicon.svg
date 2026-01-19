@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#2d7d7d"/>
+  
+  <!-- Mountain peaks -->
+  <path d="M 20 70 L 35 40 L 50 55 L 65 30 L 80 70 Z" fill="#3fb5b5"/>
+  <path d="M 35 40 L 50 55 L 65 30 L 50 65 Z" fill="#5fcaca" opacity="0.7"/>
+  
+  <!-- Sun/Circle accent -->
+  <circle cx="75" cy="25" r="8" fill="#FFA726" opacity="0.9"/>
+  
+  <!-- WF Text (optional, stylized) -->
+  <text x="50" y="85" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white" text-anchor="middle">WF</text>
+</svg>
