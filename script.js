@@ -586,68 +586,90 @@ document.addEventListener('DOMContentLoaded', () => {
     let loadedImages = 0;
     let failedImages = 0;
     
+    // Fallback images for each category
+    const fallbackImages = {
+        hero: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080"%3E%3Crect fill="%23e0e0e0" width="1920" height="1080"/%3E%3Ctext fill="rgba(0,0,0,0.5)" font-family="sans-serif" font-size="48" dy="10.5" font-weight="bold" x="50%25" y="50%25" text-anchor="middle"%3ETrail Running%3C/text%3E%3C/svg%3E',
+        gallery: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="800"%3E%3Crect fill="%23f5f5f5" width="800" height="800"/%3E%3Ctext fill="rgba(0,0,0,0.3)" font-family="sans-serif" font-size="32" dy="10.5" font-weight="bold" x="50%25" y="50%25" text-anchor="middle"%3E%F0%9F%8F%94%EF%B8%8F%3C/text%3E%3C/svg%3E',
+        blog: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="600" height="400"%3E%3Crect fill="%23eeeeee" width="600" height="400"/%3E%3Ctext fill="rgba(0,0,0,0.3)" font-family="sans-serif" font-size="24" dy="10.5" font-weight="bold" x="50%25" y="50%25" text-anchor="middle"%3E%F0%9F%93%B8%3C/text%3E%3C/svg%3E'
+    };
+    
     images.forEach((img, index) => {
+        // Skip if already processed
+        if (img.dataset.processed) return;
+        img.dataset.processed = 'true';
+        
         // Add loading state
         img.classList.add('image-loading');
         
-        // Create wrapper if not exists
-        if (!img.parentElement.classList.contains('image-wrapper')) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'image-wrapper';
-            img.parentNode.insertBefore(wrapper, img);
-            wrapper.appendChild(img);
-        }
+        // Determine image category
+        let category = 'gallery';
+        if (img.closest('.hero-image')) category = 'hero';
+        else if (img.closest('.blog-image')) category = 'blog';
         
         // Handle successful load
-        img.addEventListener('load', () => {
+        const handleLoad = () => {
             img.classList.remove('image-loading');
             img.classList.add('image-loaded');
             loadedImages++;
-            console.log(`✓ Image loaded: ${img.alt || 'unnamed'}`);
-        });
+            console.log(`✓ Image ${loadedImages} loaded: ${img.alt || 'unnamed'}`);
+        };
         
         // Handle loading errors with retry mechanism
-        img.addEventListener('error', () => {
+        const handleError = () => {
             failedImages++;
-            console.warn(`✗ Failed to load image: ${img.src}`);
+            console.warn(`✗ Failed to load image (attempt ${img.dataset.retries || 0}): ${img.src}`);
             
-            // Retry with different parameters
-            if (!img.dataset.retried) {
-                img.dataset.retried = 'true';
-                const originalSrc = img.src;
-                
-                // Try with different format
+            const retries = parseInt(img.dataset.retries || '0');
+            
+            if (retries === 0) {
+                // First retry: try without srcset
+                img.dataset.retries = '1';
+                img.removeAttribute('srcset');
+                const newSrc = img.src.replace('&fm=jpg&fit=crop', '').replace('?w=', '?auto=format&w=');
+                console.log(`🔄 Retry 1: Removing srcset and updating URL`);
                 setTimeout(() => {
-                    const newSrc = originalSrc.replace('&fm=jpg', '&fm=webp').replace('?w=', '?auto=format&w=');
-                    console.log(`🔄 Retrying image with different format: ${newSrc}`);
                     img.src = newSrc;
-                }, 1000);
+                }, 500);
+            } else if (retries === 1) {
+                // Second retry: use data URI fallback
+                img.dataset.retries = '2';
+                console.log(`🔄 Retry 2: Using fallback placeholder`);
+                setTimeout(() => {
+                    img.src = fallbackImages[category];
+                    img.classList.remove('image-loading');
+                    img.classList.add('image-loaded', 'image-fallback');
+                }, 500);
             } else {
-                // Show placeholder
+                // Final fallback
+                img.classList.remove('image-loading');
                 img.classList.add('image-error');
-                const placeholder = document.createElement('div');
-                placeholder.className = 'image-placeholder';
-                placeholder.innerHTML = `
-                    <div class="placeholder-content">
-                        <span class="placeholder-icon">🖼️</span>
-                        <span class="placeholder-text">Imatge no disponible</span>
-                    </div>
-                `;
-                img.parentElement.appendChild(placeholder);
+                console.error(`❌ All retries failed for: ${img.alt || 'unnamed'}`);
             }
-        });
+        };
+        
+        // Attach event listeners
+        img.addEventListener('load', handleLoad);
+        img.addEventListener('error', handleError);
         
         // If image is already cached and loaded
-        if (img.complete && img.naturalHeight !== 0) {
-            img.classList.remove('image-loading');
-            img.classList.add('image-loaded');
-            loadedImages++;
+        if (img.complete) {
+            if (img.naturalHeight !== 0) {
+                handleLoad();
+            } else {
+                handleError();
+            }
         }
     });
     
     // Log summary after 5 seconds
     setTimeout(() => {
-        console.log(`📊 Image Loading Summary: ${loadedImages} loaded, ${failedImages} failed, ${images.length} total`);
+        const total = images.length;
+        const pending = total - loadedImages - failedImages;
+        console.log(`📊 Image Loading Summary: ${loadedImages} loaded, ${failedImages} failed, ${pending} pending, ${total} total`);
+        
+        if (failedImages > 0) {
+            console.warn(`⚠️ Some images failed to load. This might be due to network issues or CORS restrictions.`);
+        }
     }, 5000);
 });
 
