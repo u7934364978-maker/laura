@@ -1,312 +1,159 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Wild Fitness - Entrenamientos profesionales de montaña, trail running y fitness outdoor. Conquista las cumbres con programas personalizados.">
-    <meta name="keywords" content="entrenamiento montaña, trail running, fitness outdoor, hiking training, wild fitness">
-    <title>Wild Fitness - Entrenamiento de Montaña Profesional</title>
+    <meta name="description" content="Wild Fitness - Entrenament funcional trail running a Fonteta (Baix Empordà). Classes presencials en grup reduït.">
+    <meta name="keywords" content="trail running, entrenament funcional, Baix Empordà, Fonteta, entrenament muntanya">
+    <title>Wild Fitness - Entrenament Funcional Trail</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header/Navigation -->
+    <!-- Header -->
     <header class="header">
-        <nav class="nav-container">
+        <div class="container">
             <div class="logo">
-                <span class="logo-wild">WILD</span>
-                <span class="logo-fitness">FITNESS</span>
+                <span class="logo-text">WILD FITNESS</span>
             </div>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#programas">Programas</a></li>
-                <li><a href="#sobre-mi">Sobre Mí</a></li>
-                <li><a href="#testimonios">Testimonios</a></li>
-                <li><a href="#contacto" class="btn-primary-nav">Contáctame</a></li>
-            </ul>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </nav>
+        </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="inicio">
-        <div class="hero-overlay"></div>
+    <section class="hero">
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=80" alt="Trail running en muntanya">
+            <div class="hero-overlay"></div>
+        </div>
         <div class="hero-content">
-            <h1 class="hero-title">Conquista La Montaña</h1>
-            <p class="hero-subtitle">Entrenamientos profesionales para alcanzar tus cumbres</p>
-            <div class="hero-buttons">
-                <a href="#programas" class="btn btn-primary">Ver Programas</a>
-                <a href="#contacto" class="btn btn-secondary">Consulta Gratis</a>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="scroll-arrow"></div>
+            <h1 class="hero-title">Entrenament Funcional Trail</h1>
+            <p class="hero-subtitle">Classes presencials a Fonteta (Baix Empordà)</p>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
+    <!-- Horarios Section -->
+    <section class="schedule">
         <div class="container">
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🏔️</div>
-                    <h3>Entrenamiento Específico</h3>
-                    <p>Programas diseñados para montaña, trail y trekking de alta exigencia</p>
+            <div class="schedule-header">
+                <span class="schedule-icon">📅</span>
+                <h2>Horaris</h2>
+            </div>
+
+            <div class="schedule-content">
+                <div class="schedule-main">
+                    <h3>Horari Setmanal</h3>
+                    <p class="schedule-subtitle">Grup reduït (màx. 12 persones)</p>
+                    
+                    <div class="schedule-days">
+                        <div class="schedule-day">
+                            <span class="day-name">Dilluns</span>
+                            <span class="day-time">17:20h</span>
+                        </div>
+                        <div class="schedule-day">
+                            <span class="day-name">Dimecres</span>
+                            <span class="day-time">17:20h</span>
+                        </div>
+                    </div>
+
+                    <div class="schedule-location">
+                        <div class="location-icon">📍</div>
+                        <div class="location-info">
+                            <strong>Ubicació</strong>
+                            <span>Fonteta, Baix Empordà</span>
+                            <span class="location-note">Prop de la Bisbal d'Empordà</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💪</div>
-                    <h3>Fuerza & Resistencia</h3>
-                    <p>Desarrolla la capacidad física necesaria para largas jornadas outdoor</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Planificación Personalizada</h3>
-                    <p>Entrenamientos adaptados a tu nivel y objetivos específicos</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3>Seguimiento Online</h3>
-                    <p>Acceso 24/7 a tu programa con feedback constante del entrenador</p>
+
+                <div class="schedule-features">
+                    <h3>Què Treballem</h3>
+                    <p class="features-subtitle">Sessions d'1h - 1h 15min</p>
+                    
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">💪</div>
+                            <div class="feature-content">
+                                <strong>Força Funcional</strong>
+                                <p>Exercicis específics per trail</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">🏃</div>
+                            <div class="feature-content">
+                                <strong>Tècnica de Carrera</strong>
+                                <p>Pujades, baixades i terreny tècnic</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">⛰️</div>
+                            <div class="feature-content">
+                                <strong>Entrenament en Carrera</strong>
+                                <p>Sortides i treball de resistència</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Programs Section -->
-    <section class="programs" id="programas">
-        <div class="container">
-            <div class="section-header">
-                <h2>Programas de Entrenamiento</h2>
-                <p>Elige el programa que se adapte a tus objetivos de montaña</p>
-            </div>
-            <div class="programs-grid">
-                <!-- Program 1 -->
-                <div class="program-card">
-                    <div class="program-badge">Popular</div>
-                    <h3>Trail Runner</h3>
-                    <div class="program-price">
-                        <span class="price-amount">€89</span>
-                        <span class="price-period">/mes</span>
-                    </div>
-                    <ul class="program-features">
-                        <li>✓ Plan de entrenamiento personalizado</li>
-                        <li>✓ 4 sesiones semanales</li>
-                        <li>✓ Trabajo de técnica de carrera</li>
-                        <li>✓ Preparación para carreras de montaña</li>
-                        <li>✓ Seguimiento semanal</li>
-                    </ul>
-                    <a href="#contacto" class="btn btn-outline">Más Información</a>
+            <!-- Pricing -->
+            <div class="pricing">
+                <div class="pricing-highlight">
+                    <span class="pricing-label">Primera sessió GRATUÏTA</span>
+                    <span class="pricing-note">Prova sense compromís</span>
                 </div>
-
-                <!-- Program 2 -->
-                <div class="program-card featured">
-                    <div class="program-badge premium">Premium</div>
-                    <h3>Mountain Athlete</h3>
-                    <div class="program-price">
-                        <span class="price-amount">€149</span>
-                        <span class="price-period">/mes</span>
-                    </div>
-                    <ul class="program-features">
-                        <li>✓ Todo lo del plan Trail Runner</li>
-                        <li>✓ 5-6 sesiones semanales</li>
-                        <li>✓ Entrenamiento de fuerza específico</li>
-                        <li>✓ Nutrición deportiva personalizada</li>
-                        <li>✓ Videollamadas mensuales 1:1</li>
-                        <li>✓ Preparación para expediciones</li>
-                    </ul>
-                    <a href="#contacto" class="btn btn-primary">Empezar Ahora</a>
-                </div>
-
-                <!-- Program 3 -->
-                <div class="program-card">
-                    <h3>Trekking Fitness</h3>
-                    <div class="program-price">
-                        <span class="price-amount">€69</span>
-                        <span class="price-period">/mes</span>
-                    </div>
-                    <ul class="program-features">
-                        <li>✓ 3 sesiones semanales</li>
-                        <li>✓ Preparación física general</li>
-                        <li>✓ Ideal para trekkings largos</li>
-                        <li>✓ Ejercicios con peso corporal</li>
-                        <li>✓ Seguimiento quincenal</li>
-                    </ul>
-                    <a href="#contacto" class="btn btn-outline">Más Información</a>
+                <div class="pricing-main">
+                    <span class="pricing-amount">35€/mes</span>
+                    <span class="pricing-details">2 sessions setmanals</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="about" id="sobre-mi">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="about-image-placeholder">
-                        <span>🏔️</span>
-                    </div>
-                </div>
-                <div class="about-text">
-                    <h2>Sobre Wild Fitness</h2>
-                    <p class="about-intro">La montaña es mi segunda casa, y mi misión es ayudarte a que también lo sea para ti.</p>
-                    <p>Con más de 10 años de experiencia en entrenamiento deportivo y alpinismo, he desarrollado un método único que combina la ciencia del deporte con la pasión por la montaña.</p>
-                    <div class="about-stats">
-                        <div class="stat">
-                            <span class="stat-number">500+</span>
-                            <span class="stat-label">Atletas Entrenados</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">15+</span>
-                            <span class="stat-label">Años en Montaña</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">50+</span>
-                            <span class="stat-label">Cumbres Conquistadas</span>
-                        </div>
-                    </div>
-                    <h3>Certificaciones</h3>
-                    <ul class="certifications">
-                        <li>• Entrenador Personal Certificado NSCA-CPT</li>
-                        <li>• Guía de Montaña Profesional</li>
-                        <li>• Especialista en Entrenamiento de Altitud</li>
-                        <li>• Nutrición Deportiva - ISSN</li>
-                    </ul>
-                </div>
+    <!-- Gallery Section -->
+    <section class="gallery">
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80" alt="Grup entrenament">
             </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials" id="testimonios">
-        <div class="container">
-            <div class="section-header">
-                <h2>Lo Que Dicen Mis Atletas</h2>
-                <p>Historias reales de personas que alcanzaron sus cumbres</p>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=80" alt="Trail running">
             </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Gracias al programa Mountain Athlete completé mi primera ultra trail de 100km. El entrenamiento personalizado fue clave para llegar fuerte a la meta."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">MG</div>
-                        <div class="author-info">
-                            <h4>María García</h4>
-                            <span>Trail Runner</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Subí el Mont Blanc después de 6 meses de entrenamiento. La preparación específica de fuerza y resistencia hizo la diferencia."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">JL</div>
-                        <div class="author-info">
-                            <h4>Juan López</h4>
-                            <span>Alpinista Amateur</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Profesional, motivador y con un conocimiento increíble. Me ayudó a mejorar mi técnica de carrera en montaña y mis tiempos mejoraron un 20%."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">CM</div>
-                        <div class="author-info">
-                            <h4>Carlos Martín</h4>
-                            <span>Runner de Montaña</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>¿Listo Para Tu Próxima Cumbre?</h2>
-                <p>Agenda una consulta gratuita de 30 minutos y descubre cómo puedo ayudarte</p>
-                <a href="#contacto" class="btn btn-primary btn-large">Consulta Gratuita</a>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80" alt="Entrenament força">
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section class="contact" id="contacto">
+    <section class="contact">
         <div class="container">
-            <div class="section-header">
-                <h2>Contacto</h2>
-                <p>¿Tienes preguntas? Escríbeme y te responderé en menos de 24 horas</p>
-            </div>
             <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">📧</div>
-                        <div>
-                            <h3>Email</h3>
-                            <a href="mailto:info@wild-fitness.com">info@wild-fitness.com</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">📱</div>
-                        <div>
-                            <h3>WhatsApp</h3>
-                            <a href="https://wa.me/34600000000">+34 600 000 000</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">📍</div>
-                        <div>
-                            <h3>Ubicación</h3>
-                            <p>Entrenamiento Online<br>Disponible Globalmente</p>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <h3>Sígueme</h3>
-                        <div class="social-icons">
-                            <a href="#" class="social-icon">Instagram</a>
-                            <a href="#" class="social-icon">YouTube</a>
-                            <a href="#" class="social-icon">Strava</a>
-                        </div>
-                    </div>
+                <h2>Contacte</h2>
+                <p class="contact-subtitle">Vols provar una sessió gratuïta?</p>
+                
+                <div class="contact-methods">
+                    <a href="https://wa.me/34600000000" class="contact-button whatsapp">
+                        <span class="contact-icon">📱</span>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="mailto:info@wild-fitness.com" class="contact-button email">
+                        <span class="contact-icon">📧</span>
+                        <span>Email</span>
+                    </a>
+                    <a href="https://instagram.com/wildfitness" class="contact-button instagram" target="_blank">
+                        <span class="contact-icon">📷</span>
+                        <span>Instagram</span>
+                    </a>
                 </div>
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Nombre Completo</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Teléfono (opcional)</label>
-                        <input type="tel" id="phone" name="phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="program">Programa de Interés</label>
-                        <select id="program" name="program">
-                            <option value="">Selecciona un programa</option>
-                            <option value="trail-runner">Trail Runner</option>
-                            <option value="mountain-athlete">Mountain Athlete</option>
-                            <option value="trekking-fitness">Trekking Fitness</option>
-                            <option value="consulta">Solo consulta</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Mensaje</label>
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">Enviar Mensaje</button>
-                </form>
+
+                <div class="contact-info">
+                    <p><strong>Email:</strong> info@wild-fitness.com</p>
+                    <p><strong>Telèfon:</strong> +34 600 000 000</p>
+                </div>
             </div>
         </div>
     </section>
@@ -314,38 +161,8 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <span class="logo-wild">WILD</span>
-                        <span class="logo-fitness">FITNESS</span>
-                    </div>
-                    <p>Entrenamiento de montaña profesional para conquistar tus cumbres</p>
-                </div>
-                <div class="footer-links">
-                    <h4>Enlaces</h4>
-                    <ul>
-                        <li><a href="#inicio">Inicio</a></li>
-                        <li><a href="#programas">Programas</a></li>
-                        <li><a href="#sobre-mi">Sobre Mí</a></li>
-                        <li><a href="#testimonios">Testimonios</a></li>
-                    </ul>
-                </div>
-                <div class="footer-contact">
-                    <h4>Contacto</h4>
-                    <ul>
-                        <li><a href="mailto:info@wild-fitness.com">info@wild-fitness.com</a></li>
-                        <li><a href="tel:+34600000000">+34 600 000 000</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Wild Fitness. Todos los derechos reservados.</p>
-                <div class="footer-legal">
-                    <a href="#">Política de Privacidad</a>
-                    <a href="#">Términos y Condiciones</a>
-                </div>
-            </div>
+            <p>&copy; 2024 Wild Fitness - Entrenament Funcional Trail</p>
+            <p class="footer-location">Fonteta, Baix Empordà</p>
         </div>
     </footer>
 
