@@ -392,16 +392,17 @@ if (contactForm) {
             const minLoadingTime = 1200;
             const startTime = Date.now();
             
-            // 📊 GUARDAR EN SUPABASE (nueva funcionalidad)
-            if (typeof saveContactSubmission === 'function') {
-                try {
-                    await saveContactSubmission(emailData);
-                    console.log('✅ Contacto guardado en Supabase');
-                } catch (supabaseError) {
-                    console.warn('⚠️ Error guardando en Supabase:', supabaseError);
-                    // Continuar aunque falle Supabase
-                }
-            }
+            // 📊 GUARDAR EN SUPABASE (deshabilitado temporalmente)
+            // Si quieres guardar contactos en Supabase, crea la tabla 'contact_submissions'
+            // if (typeof saveContactSubmission === 'function') {
+            //     try {
+            //         await saveContactSubmission(emailData);
+            //         console.log('✅ Contacto guardado en Supabase');
+            //     } catch (supabaseError) {
+            //         console.warn('⚠️ Error guardando en Supabase:', supabaseError);
+            //         // Continuar aunque falle Supabase
+            //     }
+            // }
             
             // Preparar datos para email con texto legible del nivel
             const emailDataWithLevel = {
