@@ -18,8 +18,9 @@ const SUPABASE_CONFIG = {
 let supabaseClient = null;
 
 function initSupabase() {
-    if (!supabase || !supabase.createClient) {
-        console.error('❌ Supabase library no cargada');
+    // Verificar si el objeto global de Supabase está disponible
+    if (typeof window.supabase === 'undefined') {
+        console.error('❌ Supabase library no cargada. Verifica que el CDN esté incluido.');
         return null;
     }
     
@@ -30,8 +31,14 @@ function initSupabase() {
     }
     
     if (!supabaseClient) {
-        supabaseClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-        console.log('✅ Supabase inicializado correctamente');
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+            console.log('✅ Supabase inicializado correctamente');
+            console.log('📊 URL:', SUPABASE_CONFIG.url);
+        } catch (error) {
+            console.error('❌ Error al inicializar Supabase:', error);
+            return null;
+        }
     }
     
     return supabaseClient;
