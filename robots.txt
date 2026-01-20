@@ -1,4 +1,15 @@
+# Wild Fitness - Robots.txt
+# Laura Ramírez - Entrenadora Personal & Guia de Muntanya
+
 User-agent: *
 Allow: /
+Disallow: /admin.html
+Disallow: /test-*.html
+Disallow: /debug-*.html
+Disallow: /*.backup$
+Disallow: /check_sync.html
+Disallow: /PRUEBA_SINCRONIZACION.html
+Disallow: /menu-mockups.html
 
-Sitemap: https://wild-fitness.com/sitemap.xml
+# Sitemap
+Sitemap: https://www.wild-fitness.com/sitemap.xml
