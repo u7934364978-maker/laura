@@ -43,8 +43,6 @@
     --spacing-lg: 3rem;
     --spacing-xl: 4rem;
     
-    /* 🟡 IMPORTANTE: Variables ajustadas para mobile */
-    
     /* Effects */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -218,18 +216,6 @@ body {
     transition: var(--transition);
 }
 
-/* 🔴 CRÍTICO: Optimizar logo para móviles pequeños */
-@media (max-width: 480px) {
-    .logo-text {
-        font-size: 1.2rem;
-        letter-spacing: 1px;
-    }
-    
-    .logo-icon {
-        font-size: 1.3rem;
-    }
-}
-
 /* Navegación mejorada */
 .nav-list {
     display: flex;
@@ -303,21 +289,6 @@ body {
     justify-content: center;
     overflow: hidden;
     padding-bottom: 140px; /* Espacio para el scroll indicator */
-}
-
-/* 🔴 CRÍTICO: Reducir altura hero en móviles */
-@media (max-width: 768px) {
-    .hero {
-        min-height: 700px;
-        padding-bottom: 100px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero {
-        min-height: 600px;
-        padding-bottom: 80px;
-    }
 }
 
 .hero-image {
@@ -410,7 +381,7 @@ img.image-error {
 }
 
 .hero-title {
-    font-size: clamp(1.75rem, 4vw, 2.5rem); /* 🟡 Mejorado: mejor mínimo */
+    font-size: clamp(1.4rem, 3vw, 2.5rem);
     font-weight: 700;
     margin-bottom: var(--spacing-sm);
     letter-spacing: -0.3px;
@@ -420,7 +391,7 @@ img.image-error {
 }
 
 .hero-subtitle {
-    font-size: clamp(1rem, 2vw, 1.4rem); /* 🟡 Mejorado: mejor escala */
+    font-size: clamp(1.15rem, 2.5vw, 1.6rem);
     font-weight: 300;
     opacity: 0.98;
     margin-bottom: var(--spacing-xl);
@@ -1276,93 +1247,66 @@ img.image-error {
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
-
-/* 🟡 IMPORTANTE: Reducir spacing en tablets */
 @media (max-width: 768px) {
-    :root {
-        --spacing-xs: 0.375rem;
-        --spacing-sm: 0.75rem;
-        --spacing-md: 1.5rem;
-        --spacing-lg: 2rem;
-        --spacing-xl: 2.5rem;
-    }
-    
-    .container {
-        padding: 0 var(--spacing-sm);
-    }
-}
-
-@media (max-width: 768px) {
-    /* Hero optimizado para mobile */
     .hero {
         height: 100vh;
-        min-height: 650px; /* Reducido de 700px */
-        padding-bottom: 100px; /* Reducido de 120px */
+        min-height: 700px;
+        padding-bottom: 120px;
     }
 
     .hero-title {
-        font-size: clamp(1.5rem, 4vw, 1.8rem); /* Mejorado con clamp */
+        font-size: 1.6rem;
         letter-spacing: -0.5px;
     }
     
     .hero-quote {
-        font-size: clamp(0.95rem, 2vw, 1.1rem); /* Mejorado con clamp */
+        font-size: 1rem;
         margin: var(--spacing-sm) auto;
         padding: 0 var(--spacing-md);
         max-width: 90%;
-        line-height: 1.7;
     }
 
     .hero-subtitle {
-        font-size: clamp(1rem, 2vw, 1.2rem); /* Mejorado con clamp */
+        font-size: 1.1rem;
     }
     
     .scroll-indicator {
-        bottom: 40px; /* Reducido de 50px */
-        padding: 0.65rem 0.9rem; /* Reducido */
+        bottom: 50px;
+        padding: 0.75rem 1rem;
     }
     
     .scroll-text {
-        font-size: 0.8rem; /* Reducido */
+        font-size: 0.85rem;
     }
     
     .scroll-arrow {
-        font-size: 1.4rem; /* Reducido de 1.5rem */
+        font-size: 1.5rem;
     }
 
     .hero-actions {
         flex-direction: column;
         width: 100%;
         max-width: 320px;
-        margin: 0 auto var(--spacing-md); /* Reducido de lg */
-        gap: 0.75rem; /* Añadido para consistencia */
+        margin: 0 auto var(--spacing-lg);
     }
 
     .btn-primary, .btn-whatsapp {
         width: 100%;
         justify-content: center;
-        padding: 0.9rem 1.75rem; /* Optimizado */
-        min-height: 44px; /* Asegurar tap target */
+        padding: 1rem 2rem;
     }
 
-    /* 🔴 CRÍTICO: Optimizar hero-badges en mobile */
     .hero-badges {
         flex-direction: column;
         align-items: stretch;
         max-width: 320px;
         margin: 0 auto;
-        gap: 0.5rem; /* Reducido aún más */
-        margin-top: var(--spacing-md); /* Reducir espacio superior */
+        gap: 0.75rem;
     }
 
     .badge {
         justify-content: center;
-        padding: 0.7rem 1rem; /* Más compacto */
-        font-size: 0.85rem;
-    }
-    
-    .badge-icon {
-        font-size: 1.2rem;
+        padding: 0.9rem 1.5rem;
     }
 
     .schedule-content {
@@ -1410,42 +1354,36 @@ img.image-error {
 
 @media (max-width: 480px) {
     :root {
-        --spacing-xl: 2rem; /* Reducido */
-        --spacing-lg: 1.5rem; /* Reducido */
+        --spacing-xl: 2.5rem;
+        --spacing-lg: 2rem;
     }
     
     .hero {
-        min-height: 600px; /* Reducido de 650px */
-        padding-bottom: 90px; /* Reducido de 110px */
+        min-height: 650px;
+        padding-bottom: 110px;
     }
     
     .hero-quote {
-        font-size: clamp(0.9rem, 2vw, 1rem);
+        font-size: 0.95rem;
         padding: 0 var(--spacing-sm);
         max-width: 95%;
-        line-height: 1.7;
     }
 
     .pricing-amount {
-        font-size: 2.3rem; /* Ligeramente reducido */
+        font-size: 2.5rem;
     }
 
     .schedule-icon {
-        font-size: 2.3rem; /* Ligeramente reducido */
+        font-size: 2.5rem;
     }
     
     .scroll-indicator {
-        bottom: 35px; /* Reducido */
-        padding: 0.55rem 0.8rem; /* Reducido */
+        bottom: 40px;
+        padding: 0.6rem 0.9rem;
     }
     
     .scroll-text {
-        font-size: 0.75rem; /* Reducido */
-    }
-    
-    /* Optimizar container padding en móviles pequeños */
-    .container {
-        padding: 0 var(--spacing-sm);
+        font-size: 0.8rem;
     }
 }
 
@@ -3852,26 +3790,8 @@ html {
 
 
 /* ============================================
-   MOBILE RESPONSIVE - OPTIMIZADO 2026
+   MOBILE RESPONSIVE - iOS & Android Fix
    ============================================ */
-
-/* 🔴 CRÍTICO: Simplificar Fixed Positioning para Mobile */
-@media screen and (max-width: 768px) {
-    .header {
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        z-index: 1000;
-        padding: 0.75rem 0;
-        will-change: auto;
-    }
-    
-    body {
-        padding-top: 70px;
-    }
-}
 
 /* iOS Safari Specific Fixes */
 @supports (-webkit-touch-callout: none) {
@@ -3906,15 +3826,15 @@ html {
     }
 }
 
-/* 🔴 CRÍTICO: Optimizar Logo y Header para Móviles Pequeños */
+/* Enhanced Mobile Styles */
 @media (max-width: 480px) {
-    /* Root adjustments - Reducir espaciado */
+    /* Root adjustments */
     :root {
-        --spacing-xs: 0.375rem;
+        --spacing-xs: 0.4rem;
         --spacing-sm: 0.75rem;
-        --spacing-md: 1.5rem;
-        --spacing-lg: 1.5rem;
-        --spacing-xl: 2rem;
+        --spacing-md: 1.25rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 2.5rem;
     }
     
     /* Header Mobile */
@@ -3926,106 +3846,65 @@ html {
         padding: 0 var(--spacing-sm);
     }
     
-    /* Logo optimizado para móviles pequeños */
     .logo-text {
-        font-size: 1.2rem; /* Aumentado de 1.1rem */
-        letter-spacing: 1px; /* Reducido de 2px */
+        font-size: 1.1rem;
     }
     
     .logo-icon {
-        font-size: 1.3rem; /* Reducido de 1.4rem */
+        font-size: 1.4rem;
     }
     
-    /* 🔴 CRÍTICO: Hero Mobile - Reducir altura y optimizar elementos */
+    /* Hero Mobile */
     .hero {
-        min-height: 600px; /* Reducido de 85vh */
+        min-height: 85vh;
         padding: var(--spacing-md);
-        padding-bottom: 80px; /* Reducido de default */
     }
     
     .hero-content {
         padding: var(--spacing-md) var(--spacing-sm);
     }
     
-    /* Mejorar escalado de títulos con clamp() */
     .hero-title {
-        font-size: clamp(1.75rem, 4vw, 2.5rem); /* Mejorado */
+        font-size: 1.6rem;
         margin-bottom: var(--spacing-sm);
-        line-height: 1.2;
     }
     
     .hero-subtitle {
-        font-size: clamp(1rem, 2vw, 1.4rem); /* Mejorado */
-        line-height: 1.6;
+        font-size: 1rem;
+        line-height: 1.5;
     }
     
     .hero-quote {
-        font-size: clamp(0.95rem, 2vw, 1.1rem); /* Mejorado */
-        line-height: 1.7;
+        font-size: 0.95rem;
+        line-height: 1.6;
         margin: var(--spacing-xs) auto var(--spacing-sm);
-        max-width: 90%;
     }
     
-    /* Optimizar Hero Badges en Mobile */
-    .hero-badges {
-        gap: 0.5rem; /* Reducido de 0.75rem */
-        margin-top: var(--spacing-md);
-    }
-    
-    .badge {
-        padding: 0.7rem 1rem; /* Reducido de 0.9rem 1.5rem */
-        font-size: 0.85rem;
-    }
-    
-    .badge-icon {
-        font-size: 1.2rem;
-    }
-    
-    /* Optimizar Hero Actions */
     .hero-actions {
         flex-direction: column;
-        gap: 0.75rem; /* Reducido */
+        gap: var(--spacing-sm);
         width: 100%;
-        margin-bottom: var(--spacing-md); /* Reducido */
     }
     
-    /* 🔴 CRÍTICO: Tap Targets Mínimos 44x44px */
     .btn-primary,
     .btn-whatsapp {
         width: 100%;
-        padding: 0.9rem 1.75rem; /* Reducido pero mantiene 44px altura */
-        font-size: 0.95rem;
+        padding: 0.9rem 1.5rem;
+        font-size: 1rem;
         justify-content: center;
-        min-height: 44px; /* Asegurar tap target */
-        min-width: 44px;
     }
     
-    /* Mejorar Hamburger Menu Mobile */
+    /* Navigation Mobile */
     .nav-list {
         padding: var(--spacing-md);
         gap: 0;
-        position: fixed;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 70px);
-        background: var(--bg-white);
-        transform: translateX(-100%); /* Cambio de left a transform para mejor performance */
-        transition: transform 0.3s ease;
-        z-index: 999;
     }
     
-    .nav-list.active {
-        transform: translateX(0);
-    }
-    
-    /* 🔴 CRÍTICO: Tap targets para navegación */
     .nav-link {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: 1rem;
         width: 100%;
         display: block;
-        min-height: 44px; /* Asegurar tap target mínimo */
     }
     
     .nav-cta {
@@ -4035,52 +3914,44 @@ html {
         border-radius: 50px;
         text-align: center;
         padding: var(--spacing-sm) var(--spacing-md) !important;
-        min-height: 44px; /* Asegurar tap target */
     }
     
-    /* Optimizar Títulos de Sección */
+    /* Sections Mobile */
     .section-title {
-        font-size: clamp(1.5rem, 4vw, 2rem); /* Mejorado con clamp */
+        font-size: 1.75rem;
         line-height: 1.3;
-        margin-bottom: var(--spacing-sm); /* Reducido */
     }
     
     .section-subtitle,
     .section-description {
-        font-size: clamp(0.95rem, 2vw, 1.1rem); /* Mejorado con clamp */
+        font-size: 1rem;
         line-height: 1.6;
     }
     
-    /* Reducir Padding de Cards en Mobile */
+    /* Cards Mobile */
     .benefit-card,
     .service-card,
     .specialty-card {
-        padding: var(--spacing-sm); /* Reducido a sm en vez de md */
+        padding: var(--spacing-md);
     }
     
     .benefit-title,
     .service-header h3,
     .specialty-title {
-        font-size: 1.15rem; /* Ligeramente reducido */
+        font-size: 1.2rem;
     }
     
-    /* About Section Mobile - Mejor uso del espacio */
+    /* About Section Mobile */
     .about-content {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
     
-    .about-text p {
-        margin-bottom: var(--spacing-sm); /* Reducir espacio entre párrafos */
-    }
-    
     .certifications-box {
         position: static;
-        padding: var(--spacing-md); /* Reducir padding */
-        margin-top: var(--spacing-md);
     }
     
-    /* Footer Mobile - Optimizado */
+    /* Footer Mobile */
     .footer-content {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
@@ -4088,7 +3959,7 @@ html {
     }
     
     .footer-column h4 {
-        font-size: 1.05rem; /* Ligeramente reducido */
+        font-size: 1.1rem;
     }
     
     .footer-bottom {
@@ -4097,7 +3968,7 @@ html {
         text-align: center;
     }
     
-    /* Blog Mobile - Mejor legibilidad */
+    /* Blog Mobile */
     .blog-article {
         margin-bottom: var(--spacing-md);
     }
@@ -4107,40 +3978,38 @@ html {
     }
     
     .article-content h2 {
-        font-size: 1.4rem; /* Ligeramente reducido */
+        font-size: 1.5rem;
     }
     
     .article-content h3 {
-        font-size: 1.2rem; /* Ligeramente reducido */
+        font-size: 1.25rem;
     }
     
     .article-excerpt {
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
     
     .article-body {
         font-size: 0.95rem;
-        line-height: 1.7; /* Mejorar legibilidad */
     }
     
-    /* Contact Page Mobile - Optimizado */
+    /* Contact Page Mobile */
     .contact-hero {
         padding: calc(var(--spacing-xl) + 70px) var(--spacing-md) var(--spacing-md);
     }
     
     .contact-title {
-        font-size: 1.65rem; /* Ligeramente reducido */
+        font-size: 1.75rem;
     }
     
     .contact-subtitle {
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
     
     .contact-form-wrapper {
-        padding: var(--spacing-sm); /* Reducir padding */
+        padding: var(--spacing-md);
     }
     
-    /* 🔴 CRÍTICO: Prevenir zoom en iOS con font-size mínimo 16px */
     .form-group label {
         font-size: 0.9rem;
     }
@@ -4148,77 +4017,29 @@ html {
     .form-group input,
     .form-group select,
     .form-group textarea {
-        font-size: 16px !important; /* Prevent iOS zoom */
+        font-size: 16px; /* Prevent iOS zoom */
         padding: 0.85rem;
-        min-height: 44px; /* Tap target mínimo */
     }
     
-    /* 🔴 CRÍTICO: Botón submit con tap target adecuado */
     .btn-submit {
         padding: 1rem 2rem;
         font-size: 1rem;
-        min-height: 44px;
-        min-width: 44px;
     }
     
-    /* Optimizar Contact Cards y FAQ */
     .contact-card {
-        padding: var(--spacing-sm); /* Reducir padding */
+        padding: var(--spacing-md);
     }
     
     .faq-item {
-        padding: var(--spacing-sm); /* Reducir padding */
+        padding: var(--spacing-md);
     }
     
     .faq-question {
-        font-size: 1.05rem; /* Ligeramente reducido */
+        font-size: 1.1rem;
     }
     
     .faq-answer {
         font-size: 0.95rem;
-        line-height: 1.7; /* Mejorar legibilidad */
-    }
-}
-
-/* 🟡 IMPORTANTE: Tablet Portrait - Breakpoint intermedio (2 columnas) */
-@media (min-width: 481px) and (max-width: 768px) {
-    /* Hero ajustado para tablets */
-    .hero {
-        min-height: 650px;
-    }
-    
-    .hero-actions {
-        flex-direction: row;
-        justify-content: center;
-        gap: var(--spacing-sm);
-    }
-    
-    .btn-primary,
-    .btn-whatsapp {
-        width: auto;
-        min-width: 180px;
-    }
-    
-    /* Grids intermedios de 2 columnas para tablets */
-    .benefits-grid,
-    .services-grid,
-    .specialties-grid,
-    .experience-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-md);
-    }
-    
-    .philosophy-pillars {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-sm);
-    }
-    
-    .about-content {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-grid {
-        grid-template-columns: 1fr;
     }
 }
 
@@ -4279,34 +4100,6 @@ html {
     }
 }
 
-/* 🟢 PERFORMANCE: Reducir animaciones en mobile */
-@media (max-width: 768px) {
-    /* Desactivar zoom de hero image para mejor performance */
-    .hero-image img {
-        animation: none;
-    }
-    
-    /* Simplificar transiciones en mobile */
-    @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-        }
-    }
-}
-
-/* 🟢 PERFORMANCE: Optimizar will-change solo cuando necesario */
-.nav-list.transitioning {
-    will-change: transform;
-}
-
-.nav-list:not(.transitioning) {
-    will-change: auto;
-}
-
 /* Landscape Mobile */
 @media (max-height: 500px) and (orientation: landscape) {
     .hero {
@@ -4341,13 +4134,11 @@ html {
 
 /* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
-    /* 🔴 CRÍTICO: Tap targets mínimos 44x44px para todos los elementos táctiles */
+    /* Larger tap targets */
     .nav-link,
     .btn-primary,
     .btn-whatsapp,
     .btn-submit,
-    button,
-    input[type="submit"],
     a {
         min-height: 44px;
         min-width: 44px;
@@ -4375,27 +4166,6 @@ html {
     .nav-link:active {
         background: rgba(63, 181, 181, 0.1);
         border-radius: 8px;
-    }
-}
-
-/* 🟢 MEJORA: Feedback visual mejorado para inputs en mobile */
-@media (max-width: 768px) {
-    input:focus,
-    textarea:focus,
-    select:focus {
-        border: 2px solid var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(45, 125, 125, 0.1);
-        outline: none;
-    }
-    
-    input:invalid:not(:placeholder-shown),
-    textarea:invalid:not(:placeholder-shown) {
-        border-color: var(--error-color);
-    }
-    
-    input:valid:not(:placeholder-shown),
-    textarea:valid:not(:placeholder-shown) {
-        border-color: var(--success-color);
     }
 }
 
@@ -4478,9 +4248,102 @@ input[type="button"] {
 
 
 /* ============================================
-   🟢 PERFORMANCE: Código Firefox iOS redundante eliminado
-   Se unificó en la regla universal mobile más abajo
+   FIREFOX iOS SPECIFIC FIXES
    ============================================ */
+
+/* Firefox iOS Header Fix - Prevent top cutoff */
+@supports not (-webkit-touch-callout: none) {
+    /* This targets Firefox (non-webkit browsers) */
+    .header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding-top: env(safe-area-inset-top, 1rem) !important;
+    }
+    
+    /* Add padding to body to prevent content hiding under fixed header */
+    body {
+        padding-top: 70px;
+    }
+    
+    /* Adjust hero section for fixed header */
+    .hero {
+        margin-top: 0;
+    }
+    
+    /* All sections need adjustment for fixed header */
+    main,
+    .main-content {
+        margin-top: 0;
+    }
+}
+
+/* Firefox-specific safe area support */
+@-moz-document url-prefix() {
+    .header {
+        padding-top: max(1rem, env(safe-area-inset-top)) !important;
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+    
+    .hero {
+        padding-top: max(var(--spacing-xl), env(safe-area-inset-top));
+    }
+}
+
+/* Additional Firefox iOS viewport fixes */
+@media screen and (max-width: 768px) {
+    /* Firefox specific */
+    @supports not (-webkit-touch-callout: none) {
+        .header {
+            position: fixed !important;
+            z-index: 1000;
+        }
+        
+        /* Prevent header overlap on content */
+        .hero,
+        section:first-of-type {
+            margin-top: 70px;
+        }
+        
+        /* Fix for hero height calculation */
+        .hero {
+            min-height: calc(100vh - 70px);
+        }
+        
+        /* Ensure logo is visible */
+        .logo {
+            z-index: 1001;
+        }
+        
+        /* Navigation adjustments */
+        .nav-list {
+            top: 70px;
+            height: calc(100vh - 70px);
+        }
+    }
+}
+
+/* Firefox iOS specific viewport unit fix */
+@supports (-moz-appearance: none) {
+    html {
+        height: 100vh;
+        height: -moz-available;
+    }
+    
+    body {
+        min-height: 100vh;
+        min-height: -moz-available;
+    }
+    
+    .hero {
+        min-height: 100vh;
+        min-height: -moz-available;
+    }
+}
+
 
 /* ============================================
    UNIVERSAL MOBILE HEADER FIX (Safari + Firefox iOS)
