@@ -123,14 +123,10 @@ function displayProgramInfo(program) {
     document.getElementById('programPeriod').textContent = program.period;
 }
 
-// Calcular totales con IVA
+// Calcular totales (precios con IVA incluido)
 function calculateTotal(price) {
-    const subtotal = price;
-    const iva = Math.round(subtotal * 0.21 * 100) / 100; // 21% IVA
-    const total = subtotal + iva;
+    const total = price; // El precio ya incluye IVA
     
-    document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2)}`;
-    document.getElementById('iva').textContent = `€${iva.toFixed(2)}`;
     document.getElementById('total').textContent = `€${total.toFixed(2)}`;
 }
 
@@ -330,11 +326,9 @@ async function createPaymentIntent(data) {
     }
 }
 
-// Calcular monto total en centavos
+// Calcular monto total en centavos (precio con IVA incluido)
 function calculateTotalAmount() {
-    const subtotal = selectedProgram.price;
-    const iva = Math.round(subtotal * 0.21 * 100) / 100;
-    const total = subtotal + iva;
+    const total = selectedProgram.price; // El precio ya incluye IVA
     return Math.round(total * 100); // Convertir a centavos
 }
 
