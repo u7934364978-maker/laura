@@ -54,7 +54,7 @@ Esto abrirá el navegador para autenticarte.
 El KV (Key-Value) es donde se almacenan las actividades para que el Worker pueda acceder a ellas.
 
 ```bash
-wrangler kv:namespace create ACTIVITIES_KV
+wrangler kv namespace create ACTIVITIES_KV
 ```
 
 **Ejemplo de salida:**
@@ -66,13 +66,25 @@ binding = "ACTIVITIES_KV"
 id = "abcd1234567890efgh"
 ```
 
-**⚠️ IMPORTANTE:** Copia el `id` que te devuelve y pégalo en `wrangler-scheduled.toml` en la línea 34:
+**⚠️ IMPORTANTE:** Copia el `id` que te devuelve y pégalo en **DOS ARCHIVOS**:
 
+1. **`wrangler-scheduled.toml`** línea 34:
 ```toml
 [[kv_namespaces]]
 binding = "ACTIVITIES_KV"
 id = "abcd1234567890efgh"  # ← Pega aquí tu ID
 ```
+
+2. **`wrangler.toml`** línea 25:
+```toml
+[[kv_namespaces]]
+binding = "ACTIVITIES_KV"
+id = "abcd1234567890efgh"  # ← El MISMO ID aquí también
+```
+
+**💡 Nota:** El mismo KV se usa en ambos workers:
+- `worker.js` (principal) - Para recibir sincronizaciones desde el frontend
+- `scheduled-worker.js` (cron) - Para leer actividades y enviar recordatorios
 
 ### **Paso 4: Configurar Resend API Key**
 
@@ -151,8 +163,10 @@ localStorage.getItem('wild_fitness_activities')
 # 2. Copiar el JSON y guardarlo en activities.json
 
 # 3. Subir a KV
-wrangler kv:key put --binding=ACTIVITIES_KV "wild_fitness_activities" --path=activities.json --config wrangler-scheduled.toml
+wrangler kv key put --namespace-id=TU_KV_ID wild_fitness_activities --path=activities.json
 ```
+
+**Nota:** Reemplaza `TU_KV_ID` con el ID del namespace que obtuviste en el Paso 3.
 
 ---
 
@@ -240,8 +254,9 @@ Si algo falla, el admin recibirá:
 **Solución:**
 1. Verifica que las actividades se están sincronizando:
    ```bash
-   wrangler kv:key get --binding=ACTIVITIES_KV "wild_fitness_activities" --config wrangler-scheduled.toml
+   wrangler kv key get --namespace-id=TU_KV_ID wild_fitness_activities
    ```
+   (Reemplaza `TU_KV_ID` con tu ID del namespace)
 2. Si está vacío, sincroniza manualmente (ver Opción B arriba)
 
 ### **❌ "Error obteniendo actividades"**
@@ -393,7 +408,7 @@ Los participantes recibirán un email con:
 Si necesitas ayuda:
 
 1. **Ver logs:** `npx wrangler tail --config wrangler-scheduled.toml`
-2. **Revisar KV:** `wrangler kv:key get --binding=ACTIVITIES_KV "wild_fitness_activities" --config wrangler-scheduled.toml`
+2. **Revisar KV:** `wrangler kv key get --namespace-id=TU_KV_ID wild_fitness_activities`
 3. **Cloudflare Dashboard:** https://dash.cloudflare.com/ → Workers → wild-fitness-scheduled-emails
 4. **Resend Dashboard:** https://resend.com/emails → Ver historial de envíos
 
