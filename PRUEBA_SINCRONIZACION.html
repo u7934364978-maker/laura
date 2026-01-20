@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Sincronización - Wild Fitness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 36px;
+        }
+        
+        .instructions {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .instructions h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .test-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .test-panel h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-create {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-create:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-clear {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-clear:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .activities-display {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .activity-item h4 {
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .activity-item p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 3px 0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #9ca3af;
+            padding: 40px 20px;
+        }
+        
+        .log {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+        }
+        
+        .log-entry.success {
+            color: #10b981;
+        }
+        
+        .log-entry.error {
+            color: #ef4444;
+        }
+        
+        .log-entry.info {
+            color: #3b82f6;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+        
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Prueba de Sincronización - Wild Fitness</h1>
+        
+        <div class="instructions">
+            <h2>📋 Instrucciones de Prueba</h2>
+            <ol>
+                <li><strong>Abre dos pestañas:</strong> Abre esta página en dos pestañas diferentes del navegador</li>
+                <li><strong>Crea una actividad:</strong> Click en "Crear Actividad TEST" en una pestaña</li>
+                <li><strong>Observa la otra pestaña:</strong> La actividad debería aparecer automáticamente en la otra pestaña</li>
+                <li><strong>Elimina una actividad:</strong> Click en "Eliminar Última" y observa la sincronización</li>
+                <li><strong>Revisa los logs:</strong> Los logs en la parte inferior muestran todos los eventos de sincronización</li>
+            </ol>
+            
+            <div class="alert alert-success" style="margin-top: 20px;">
+                <strong>✅ Sincronización Activa:</strong> BroadcastChannel + Storage Events + Polling cada 3s
+            </div>
+        </div>
+        
+        <div class="test-panel">
+            <h3>🎮 Panel de Control</h3>
+            
+            <div class="button-group">
+                <button class="btn-create" onclick="createTestActivity()">
+                    ➕ Crear Actividad TEST
+                </button>
+                <button class="btn-delete" onclick="deleteLastActivity()">
+                    🗑️ Eliminar Última
+                </button>
+                <button class="btn-clear" onclick="clearAllActivities()">
+                    🧹 Limpiar Todo
+                </button>
+                <button class="btn-info" onclick="loadActivities()">
+                    🔄 Recargar
+                </button>
+            </div>
+            
+            <h3>📅 Actividades Actuales (<span id="activityCount">0</span>)</h3>
+            <div class="activities-display" id="activitiesDisplay">
+                <div class="empty-state">
+                    No hay actividades. Crea una actividad de prueba para comenzar.
+                </div>
+            </div>
+            
+            <h3>📊 Log de Eventos</h3>
+            <div class="log" id="logDisplay">
+                <div class="log-entry info">🚀 Sistema de sincronización inicializado</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'wild_fitness_activities';
+        let activities = [];
+        let syncChannel;
+        
+        // Initialize BroadcastChannel
+        try {
+            syncChannel = new BroadcastChannel('wild_fitness_sync');
+            
+            syncChannel.onmessage = (event) => {
+                if (event.data.type === 'activities_updated') {
+                    addLog('🔄 Sincronización recibida via BroadcastChannel', 'success');
+                    loadActivities();
+                }
+            };
+            
+            addLog('✅ BroadcastChannel activado', 'success');
+        } catch (e) {
+            addLog('⚠️ BroadcastChannel no disponible, usando fallbacks', 'error');
+        }
+        
+        // Listen for storage events
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY) {
+                addLog('🔄 Storage event detectado', 'info');
+                loadActivities();
+            }
+        });
+        
+        // Polling fallback
+        setInterval(() => {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            const currentStored = JSON.stringify(activities);
+            if (stored !== currentStored) {
+                addLog('🔄 Cambio detectado via polling', 'info');
+                loadActivities();
+            }
+        }, 3000);
+        
+        // Load activities
+        function loadActivities() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                activities = stored ? JSON.parse(stored) : [];
+                renderActivities();
+                document.getElementById('activityCount').textContent = activities.length;
+            } catch (error) {
+                addLog('❌ Error cargando actividades: ' + error.message, 'error');
+            }
+        }
+        
+        // Save activities
+        function saveActivities() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
+                
+                // Broadcast to other tabs
+                if (syncChannel) {
+                    syncChannel.postMessage({ type: 'activities_updated', timestamp: Date.now() });
+                    addLog('📡 Mensaje de sync enviado via BroadcastChannel', 'success');
+                }
+                
+                // Trigger storage event
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: STORAGE_KEY,
+                    newValue: JSON.stringify(activities),
+                    url: window.location.href
+                }));
+                
+                addLog('💾 Actividades guardadas en localStorage', 'success');
+                loadActivities();
+            } catch (error) {
+                addLog('❌ Error guardando: ' + error.message, 'error');
+            }
+        }
+        
+        // Create test activity
+        function createTestActivity() {
+            const activity = {
+                id: Date.now(),
+                title: 'Trail Running TEST ' + new Date().toLocaleTimeString(),
+                type: 'trail',
+                date: new Date().toISOString().split('T')[0],
+                time: '09:00',
+                location: 'Test Location',
+                capacity: 10,
+                enrolled: 0,
+                participants: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            activities.push(activity);
+            saveActivities();
+            addLog('➕ Actividad creada: ' + activity.title, 'success');
+        }
+        
+        // Delete last activity
+        function deleteLastActivity() {
+            if (activities.length === 0) {
+                addLog('⚠️ No hay actividades para eliminar', 'error');
+                return;
+            }
+            
+            const deleted = activities.pop();
+            saveActivities();
+            addLog('🗑️ Actividad eliminada: ' + deleted.title, 'info');
+        }
+        
+        // Clear all activities
+        function clearAllActivities() {
+            if (confirm('¿Estás seguro de eliminar TODAS las actividades?')) {
+                activities = [];
+                saveActivities();
+                addLog('🧹 Todas las actividades eliminadas', 'info');
+            }
+        }
+        
+        // Render activities
+        function renderActivities() {
+            const container = document.getElementById('activitiesDisplay');
+            
+            if (activities.length === 0) {
+                container.innerHTML = '<div class="empty-state">No hay actividades. Crea una actividad de prueba para comenzar.</div>';
+                return;
+            }
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <h4>🏃 ${activity.title}</h4>
+                    <p><strong>Fecha:</strong> ${activity.date} a las ${activity.time}</p>
+                    <p><strong>Ubicación:</strong> ${activity.location}</p>
+                    <p><strong>Capacidad:</strong> ${activity.enrolled}/${activity.capacity}</p>
+                    <p style="font-size: 12px; color: #9ca3af;">ID: ${activity.id}</p>
+                </div>
+            `).join('');
+        }
+        
+        // Add log entry
+        function addLog(message, type = 'info') {
+            const logDisplay = document.getElementById('logDisplay');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDisplay.appendChild(entry);
+            logDisplay.scrollTop = logDisplay.scrollHeight;
+            
+            console.log(message);
+        }
+        
+        // Initialize
+        loadActivities();
+        addLog('🎯 Sistema listo para pruebas', 'success');
+    </script>
+</body>
+</html>

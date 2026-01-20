@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check Sync - Wild Fitness</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+        pre {
+            background: #000;
+            padding: 20px;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .info {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Wild Fitness - Check Sync Status</h1>
+    
+    <div class="info">
+        <strong>Fecha actual:</strong> <span id="currentDate"></span><br>
+        <strong>localStorage key:</strong> wild_fitness_activities
+    </div>
+    
+    <button onclick="checkData()">🔄 Verificar Datos</button>
+    <button onclick="clearData()">🗑️ Limpiar localStorage</button>
+    <button onclick="testBroadcast()">📡 Test BroadcastChannel</button>
+    
+    <h2>📊 Datos en localStorage:</h2>
+    <pre id="output"></pre>
+    
+    <h2>📝 Log de Eventos:</h2>
+    <pre id="log"></pre>
+
+    <script>
+        const STORAGE_KEY = 'wild_fitness_activities';
+        
+        // Show current date
+        document.getElementById('currentDate').textContent = new Date().toISOString().split('T')[0];
+        
+        function log(message) {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logEl.textContent += `[${timestamp}] ${message}\n`;
+            console.log(message);
+        }
+        
+        function checkData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            const output = document.getElementById('output');
+            
+            if (!stored) {
+                output.textContent = '❌ No hay datos en localStorage';
+                log('❌ localStorage está vacío');
+                return;
+            }
+            
+            try {
+                const activities = JSON.parse(stored);
+                output.textContent = JSON.stringify(activities, null, 2);
+                log(`✅ ${activities.length} actividades encontradas`);
+                
+                // Check dates
+                const today = new Date().toISOString().split('T')[0];
+                const future = activities.filter(a => a.date >= today);
+                log(`📅 Hoy: ${today}`);
+                log(`📅 Actividades futuras: ${future.length}`);
+                
+                activities.forEach(a => {
+                    const isFuture = a.date >= today;
+                    log(`  - ${a.title}: ${a.date} ${isFuture ? '✅ FUTURA' : '❌ PASADA'}`);
+                });
+            } catch (e) {
+                output.textContent = '❌ Error parseando JSON: ' + e.message;
+                log('❌ Error: ' + e.message);
+            }
+        }
+        
+        function clearData() {
+            if (confirm('¿Seguro que quieres limpiar TODOS los datos?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                document.getElementById('output').textContent = '🗑️ Datos eliminados';
+                log('🗑️ localStorage limpiado');
+            }
+        }
+        
+        function testBroadcast() {
+            try {
+                const channel = new BroadcastChannel('wild_fitness_sync');
+                
+                channel.onmessage = (e) => {
+                    log('📡 Mensaje recibido: ' + JSON.stringify(e.data));
+                };
+                
+                channel.postMessage({
+                    type: 'test',
+                    message: 'Test message',
+                    timestamp: Date.now()
+                });
+                
+                log('📡 BroadcastChannel test enviado');
+                
+                setTimeout(() => {
+                    channel.close();
+                }, 2000);
+            } catch (e) {
+                log('❌ BroadcastChannel error: ' + e.message);
+            }
+        }
+        
+        // Listen for storage changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY) {
+                log('🔄 Storage event detectado');
+                checkData();
+            }
+        });
+        
+        // Listen for broadcast messages
+        try {
+            const channel = new BroadcastChannel('wild_fitness_sync');
+            channel.onmessage = (e) => {
+                log('📡 Broadcast recibido: ' + JSON.stringify(e.data));
+                if (e.data.type === 'activities_updated') {
+                    checkData();
+                }
+            };
+        } catch (e) {
+            log('⚠️ BroadcastChannel no disponible');
+        }
+        
+        // Auto-check on load
+        log('🚀 Iniciado');
+        checkData();
+    </script>
+</body>
+</html>
