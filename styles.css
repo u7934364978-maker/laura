@@ -1248,52 +1248,56 @@ img.image-error {
    RESPONSIVE DESIGN
    ============================================ */
 @media (max-width: 768px) {
+    /* Hero optimizado para mobile */
     .hero {
         height: 100vh;
-        min-height: 700px;
-        padding-bottom: 120px;
+        min-height: 650px; /* Reducido de 700px */
+        padding-bottom: 100px; /* Reducido de 120px */
     }
 
     .hero-title {
-        font-size: 1.6rem;
+        font-size: clamp(1.5rem, 4vw, 1.8rem); /* Mejorado con clamp */
         letter-spacing: -0.5px;
     }
     
     .hero-quote {
-        font-size: 1rem;
+        font-size: clamp(0.95rem, 2vw, 1.1rem); /* Mejorado con clamp */
         margin: var(--spacing-sm) auto;
         padding: 0 var(--spacing-md);
         max-width: 90%;
+        line-height: 1.7;
     }
 
     .hero-subtitle {
-        font-size: 1.1rem;
+        font-size: clamp(1rem, 2vw, 1.2rem); /* Mejorado con clamp */
     }
     
     .scroll-indicator {
-        bottom: 50px;
-        padding: 0.75rem 1rem;
+        bottom: 40px; /* Reducido de 50px */
+        padding: 0.65rem 0.9rem; /* Reducido */
     }
     
     .scroll-text {
-        font-size: 0.85rem;
+        font-size: 0.8rem; /* Reducido */
     }
     
     .scroll-arrow {
-        font-size: 1.5rem;
+        font-size: 1.4rem; /* Reducido de 1.5rem */
     }
 
     .hero-actions {
         flex-direction: column;
         width: 100%;
         max-width: 320px;
-        margin: 0 auto var(--spacing-lg);
+        margin: 0 auto var(--spacing-md); /* Reducido de lg */
+        gap: 0.75rem; /* Añadido para consistencia */
     }
 
     .btn-primary, .btn-whatsapp {
         width: 100%;
         justify-content: center;
-        padding: 1rem 2rem;
+        padding: 0.9rem 1.75rem; /* Optimizado */
+        min-height: 44px; /* Asegurar tap target */
     }
 
     .hero-badges {
@@ -1301,12 +1305,13 @@ img.image-error {
         align-items: stretch;
         max-width: 320px;
         margin: 0 auto;
-        gap: 0.75rem;
+        gap: 0.6rem; /* Reducido de 0.75rem */
     }
 
     .badge {
         justify-content: center;
-        padding: 0.9rem 1.5rem;
+        padding: 0.75rem 1.25rem; /* Optimizado */
+        font-size: 0.9rem;
     }
 
     .schedule-content {
@@ -1354,36 +1359,42 @@ img.image-error {
 
 @media (max-width: 480px) {
     :root {
-        --spacing-xl: 2.5rem;
-        --spacing-lg: 2rem;
+        --spacing-xl: 2rem; /* Reducido */
+        --spacing-lg: 1.5rem; /* Reducido */
     }
     
     .hero {
-        min-height: 650px;
-        padding-bottom: 110px;
+        min-height: 600px; /* Reducido de 650px */
+        padding-bottom: 90px; /* Reducido de 110px */
     }
     
     .hero-quote {
-        font-size: 0.95rem;
+        font-size: clamp(0.9rem, 2vw, 1rem);
         padding: 0 var(--spacing-sm);
         max-width: 95%;
+        line-height: 1.7;
     }
 
     .pricing-amount {
-        font-size: 2.5rem;
+        font-size: 2.3rem; /* Ligeramente reducido */
     }
 
     .schedule-icon {
-        font-size: 2.5rem;
+        font-size: 2.3rem; /* Ligeramente reducido */
     }
     
     .scroll-indicator {
-        bottom: 40px;
-        padding: 0.6rem 0.9rem;
+        bottom: 35px; /* Reducido */
+        padding: 0.55rem 0.8rem; /* Reducido */
     }
     
     .scroll-text {
-        font-size: 0.8rem;
+        font-size: 0.75rem; /* Reducido */
+    }
+    
+    /* Optimizar container padding en móviles pequeños */
+    .container {
+        padding: 0 var(--spacing-sm);
     }
 }
 
@@ -3790,8 +3801,26 @@ html {
 
 
 /* ============================================
-   MOBILE RESPONSIVE - iOS & Android Fix
+   MOBILE RESPONSIVE - OPTIMIZADO 2026
    ============================================ */
+
+/* 🔴 CRÍTICO: Simplificar Fixed Positioning para Mobile */
+@media screen and (max-width: 768px) {
+    .header {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: 0.75rem 0;
+        will-change: auto;
+    }
+    
+    body {
+        padding-top: 70px;
+    }
+}
 
 /* iOS Safari Specific Fixes */
 @supports (-webkit-touch-callout: none) {
@@ -3826,15 +3855,15 @@ html {
     }
 }
 
-/* Enhanced Mobile Styles */
+/* 🔴 CRÍTICO: Optimizar Logo y Header para Móviles Pequeños */
 @media (max-width: 480px) {
-    /* Root adjustments */
+    /* Root adjustments - Reducir espaciado */
     :root {
-        --spacing-xs: 0.4rem;
+        --spacing-xs: 0.375rem;
         --spacing-sm: 0.75rem;
-        --spacing-md: 1.25rem;
-        --spacing-lg: 2rem;
-        --spacing-xl: 2.5rem;
+        --spacing-md: 1.5rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
     }
     
     /* Header Mobile */
@@ -3846,65 +3875,106 @@ html {
         padding: 0 var(--spacing-sm);
     }
     
+    /* Logo optimizado para móviles pequeños */
     .logo-text {
-        font-size: 1.1rem;
+        font-size: 1.2rem; /* Aumentado de 1.1rem */
+        letter-spacing: 1px; /* Reducido de 2px */
     }
     
     .logo-icon {
-        font-size: 1.4rem;
+        font-size: 1.3rem; /* Reducido de 1.4rem */
     }
     
-    /* Hero Mobile */
+    /* 🔴 CRÍTICO: Hero Mobile - Reducir altura y optimizar elementos */
     .hero {
-        min-height: 85vh;
+        min-height: 600px; /* Reducido de 85vh */
         padding: var(--spacing-md);
+        padding-bottom: 80px; /* Reducido de default */
     }
     
     .hero-content {
         padding: var(--spacing-md) var(--spacing-sm);
     }
     
+    /* Mejorar escalado de títulos con clamp() */
     .hero-title {
-        font-size: 1.6rem;
+        font-size: clamp(1.75rem, 4vw, 2.5rem); /* Mejorado */
         margin-bottom: var(--spacing-sm);
+        line-height: 1.2;
     }
     
     .hero-subtitle {
-        font-size: 1rem;
-        line-height: 1.5;
+        font-size: clamp(1rem, 2vw, 1.4rem); /* Mejorado */
+        line-height: 1.6;
     }
     
     .hero-quote {
-        font-size: 0.95rem;
-        line-height: 1.6;
+        font-size: clamp(0.95rem, 2vw, 1.1rem); /* Mejorado */
+        line-height: 1.7;
         margin: var(--spacing-xs) auto var(--spacing-sm);
+        max-width: 90%;
     }
     
+    /* Optimizar Hero Badges en Mobile */
+    .hero-badges {
+        gap: 0.5rem; /* Reducido de 0.75rem */
+        margin-top: var(--spacing-md);
+    }
+    
+    .badge {
+        padding: 0.7rem 1rem; /* Reducido de 0.9rem 1.5rem */
+        font-size: 0.85rem;
+    }
+    
+    .badge-icon {
+        font-size: 1.2rem;
+    }
+    
+    /* Optimizar Hero Actions */
     .hero-actions {
         flex-direction: column;
-        gap: var(--spacing-sm);
+        gap: 0.75rem; /* Reducido */
         width: 100%;
+        margin-bottom: var(--spacing-md); /* Reducido */
     }
     
+    /* 🔴 CRÍTICO: Tap Targets Mínimos 44x44px */
     .btn-primary,
     .btn-whatsapp {
         width: 100%;
-        padding: 0.9rem 1.5rem;
-        font-size: 1rem;
+        padding: 0.9rem 1.75rem; /* Reducido pero mantiene 44px altura */
+        font-size: 0.95rem;
         justify-content: center;
+        min-height: 44px; /* Asegurar tap target */
+        min-width: 44px;
     }
     
-    /* Navigation Mobile */
+    /* Mejorar Hamburger Menu Mobile */
     .nav-list {
         padding: var(--spacing-md);
         gap: 0;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: var(--bg-white);
+        transform: translateX(-100%); /* Cambio de left a transform para mejor performance */
+        transition: transform 0.3s ease;
+        z-index: 999;
     }
     
+    .nav-list.active {
+        transform: translateX(0);
+    }
+    
+    /* 🔴 CRÍTICO: Tap targets para navegación */
     .nav-link {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: 1rem;
         width: 100%;
         display: block;
+        min-height: 44px; /* Asegurar tap target mínimo */
     }
     
     .nav-cta {
@@ -3914,44 +3984,52 @@ html {
         border-radius: 50px;
         text-align: center;
         padding: var(--spacing-sm) var(--spacing-md) !important;
+        min-height: 44px; /* Asegurar tap target */
     }
     
-    /* Sections Mobile */
+    /* Optimizar Títulos de Sección */
     .section-title {
-        font-size: 1.75rem;
+        font-size: clamp(1.5rem, 4vw, 2rem); /* Mejorado con clamp */
         line-height: 1.3;
+        margin-bottom: var(--spacing-sm); /* Reducido */
     }
     
     .section-subtitle,
     .section-description {
-        font-size: 1rem;
+        font-size: clamp(0.95rem, 2vw, 1.1rem); /* Mejorado con clamp */
         line-height: 1.6;
     }
     
-    /* Cards Mobile */
+    /* Reducir Padding de Cards en Mobile */
     .benefit-card,
     .service-card,
     .specialty-card {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm); /* Reducido a sm en vez de md */
     }
     
     .benefit-title,
     .service-header h3,
     .specialty-title {
-        font-size: 1.2rem;
+        font-size: 1.15rem; /* Ligeramente reducido */
     }
     
-    /* About Section Mobile */
+    /* About Section Mobile - Mejor uso del espacio */
     .about-content {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
     
-    .certifications-box {
-        position: static;
+    .about-text p {
+        margin-bottom: var(--spacing-sm); /* Reducir espacio entre párrafos */
     }
     
-    /* Footer Mobile */
+    .certifications-box {
+        position: static;
+        padding: var(--spacing-md); /* Reducir padding */
+        margin-top: var(--spacing-md);
+    }
+    
+    /* Footer Mobile - Optimizado */
     .footer-content {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
@@ -3959,7 +4037,7 @@ html {
     }
     
     .footer-column h4 {
-        font-size: 1.1rem;
+        font-size: 1.05rem; /* Ligeramente reducido */
     }
     
     .footer-bottom {
@@ -3968,7 +4046,7 @@ html {
         text-align: center;
     }
     
-    /* Blog Mobile */
+    /* Blog Mobile - Mejor legibilidad */
     .blog-article {
         margin-bottom: var(--spacing-md);
     }
@@ -3978,38 +4056,40 @@ html {
     }
     
     .article-content h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem; /* Ligeramente reducido */
     }
     
     .article-content h3 {
-        font-size: 1.25rem;
+        font-size: 1.2rem; /* Ligeramente reducido */
     }
     
     .article-excerpt {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
     
     .article-body {
         font-size: 0.95rem;
+        line-height: 1.7; /* Mejorar legibilidad */
     }
     
-    /* Contact Page Mobile */
+    /* Contact Page Mobile - Optimizado */
     .contact-hero {
         padding: calc(var(--spacing-xl) + 70px) var(--spacing-md) var(--spacing-md);
     }
     
     .contact-title {
-        font-size: 1.75rem;
+        font-size: 1.65rem; /* Ligeramente reducido */
     }
     
     .contact-subtitle {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
     
     .contact-form-wrapper {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm); /* Reducir padding */
     }
     
+    /* 🔴 CRÍTICO: Prevenir zoom en iOS con font-size mínimo 16px */
     .form-group label {
         font-size: 0.9rem;
     }
@@ -4017,29 +4097,77 @@ html {
     .form-group input,
     .form-group select,
     .form-group textarea {
-        font-size: 16px; /* Prevent iOS zoom */
+        font-size: 16px !important; /* Prevent iOS zoom */
         padding: 0.85rem;
+        min-height: 44px; /* Tap target mínimo */
     }
     
+    /* 🔴 CRÍTICO: Botón submit con tap target adecuado */
     .btn-submit {
         padding: 1rem 2rem;
         font-size: 1rem;
+        min-height: 44px;
+        min-width: 44px;
     }
     
+    /* Optimizar Contact Cards y FAQ */
     .contact-card {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm); /* Reducir padding */
     }
     
     .faq-item {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm); /* Reducir padding */
     }
     
     .faq-question {
-        font-size: 1.1rem;
+        font-size: 1.05rem; /* Ligeramente reducido */
     }
     
     .faq-answer {
         font-size: 0.95rem;
+        line-height: 1.7; /* Mejorar legibilidad */
+    }
+}
+
+/* 🟡 IMPORTANTE: Tablet Portrait - Breakpoint intermedio (2 columnas) */
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Hero ajustado para tablets */
+    .hero {
+        min-height: 650px;
+    }
+    
+    .hero-actions {
+        flex-direction: row;
+        justify-content: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .btn-primary,
+    .btn-whatsapp {
+        width: auto;
+        min-width: 180px;
+    }
+    
+    /* Grids intermedios de 2 columnas para tablets */
+    .benefits-grid,
+    .services-grid,
+    .specialties-grid,
+    .experience-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    .philosophy-pillars {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -4100,6 +4228,34 @@ html {
     }
 }
 
+/* 🟢 PERFORMANCE: Reducir animaciones en mobile */
+@media (max-width: 768px) {
+    /* Desactivar zoom de hero image para mejor performance */
+    .hero-image img {
+        animation: none;
+    }
+    
+    /* Simplificar transiciones en mobile */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* 🟢 PERFORMANCE: Optimizar will-change solo cuando necesario */
+.nav-list.transitioning {
+    will-change: transform;
+}
+
+.nav-list:not(.transitioning) {
+    will-change: auto;
+}
+
 /* Landscape Mobile */
 @media (max-height: 500px) and (orientation: landscape) {
     .hero {
@@ -4134,11 +4290,13 @@ html {
 
 /* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
-    /* Larger tap targets */
+    /* 🔴 CRÍTICO: Tap targets mínimos 44x44px para todos los elementos táctiles */
     .nav-link,
     .btn-primary,
     .btn-whatsapp,
     .btn-submit,
+    button,
+    input[type="submit"],
     a {
         min-height: 44px;
         min-width: 44px;
@@ -4166,6 +4324,27 @@ html {
     .nav-link:active {
         background: rgba(63, 181, 181, 0.1);
         border-radius: 8px;
+    }
+}
+
+/* 🟢 MEJORA: Feedback visual mejorado para inputs en mobile */
+@media (max-width: 768px) {
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border: 2px solid var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(45, 125, 125, 0.1);
+        outline: none;
+    }
+    
+    input:invalid:not(:placeholder-shown),
+    textarea:invalid:not(:placeholder-shown) {
+        border-color: var(--error-color);
+    }
+    
+    input:valid:not(:placeholder-shown),
+    textarea:valid:not(:placeholder-shown) {
+        border-color: var(--success-color);
     }
 }
 
