@@ -2,7 +2,7 @@
 // IMPORTANTE: Reemplaza 'TU_PUBLISHABLE_KEY_DE_STRIPE' con tu clave real de Stripe
 
 // Configuración de Stripe
-// Para obtener tu clave: https://dashboard.stripe.com/apikeys
+// Publishable key configurada (modo TEST)
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Srimv3rBdQp0c0dVXQkSImuczLve4tnbyNnLdeU7XslPIoM2e1AezPYUl6F7xlRjGHXZmyuykX42N89DxBGZkFX00fwy2YkWB';
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 const elements = stripe.elements();
@@ -302,7 +302,7 @@ async function createPaymentIntent(data) {
     try {
         // Llamar al Cloudflare Worker para crear el Payment Intent
         // El worker maneja la clave secreta de forma segura
-        const workerUrl = 'https://wild-fitness-payments.REPLACE_WITH_YOUR_WORKER_URL.workers.dev/create-payment-intent';
+        const workerUrl = 'https://wild-fitness-payments.w5kvt5ypsr.workers.dev/create-payment-intent';
         
         const response = await fetch(workerUrl, {
             method: 'POST',
