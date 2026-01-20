@@ -52,105 +52,158 @@
     <pre id="log"></pre>
 
     <script>
+        // VARIABLES GLOBALES
         const STORAGE_KEY = 'wild_fitness_activities';
+        let logEl, outputEl, dateEl;
         
-        // Show current date
-        document.getElementById('currentDate').textContent = new Date().toISOString().split('T')[0];
+        // INICIALIZACIÓN
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página cargada');
+            
+            // Obtener elementos del DOM
+            logEl = document.getElementById('log');
+            outputEl = document.getElementById('output');
+            dateEl = document.getElementById('currentDate');
+            
+            // Mostrar fecha actual
+            if (dateEl) {
+                dateEl.textContent = new Date().toISOString().split('T')[0];
+            }
+            
+            // Log inicial
+            log('🚀 Sistema iniciado correctamente');
+            log('✅ Botones cargados y listos');
+            
+            // Auto-check
+            checkData();
+            
+            // Listen for storage changes
+            window.addEventListener('storage', (e) => {
+                if (e.key === STORAGE_KEY) {
+                    log('🔄 Storage event detectado');
+                    checkData();
+                }
+            });
+            
+            // Listen for broadcast messages
+            try {
+                const channel = new BroadcastChannel('wild_fitness_sync');
+                channel.onmessage = (e) => {
+                    log('📡 Broadcast recibido: ' + JSON.stringify(e.data));
+                    if (e.data.type === 'activities_updated') {
+                        checkData();
+                    }
+                };
+                log('✅ BroadcastChannel listener activado');
+            } catch (e) {
+                log('⚠️ BroadcastChannel no disponible: ' + e.message);
+            }
+        });
         
+        // FUNCIONES
         function log(message) {
-            const logEl = document.getElementById('log');
             const timestamp = new Date().toLocaleTimeString();
-            logEl.textContent += `[${timestamp}] ${message}\n`;
-            console.log(message);
+            const fullMessage = `[${timestamp}] ${message}`;
+            
+            console.log(fullMessage);
+            
+            if (logEl) {
+                logEl.textContent += fullMessage + '\n';
+                logEl.scrollTop = logEl.scrollHeight;
+            }
         }
         
         function checkData() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            const output = document.getElementById('output');
+            log('🔍 Verificando datos...');
             
-            if (!stored) {
-                output.textContent = '❌ No hay datos en localStorage';
-                log('❌ localStorage está vacío');
+            if (!outputEl) {
+                console.error('❌ Elemento output no encontrado');
                 return;
             }
             
             try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                
+                if (!stored || stored === 'null' || stored === 'undefined') {
+                    outputEl.textContent = '❌ No hay datos en localStorage\n\nKey: ' + STORAGE_KEY;
+                    log('❌ localStorage está vacío');
+                    return;
+                }
+                
                 const activities = JSON.parse(stored);
-                output.textContent = JSON.stringify(activities, null, 2);
+                
+                if (!Array.isArray(activities)) {
+                    outputEl.textContent = '❌ Los datos no son un array válido';
+                    log('❌ Datos inválidos en localStorage');
+                    return;
+                }
+                
+                outputEl.textContent = JSON.stringify(activities, null, 2);
                 log(`✅ ${activities.length} actividades encontradas`);
                 
                 // Check dates
                 const today = new Date().toISOString().split('T')[0];
                 const future = activities.filter(a => a.date >= today);
                 log(`📅 Hoy: ${today}`);
-                log(`📅 Actividades futuras: ${future.length}`);
+                log(`📅 Actividades futuras: ${future.length}/${activities.length}`);
                 
-                activities.forEach(a => {
+                activities.forEach((a, index) => {
                     const isFuture = a.date >= today;
-                    log(`  - ${a.title}: ${a.date} ${isFuture ? '✅ FUTURA' : '❌ PASADA'}`);
+                    log(`  ${index + 1}. ${a.title || 'Sin título'}: ${a.date} ${isFuture ? '✅ FUTURA' : '❌ PASADA'}`);
                 });
+                
             } catch (e) {
-                output.textContent = '❌ Error parseando JSON: ' + e.message;
+                outputEl.textContent = '❌ Error parseando JSON:\n\n' + e.message + '\n\nDatos raw:\n' + stored;
                 log('❌ Error: ' + e.message);
+                console.error('Error completo:', e);
             }
         }
         
         function clearData() {
-            if (confirm('¿Seguro que quieres limpiar TODOS los datos?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                document.getElementById('output').textContent = '🗑️ Datos eliminados';
-                log('🗑️ localStorage limpiado');
+            log('🗑️ Solicitud de limpieza');
+            
+            if (confirm('¿Seguro que quieres limpiar TODOS los datos?\n\nEsta acción NO se puede deshacer.')) {
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                    outputEl.textContent = '🗑️ Datos eliminados correctamente';
+                    log('✅ localStorage limpiado');
+                } catch (e) {
+                    log('❌ Error al limpiar: ' + e.message);
+                }
+            } else {
+                log('❌ Limpieza cancelada por el usuario');
             }
         }
         
         function testBroadcast() {
+            log('📡 Iniciando test de BroadcastChannel...');
+            
             try {
                 const channel = new BroadcastChannel('wild_fitness_sync');
                 
                 channel.onmessage = (e) => {
-                    log('📡 Mensaje recibido: ' + JSON.stringify(e.data));
+                    log('✅ Mensaje recibido: ' + JSON.stringify(e.data));
                 };
                 
-                channel.postMessage({
+                const testMessage = {
                     type: 'test',
-                    message: 'Test message',
+                    message: 'Test message from check_sync.html',
                     timestamp: Date.now()
-                });
+                };
                 
-                log('📡 BroadcastChannel test enviado');
+                channel.postMessage(testMessage);
+                log('📡 Test enviado: ' + JSON.stringify(testMessage));
                 
                 setTimeout(() => {
                     channel.close();
+                    log('📡 Canal cerrado');
                 }, 2000);
+                
             } catch (e) {
                 log('❌ BroadcastChannel error: ' + e.message);
+                console.error('BroadcastChannel error:', e);
             }
         }
-        
-        // Listen for storage changes
-        window.addEventListener('storage', (e) => {
-            if (e.key === STORAGE_KEY) {
-                log('🔄 Storage event detectado');
-                checkData();
-            }
-        });
-        
-        // Listen for broadcast messages
-        try {
-            const channel = new BroadcastChannel('wild_fitness_sync');
-            channel.onmessage = (e) => {
-                log('📡 Broadcast recibido: ' + JSON.stringify(e.data));
-                if (e.data.type === 'activities_updated') {
-                    checkData();
-                }
-            };
-        } catch (e) {
-            log('⚠️ BroadcastChannel no disponible');
-        }
-        
-        // Auto-check on load
-        log('🚀 Iniciado');
-        checkData();
     </script>
 </body>
 </html>
