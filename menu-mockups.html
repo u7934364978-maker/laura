@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockups - Menús Mobile Wild Fitness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .mockup-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .mockup-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+        }
+
+        .mockup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .mockup-title {
+            font-size: 1.3rem;
+            color: #2d7d7d;
+            font-weight: 700;
+        }
+
+        .mockup-number {
+            background: linear-gradient(135deg, #2d7d7d, #3fb5b5);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .phone-mockup {
+            background: #f8f9fa;
+            border: 8px solid #1a1a1a;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 320px;
+            height: 600px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #1a1a1a;
+            border-radius: 0 0 15px 15px;
+            z-index: 10;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-header {
+            background: rgba(255,255,255,0.98);
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .demo-logo {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2d7d7d;
+        }
+
+        .demo-hamburger {
+            width: 24px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .demo-hamburger span {
+            width: 100%;
+            height: 2px;
+            background: #2d7d7d;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-content {
+            padding: 2rem 1rem;
+            color: #666;
+        }
+
+        .demo-content h3 {
+            color: #2d7d7d;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .demo-content p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .pros, .cons {
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .pros {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+
+        .cons {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+
+        .pros h4, .cons h4 {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .pros li::before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .cons li::before {
+            content: "⚠ ";
+            color: #ef4444;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #744210;
+            margin-top: 1rem;
+        }
+
+        /* Animaciones de menú - OPCIÓN 1: Slide from Left */
+        .menu-slide-left {
+            position: absolute;
+            top: 68px;
+            left: 0;
+            width: 75%;
+            height: calc(100% - 68px);
+            background: white;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .mockup-card:hover .menu-slide-left {
+            transform: translateX(0);
+        }
+
+        /* OPCIÓN 2: Slide from Right */
+        .menu-slide-right {
+            position: absolute;
+            top: 68px;
+            right: 0;
+            width: 75%;
+            height: calc(100% - 68px);
+            background: white;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .mockup-card:hover .menu-slide-right {
+            transform: translateX(0);
+        }
+
+        /* OPCIÓN 3: Full Screen Overlay */
+        .menu-fullscreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 125, 125, 0.98);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mockup-card:hover .menu-fullscreen {
+            opacity: 1;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* OPCIÓN 4: Bottom Sheet */
+        .menu-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .mockup-card:hover .menu-bottom {
+            transform: translateY(0);
+        }
+
+        .bottom-handle {
+            width: 40px;
+            height: 4px;
+            background: #ccc;
+            border-radius: 2px;
+            margin: 0.5rem auto;
+        }
+
+        /* OPCIÓN 5: Push Content */
+        .menu-push {
+            position: absolute;
+            top: 68px;
+            left: 0;
+            width: 70%;
+            height: calc(100% - 68px);
+            background: white;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .content-push {
+            position: absolute;
+            top: 68px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 68px);
+            background: white;
+            transition: transform 0.3s ease;
+        }
+
+        .mockup-card:hover .menu-push {
+            transform: translateX(0);
+        }
+
+        .mockup-card:hover .content-push {
+            transform: translateX(70%);
+        }
+
+        /* OPCIÓN 6: Dropdown */
+        .menu-dropdown {
+            position: absolute;
+            top: 68px;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            z-index: 100;
+        }
+
+        .mockup-card:hover .menu-dropdown {
+            max-height: 300px;
+        }
+
+        /* Menu items styling */
+        .menu-items {
+            padding: 1.5rem 1rem;
+        }
+
+        .menu-item {
+            padding: 0.75rem 1rem;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .menu-item:hover {
+            background: #f0f9f9;
+        }
+
+        .menu-fullscreen .menu-item {
+            color: white;
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0);
+            transition: background 0.3s ease;
+            pointer-events: none;
+        }
+
+        .mockup-card:hover .overlay {
+            background: rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Mockups de Menús Mobile</h1>
+        <p class="subtitle">Wild Fitness - Pasa el cursor sobre cada mockup para ver la animación</p>
+
+        <div class="grid">
+            <!-- OPCIÓN 1: Slide from Left -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-title">Slide from Left</div>
+                    <div class="mockup-number">1</div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="demo-header">
+                            <div class="demo-hamburger">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="demo-logo">WILD FITNESS</div>
+                        </div>
+                        <div class="demo-content">
+                            <h3>Hero Section</h3>
+                            <p>Contenido del sitio web...</p>
+                        </div>
+                        <div class="menu-slide-left">
+                            <div class="menu-items">
+                                <a href="#" class="menu-item">🏠 Inici</a>
+                                <a href="#" class="menu-item">👤 Sobre Laura</a>
+                                <a href="#" class="menu-item">💪 Serveis</a>
+                                <a href="#" class="menu-item">📝 Blog</a>
+                                <a href="#" class="menu-item">📧 Contacte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Pros</h4>
+                        <ul>
+                            <li>Compacto</li>
+                            <li>Natural</li>
+                            <li>Fácil de cerrar</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Menos común</li>
+                            <li>Puede confundir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OPCIÓN 2: Slide from Right -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-title">Slide from Right</div>
+                    <div class="mockup-number">2</div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="demo-header">
+                            <div class="demo-logo">WILD FITNESS</div>
+                            <div class="demo-hamburger">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="demo-content">
+                            <h3>Hero Section</h3>
+                            <p>Contenido del sitio web...</p>
+                        </div>
+                        <div class="overlay"></div>
+                        <div class="menu-slide-right">
+                            <div class="menu-items">
+                                <a href="#" class="menu-item">🏠 Inici</a>
+                                <a href="#" class="menu-item">👤 Sobre Laura</a>
+                                <a href="#" class="menu-item">💪 Serveis</a>
+                                <a href="#" class="menu-item">📝 Blog</a>
+                                <a href="#" class="menu-item">📧 Contacte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Pros</h4>
+                        <ul>
+                            <li>Muy popular</li>
+                            <li>Intuitivo</li>
+                            <li>Moderno</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Ninguno destacable</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="recommendation">⭐ MÁS POPULAR</div>
+            </div>
+
+            <!-- OPCIÓN 3: Full Screen Overlay -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-title">Full Screen Overlay</div>
+                    <div class="mockup-number">3</div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="demo-header">
+                            <div class="demo-logo">WILD FITNESS</div>
+                            <div class="demo-hamburger">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="demo-content">
+                            <h3>Hero Section</h3>
+                            <p>Contenido del sitio web...</p>
+                        </div>
+                        <div class="menu-fullscreen">
+                            <div class="close-btn">✕</div>
+                            <div class="menu-items">
+                                <a href="#" class="menu-item">🏠 Inici</a>
+                                <a href="#" class="menu-item">👤 Sobre Laura</a>
+                                <a href="#" class="menu-item">💪 Serveis</a>
+                                <a href="#" class="menu-item">📝 Blog</a>
+                                <a href="#" class="menu-item">📧 Contacte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Pros</h4>
+                        <ul>
+                            <li>Dramático</li>
+                            <li>Elegante</li>
+                            <li>Foco completo</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Ocupa todo</li>
+                            <li>Puede abrumar</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="recommendation">⭐ MÁS ELEGANTE</div>
+            </div>
+
+            <!-- OPCIÓN 4: Bottom Sheet -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-title">Bottom Sheet</div>
+                    <div class="mockup-number">4</div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="demo-header">
+                            <div class="demo-logo">WILD FITNESS</div>
+                            <div class="demo-hamburger">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="demo-content">
+                            <h3>Hero Section</h3>
+                            <p>Contenido del sitio web...</p>
+                        </div>
+                        <div class="overlay"></div>
+                        <div class="menu-bottom">
+                            <div class="bottom-handle"></div>
+                            <div class="menu-items">
+                                <a href="#" class="menu-item">🏠 Inici</a>
+                                <a href="#" class="menu-item">👤 Sobre Laura</a>
+                                <a href="#" class="menu-item">💪 Serveis</a>
+                                <a href="#" class="menu-item">📝 Blog</a>
+                                <a href="#" class="menu-item">📧 Contacte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Pros</h4>
+                        <ul>
+                            <li>Muy mobile-friendly</li>
+                            <li>Moderno</li>
+                            <li>Natural gesture</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Menos común web</li>
+                            <li>Puede confundir PC</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="recommendation">⭐ MÁS MODERNA</div>
+            </div>
+
+            <!-- OPCIÓN 5: Side Drawer Push -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-title">Side Drawer Push</div>
+                    <div class="mockup-number">5</div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="demo-header">
+                            <div class="demo-hamburger">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="demo-logo">WILD FITNESS</div>
+                        </div>
+                        <div class="content-push">
+                            <div class="demo-content">
+                                <h3>Hero Section</h3>
+                                <p>Contenido se empuja...</p>
+                            </div>
+                        </div>
+                        <div class="menu-push">
+                            <div class="menu-items">
+                                <a href="#" class="menu-item">🏠 Inici</a>
+                                <a href="#" class="menu-item">👤 Sobre Laura</a>
+                                <a href="#" class="menu-item">💪 Serveis</a>
+                                <a href="#" class="menu-item">📝 Blog</a>
+                                <a href="#" class="menu-item">📧 Contacte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Pros</h4>
+                        <ul>
+                            <li>Efecto elegante</li>
+                            <li>Contexto visible</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Puede confundir</li>
+                            <li>Más complejo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OPCIÓN 6: Accordion Dropdown -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-title">Accordion Dropdown</div>
+                    <div class="mockup-number">6</div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="demo-header">
+                            <div class="demo-hamburger">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="demo-logo">WILD FITNESS</div>
+                        </div>
+                        <div class="menu-dropdown">
+                            <div class="menu-items">
+                                <a href="#" class="menu-item">🏠 Inici</a>
+                                <a href="#" class="menu-item">👤 Sobre Laura</a>
+                                <a href="#" class="menu-item">💪 Serveis</a>
+                                <a href="#" class="menu-item">📝 Blog</a>
+                                <a href="#" class="menu-item">📧 Contacte</a>
+                            </div>
+                        </div>
+                        <div class="demo-content">
+                            <h3>Hero Section</h3>
+                            <p>Contenido empujado hacia abajo...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Pros</h4>
+                        <ul>
+                            <li>Simple</li>
+                            <li>Sin overlay</li>
+                            <li>Rápido</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ Contras</h4>
+                        <ul>
+                            <li>Puede romper layout</li>
+                            <li>Menos fluido</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; padding: 2rem; border-radius: 20px; text-align: center; margin-top: 2rem;">
+            <h2 style="color: #2d7d7d; margin-bottom: 1rem;">¿Cuál te gusta más?</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Dime el número (1-6) y lo implemento inmediatamente 🚀</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <div style="padding: 1rem; background: #ffd700; border-radius: 10px; font-weight: bold;">
+                    ⭐ Recomendado: #2 (Slide from Right)
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

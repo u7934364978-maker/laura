@@ -47,66 +47,67 @@ window.addEventListener('scroll', () => {
 });
 
 // ============================================
-// Mobile Navigation Toggle
+// Mobile Navigation Toggle - Side Drawer Push Effect
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.getElementById('navToggle');
     const mainNav = document.getElementById('mainNav');
     const navList = mainNav?.querySelector('.nav-list');
+    
+    // Create overlay element
+    let menuOverlay = document.querySelector('.menu-overlay');
+    if (!menuOverlay) {
+        menuOverlay = document.createElement('div');
+        menuOverlay.className = 'menu-overlay';
+        document.body.appendChild(menuOverlay);
+    }
 
-    console.log('Navigation elements:', { navToggle, mainNav, navList }); // Debug
+    console.log('Navigation elements:', { navToggle, mainNav, navList, menuOverlay }); // Debug
+
+    function toggleMenu(isActive) {
+        navList.classList.toggle('active', isActive);
+        menuOverlay.classList.toggle('active', isActive);
+        document.body.classList.toggle('menu-active', isActive);
+        navToggle.setAttribute('aria-expanded', isActive);
+        
+        console.log('Menu toggled:', isActive); // Debug
+    }
 
     if (navToggle && navList) {
         navToggle.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             
-            const isActive = navList.classList.toggle('active');
-            navToggle.setAttribute('aria-expanded', isActive);
-            
-            console.log('Menu toggled:', isActive); // Debug
-            
-            // Prevent body scroll when menu is open
-            document.body.style.overflow = isActive ? 'hidden' : '';
+            const isActive = !navList.classList.contains('active');
+            toggleMenu(isActive);
+        });
+
+        // Close menu when clicking on overlay
+        menuOverlay.addEventListener('click', () => {
+            toggleMenu(false);
         });
 
         // Close menu when clicking on a link
         const navLinks = navList.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                navList.classList.remove('active');
-                navToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
+                toggleMenu(false);
             });
         });
 
-        // Close menu when clicking on overlay (outside nav-list)
-        navList.addEventListener('click', (e) => {
-            // Si el clic es en el overlay (después del ancho del menú), cerrar
-            if (e.target === navList) {
-                navList.classList.remove('active');
-                navToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Close menu when clicking outside
+        // Close menu when clicking outside (on the pushed content)
         document.addEventListener('click', (e) => {
             if (!mainNav.contains(e.target) && 
-                !navToggle.contains(e.target) && 
+                !e.target.classList.contains('menu-overlay') &&
                 navList.classList.contains('active')) {
-                navList.classList.remove('active');
-                navToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
+                toggleMenu(false);
             }
         });
 
         // Close menu on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && navList.classList.contains('active')) {
-                navList.classList.remove('active');
-                navToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
+                toggleMenu(false);
             }
         });
     } else {
