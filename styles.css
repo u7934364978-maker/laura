@@ -1570,14 +1570,43 @@ a, button, .feature-item, .gallery-item img {
         left: 0;
         right: 0;
         width: 100%;
-        z-index: 1001;
+        z-index: 1000;
         padding: 0.75rem 0;
-        background: var(--bg-white);
-        box-shadow: var(--shadow-sm);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     body {
         padding-top: 70px; /* Compensar header fixed */
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Push effect cuando el menú está activo */
+    body.menu-active {
+        transform: translateX(70%);
+        overflow: hidden;
+    }
+    
+    body.menu-active .header {
+        transform: translateX(70%);
+    }
+    
+    /* Overlay cuando el menú está activo */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+        z-index: 99;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
     }
     
     /* Hamburger menu mejorado */
@@ -1587,10 +1616,9 @@ a, button, .feature-item, .gallery-item img {
         border: none;
         cursor: pointer;
         padding: 0.5rem;
-        z-index: 1002;
+        z-index: 1001;
         min-height: 44px; /* Tap target iOS */
         min-width: 44px;
-        position: relative;
     }
 
     .hamburger {
@@ -1627,34 +1655,29 @@ a, button, .feature-item, .gallery-item img {
     .nav-toggle[aria-expanded="true"] .hamburger::before {
         top: 0;
         transform: rotate(45deg);
-        background: var(--primary-color);
     }
 
     .nav-toggle[aria-expanded="true"] .hamburger::after {
         bottom: 0;
         transform: rotate(-45deg);
-        background: var(--primary-color);
     }
 
-    /* Menú mobile lateral izquierdo con diseño Wild Fitness */
+    /* Menú mobile Side Drawer Push - Opción 5 */
     .nav-list {
         position: fixed;
-        top: 0;
+        top: 70px;
         left: 0;
-        width: 280px;
-        max-width: 80vw;
-        height: 100vh;
-        background: linear-gradient(to bottom, rgba(45, 125, 125, 0.98), rgba(45, 125, 125, 0.95)), 
-                    url('/images/hero.jpg');
-        background-size: cover;
-        background-position: center;
+        width: 70%; /* Menú ocupa 70% del ancho */
+        max-width: 320px; /* Máximo 320px para pantallas grandes */
+        height: calc(100vh - 70px);
+        background: var(--bg-white);
         flex-direction: column;
         justify-content: flex-start;
-        padding: 0;
-        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+        padding: var(--spacing-lg);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
         transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 999;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 100;
         overflow-y: auto;
     }
 
@@ -1662,73 +1685,13 @@ a, button, .feature-item, .gallery-item img {
         transform: translateX(0);
     }
 
-    /* Logo dentro del menú móvil */
-    .nav-list::before {
-        content: '🏔️ WILD FITNESS';
-        display: block;
-        background: rgba(0, 0, 0, 0.4);
-        color: white;
-        font-size: 1.1rem;
-        font-weight: 700;
-        padding: 1.5rem 1.5rem;
-        text-align: left;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        letter-spacing: 1px;
-    }
-
-    .nav-list li {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
     .nav-link {
         width: 100%;
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-        font-weight: 500;
-        min-height: 56px;
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 1.1rem;
+        min-height: 44px; /* Tap target iOS */
         display: flex;
         align-items: center;
-        color: white !important;
-        background: transparent;
-        transition: all 0.2s ease;
-        border-left: 3px solid transparent;
-    }
-
-    .nav-link:hover,
-    .nav-link:active {
-        background: rgba(255, 255, 255, 0.1);
-        border-left-color: var(--accent-color);
-        color: white !important;
-    }
-
-    /* Botón CTA dentro del menú móvil */
-    .nav-cta {
-        margin-top: 1rem;
-        background: rgba(255, 255, 255, 0.15) !important;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 8px;
-        margin-left: 1rem;
-        margin-right: 1rem;
-        text-align: center;
-        justify-content: center;
-        font-weight: 600;
-    }
-
-    .nav-cta:hover {
-        background: rgba(255, 255, 255, 0.25) !important;
-        border-color: white;
-    }
-
-    /* Overlay para cerrar menú al hacer clic fuera */
-    .nav-list.active::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 280px;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: -1;
     }
 }
 
