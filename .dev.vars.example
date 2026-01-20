@@ -1,0 +1,15 @@
+# Stripe API Keys
+# Obtén tus claves en: https://dashboard.stripe.com/apikeys
+
+# Test Mode (para desarrollo)
+STRIPE_SECRET_KEY=sk_test_TU_CLAVE_SECRETA_AQUI
+
+# Production Mode (para producción - usar con precaución)
+# STRIPE_SECRET_KEY=sk_live_TU_CLAVE_SECRETA_AQUI
+
+# Webhook Secret (opcional)
+# STRIPE_WEBHOOK_SECRET=whsec_TU_WEBHOOK_SECRET_AQUI
+
+# Supabase (opcional - para guardar pagos en BD)
+# SUPABASE_URL=https://tu-proyecto.supabase.co
+# SUPABASE_KEY=tu_anon_key_aqui
