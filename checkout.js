@@ -3,7 +3,7 @@
 
 // Configuración de Stripe
 // Para obtener tu clave: https://dashboard.stripe.com/apikeys
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_TU_PUBLISHABLE_KEY_DE_STRIPE'; // ⚠️ REEMPLAZAR CON TU CLAVE REAL
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Srimv3rBdQp0c0dVXQkSImuczLve4tnbyNnLdeU7XslPIoM2e1AezPYUl6F7xlRjGHXZmyuykX42N89DxBGZkFX00fwy2YkWB';
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 const elements = stripe.elements();
 
@@ -293,37 +293,41 @@ async function processBizumPayment(name, email, phone) {
 
 // Crear Payment Intent en el servidor
 async function createPaymentIntent(data) {
-    // IMPORTANTE: Esta función debe llamar a tu backend
-    // El siguiente código es un EJEMPLO que debes reemplazar con tu implementación real
+    // IMPORTANTE: En producción, esto debería llamar a tu Cloudflare Worker
+    // Por ahora usamos Stripe directamente desde el cliente (solo para testing)
     
-    // En producción, necesitas un endpoint en tu servidor que:
-    // 1. Reciba los datos del pago
-    // 2. Cree un Payment Intent usando la API de Stripe desde el servidor
-    // 3. Devuelva el client_secret al frontend
+    // ⚠️ NOTA: Esta NO es la forma recomendada en producción
+    // En producción deberías usar el worker: payment-worker.js
     
-    // Ejemplo de llamada al backend:
-    /*
-    const response = await fetch('https://tu-backend.com/create-payment-intent', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    });
-    
-    if (!response.ok) {
-        throw new Error('Error creant el pagament');
+    try {
+        // Llamar al Cloudflare Worker para crear el Payment Intent
+        // El worker maneja la clave secreta de forma segura
+        const workerUrl = 'https://wild-fitness-payments.REPLACE_WITH_YOUR_WORKER_URL.workers.dev/create-payment-intent';
+        
+        const response = await fetch(workerUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error?.message || 'Error creant el Payment Intent');
+        }
+        
+        const paymentIntent = await response.json();
+        
+        return {
+            clientSecret: paymentIntent.client_secret,
+            paymentIntentId: paymentIntent.id,
+        };
+        
+    } catch (error) {
+        console.error('Error creant Payment Intent:', error);
+        throw error;
     }
-    
-    return await response.json();
-    */
-    
-    // ⚠️ DEMO MODE - ELIMINAR EN PRODUCCIÓN
-    console.warn('⚠️ DEMO MODE: Necesitas implementar un backend real para procesar pagos');
-    console.log('Datos del pago:', data);
-    
-    throw new Error('Per processar pagaments reals, necessites configurar un backend amb Stripe.\n\n' +
-                    'Consulta la documentació a: STRIPE_SETUP.md');
 }
 
 // Calcular monto total en centavos

@@ -1,17 +1,12 @@
 /**
  * Cloudflare Worker para procesar pagos con Stripe
+ * Wild Fitness - Payment Gateway
  * 
  * Este worker maneja:
  * - Creación de Payment Intents
  * - Webhooks de Stripe
  * - Validación de pagos
  * - Envío de confirmaciones
- * 
- * Variables de entorno necesarias:
- * - STRIPE_SECRET_KEY: Tu clave secreta de Stripe (sk_test_... o sk_live_...)
- * - STRIPE_WEBHOOK_SECRET: Secret del webhook de Stripe (whsec_...)
- * - SUPABASE_URL: URL de tu proyecto Supabase (opcional)
- * - SUPABASE_KEY: API Key de Supabase (opcional)
  */
 
 // Configuración
@@ -19,7 +14,9 @@ const STRIPE_API_URL = 'https://api.stripe.com/v1';
 const ALLOWED_ORIGINS = [
     'https://wildbreathing.com',
     'https://www.wildbreathing.com',
-    'http://localhost:3000', // Para desarrollo local
+    'https://laura-morada.pages.dev',
+    'http://localhost:3000',
+    'http://localhost:8080',
 ];
 
 // Headers CORS
@@ -30,16 +27,20 @@ const corsHeaders = {
 };
 
 /**
- * Manejador principal
+ * Manejador principal con acceso a variables de entorno
  */
-addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request));
-});
+export default {
+    async fetch(request, env, ctx) {
+        return handleRequest(request, env);
+    }
+};
 
 /**
  * Procesar solicitudes
  */
-async function handleRequest(request) {
+async function handleRequest(request, env) {
+    // Obtener la clave secreta de Stripe desde las variables de entorno
+    const STRIPE_SECRET_KEY = env.STRIPE_SECRET_KEY;
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -58,10 +59,10 @@ async function handleRequest(request) {
         // Rutas
         switch (path) {
             case '/create-payment-intent':
-                return await createPaymentIntent(request);
+                return await createPaymentIntent(request, STRIPE_SECRET_KEY, env);
             
             case '/webhook':
-                return await handleWebhook(request);
+                return await handleWebhook(request, env);
             
             case '/health':
                 return jsonResponse({ status: 'ok', timestamp: new Date().toISOString() });
@@ -81,7 +82,7 @@ async function handleRequest(request) {
 /**
  * Crear Payment Intent en Stripe
  */
-async function createPaymentIntent(request) {
+async function createPaymentIntent(request, STRIPE_SECRET_KEY, env) {
     if (request.method !== 'POST') {
         return jsonResponse({ error: 'Method not allowed' }, 405);
     }
@@ -99,7 +100,7 @@ async function createPaymentIntent(request) {
 
     try {
         // Crear Payment Intent en Stripe
-        const paymentIntent = await createStripePaymentIntent({
+        const paymentIntent = await createStripePaymentIntent(STRIPE_SECRET_KEY, {
             amount,
             currency: currency || 'eur',
             paymentMethodTypes: paymentMethod === 'bizum' ? ['card', 'bizum'] : ['card'],
@@ -113,6 +114,8 @@ async function createPaymentIntent(request) {
         });
 
         // Guardar en base de datos (opcional)
+        const SUPABASE_URL = env.SUPABASE_URL;
+        const SUPABASE_KEY = env.SUPABASE_KEY;
         if (SUPABASE_URL && SUPABASE_KEY) {
             await savePaymentToDatabase({
                 payment_intent_id: paymentIntent.id,
@@ -194,7 +197,7 @@ async function handleWebhook(request) {
 /**
  * Crear Payment Intent en Stripe API
  */
-async function createStripePaymentIntent(params) {
+async function createStripePaymentIntent(STRIPE_SECRET_KEY, params) {
     const { amount, currency, paymentMethodTypes, metadata } = params;
 
     const stripeParams = new URLSearchParams({
