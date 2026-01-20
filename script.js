@@ -384,7 +384,7 @@ if (contactForm) {
                 name: formData.get('name'),
                 email: formData.get('email'),
                 phone: formData.get('phone'),
-                level: getLevelText(formData.get('level')),
+                level: formData.get('level'),
                 message: formData.get('message')
             };
             
@@ -392,13 +392,30 @@ if (contactForm) {
             const minLoadingTime = 1200;
             const startTime = Date.now();
             
+            // 📊 GUARDAR EN SUPABASE (nueva funcionalidad)
+            if (typeof saveContactSubmission === 'function') {
+                try {
+                    await saveContactSubmission(emailData);
+                    console.log('✅ Contacto guardado en Supabase');
+                } catch (supabaseError) {
+                    console.warn('⚠️ Error guardando en Supabase:', supabaseError);
+                    // Continuar aunque falle Supabase
+                }
+            }
+            
+            // Preparar datos para email con texto legible del nivel
+            const emailDataWithLevel = {
+                ...emailData,
+                level: getLevelText(emailData.level)
+            };
+            
             // Enviar a Cloudflare Worker para email automático
             const emailResponse = await fetch('/api/send-welcome-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(emailData)
+                body: JSON.stringify(emailDataWithLevel)
             }).catch(err => {
                 console.warn('Email service unavailable:', err);
                 return { ok: false };

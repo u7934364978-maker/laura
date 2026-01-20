@@ -155,4 +155,37 @@ function subscribeToActivities(callback) {
     return subscription;
 }
 
+// Guardar formulario de contacto
+async function saveContactSubmission(contactData) {
+    const client = initSupabase();
+    if (!client) {
+        console.warn('⚠️ Supabase no disponible, saltando guardado');
+        return null;
+    }
+    
+    try {
+        const { data, error } = await client
+            .from('contact_submissions')
+            .insert([{
+                name: contactData.name,
+                email: contactData.email,
+                phone: contactData.phone || null,
+                location: contactData.location || null,
+                service: contactData.level || null,
+                message: contactData.message,
+                status: 'new'
+            }])
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        console.log('✅ Contacto guardado en Supabase:', data);
+        return data;
+    } catch (error) {
+        console.error('❌ Error al guardar contacto:', error);
+        return null;
+    }
+}
+
 console.log('📦 supabase-config.js cargado');
