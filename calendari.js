@@ -115,6 +115,15 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification('🔄 Calendari actualitzat', 'Les activitats s\'han actualitzat');
         }
     }, 3000); // Check every 3 seconds
+    
+    // ============================================
+    // SUPABASE: Real-time subscriptions
+    // ============================================
+    subscribeToActivities((payload) => {
+        console.log('🔥 Supabase real-time update:', payload.eventType);
+        loadActivities();
+        showNotification('🔄 Calendari actualitzat', 'Nova activitat disponible!');
+    });
 });
 
 // ============================================
@@ -402,14 +411,30 @@ function initEventListeners() {
 // ============================================
 // Activity Management
 // ============================================
-function loadActivities() {
+async function loadActivities() {
     try {
+        console.log('🔄 Cargando actividades desde Supabase...');
+        
+        // Intentar cargar desde Supabase
+        const supabaseActivities = await getActivities();
+        
+        if (supabaseActivities && supabaseActivities.length > 0) {
+            activities = supabaseActivities;
+            console.log(`✅ ${activities.length} actividades cargadas desde Supabase`);
+            renderActivities();
+            return;
+        }
+        
+        // Fallback: cargar desde localStorage si Supabase no está configurado
+        console.log('⚠️ Supabase no disponible, usando localStorage como fallback');
         const stored = localStorage.getItem(STORAGE_KEY);
         activities = stored ? JSON.parse(stored) : [];
-        console.log('✅ Activities loaded:', activities.length);
+        console.log('✅ Activities loaded from localStorage:', activities.length);
+        renderActivities();
     } catch (error) {
         console.error('❌ Error loading activities:', error);
         activities = [];
+        renderActivities();
     }
 }
 

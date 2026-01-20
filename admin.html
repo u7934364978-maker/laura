@@ -855,6 +855,10 @@
         </div>
     </div>
 
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    
     <script src="calendari.js"></script>
     <script>
         // Admin Dashboard Script
@@ -985,6 +989,12 @@
                 adminDashboard.classList.add('active');
                 loadActivities();
                 updateDashboard();
+                
+                // Suscribirse a cambios en tiempo real de Supabase
+                subscribeToActivities((payload) => {
+                    console.log('🔄 Cambio en tiempo real detectado:', payload.eventType);
+                    loadActivities(); // Recargar actividades cuando hay cambios
+                });
             }
             
             function showLogin() {
@@ -995,16 +1005,37 @@
                 loginError.classList.remove('show');
             }
             
-            function loadActivities() {
+            async function loadActivities() {
+                console.log('🔄 Cargando actividades desde Supabase...');
+                
+                // Intentar cargar desde Supabase
+                const supabaseActivities = await getActivities();
+                
+                if (supabaseActivities && supabaseActivities.length > 0) {
+                    activities = supabaseActivities;
+                    console.log(`✅ ${activities.length} actividades cargadas desde Supabase`);
+                    updateDashboard();
+                    return;
+                }
+                
+                // Fallback: cargar desde localStorage si Supabase no está configurado
+                console.log('⚠️ Supabase no disponible, usando localStorage como fallback');
                 const stored = localStorage.getItem('wild_fitness_activities');
                 activities = stored ? JSON.parse(stored) : [];
+                console.log(`📦 ${activities.length} actividades cargadas desde localStorage`);
+                updateDashboard();
             }
             
-            function saveActivities() {
-                localStorage.setItem('wild_fitness_activities', JSON.stringify(activities));
-                console.log('💾 Activities saved');
+            async function saveActivities() {
+                console.log('💾 Guardando actividades...');
                 
-                // Broadcast to other tabs using BroadcastChannel
+                // Guardar en localStorage como backup
+                localStorage.setItem('wild_fitness_activities', JSON.stringify(activities));
+                
+                // Nota: Las actividades ya se guardan en Supabase individualmente
+                // con createActivity, updateActivity, deleteActivityFromDB
+                
+                // Broadcast a otras pestañas
                 try {
                     const channel = new BroadcastChannel('wild_fitness_sync');
                     channel.postMessage({ type: 'activities_updated', timestamp: Date.now() });
@@ -1014,15 +1045,7 @@
                     console.warn('⚠️ BroadcastChannel not available');
                 }
                 
-                // Trigger storage event (fallback)
-                window.dispatchEvent(new StorageEvent('storage', {
-                    key: 'wild_fitness_activities',
-                    newValue: JSON.stringify(activities),
-                    url: window.location.href
-                }));
-                
                 updateDashboard();
-                syncActivitiesToServer();
             }
             
             async function syncActivitiesToServer() {
@@ -1185,11 +1208,10 @@
                 document.getElementById('participantsModal').classList.remove('active');
             }
             
-            function handleActivitySubmit(e) {
+            async function handleActivitySubmit(e) {
                 e.preventDefault();
                 
-                const activity = {
-                    id: currentEditingId || Date.now(),
+                const activityData = {
                     title: document.getElementById('activityTitle').value,
                     type: document.getElementById('activityType').value,
                     date: document.getElementById('activityDate').value,
@@ -1198,27 +1220,62 @@
                     latitude: parseFloat(document.getElementById('activityLatitude').value) || null,
                     longitude: parseFloat(document.getElementById('activityLongitude').value) || null,
                     capacity: parseInt(document.getElementById('activityCapacity').value),
-                    enrolled: 0,
                     description: document.getElementById('activityDescription').value,
                     participants: [],
-                    createdAt: new Date().toISOString(),
-                    createdBy: 'admin'
+                    created_at: new Date().toISOString(),
+                    created_by: 'admin'
                 };
                 
-                if (currentEditingId) {
-                    const index = activities.findIndex(a => a.id === currentEditingId);
-                    if (index !== -1) {
-                        activity.enrolled = activities[index].enrolled;
-                        activity.participants = activities[index].participants;
-                        activities[index] = activity;
+                try {
+                    if (currentEditingId) {
+                        // EDITAR actividad existente
+                        console.log('✏️ Editando actividad:', currentEditingId);
+                        
+                        // Mantener enrolled y participants
+                        const existing = activities.find(a => a.id === currentEditingId);
+                        if (existing) {
+                            activityData.enrolled = existing.enrolled;
+                            activityData.participants = existing.participants;
+                        }
+                        
+                        const updated = await updateActivity(currentEditingId, activityData);
+                        
+                        if (updated) {
+                            // Actualizar en el array local
+                            const index = activities.findIndex(a => a.id === currentEditingId);
+                            if (index !== -1) {
+                                activities[index] = updated;
+                            }
+                            closeActivityModal();
+                            alert('✅ Activitat actualitzada correctament!');
+                        } else {
+                            alert('❌ Error al actualizar la activitat. Intenta de nou.');
+                            return;
+                        }
+                    } else {
+                        // CREAR nueva actividad
+                        console.log('➕ Creando nueva actividad');
+                        
+                        activityData.enrolled = 0;
+                        const created = await createActivity(activityData);
+                        
+                        if (created) {
+                            activities.push(created);
+                            closeActivityModal();
+                            alert('✅ Activitat creada correctament!');
+                        } else {
+                            alert('❌ Error al crear la activitat. Intenta de nou.');
+                            return;
+                        }
                     }
-                } else {
-                    activities.push(activity);
+                    
+                    // Guardar en localStorage como backup y actualizar UI
+                    await saveActivities();
+                    
+                } catch (error) {
+                    console.error('❌ Error:', error);
+                    alert('❌ Error al guardar la activitat: ' + error.message);
                 }
-                
-                saveActivities();
-                closeActivityModal();
-                alert('✅ Activitat guardada correctament!');
             }
             
             window.editActivity = function(id) {
@@ -1240,11 +1297,21 @@
                 document.getElementById('activityModal').classList.add('active');
             };
             
-            window.deleteActivity = function(id) {
+            window.deleteActivity = async function(id) {
                 if (confirm('⚠️ Estàs segur que vols eliminar aquesta activitat?')) {
-                    activities = activities.filter(a => a.id !== id);
-                    saveActivities();
-                    alert('✅ Activitat eliminada correctament!');
+                    console.log('🗑️ Eliminando actividad:', id);
+                    
+                    const success = await deleteActivityFromDB(id);
+                    
+                    if (success) {
+                        activities = activities.filter(a => a.id !== id);
+                        await saveActivities();
+                        alert('✅ Activitat eliminada correctament!');
+                    } else {
+                        alert('❌ Error al eliminar la activitat. Intenta de nou.');
+                    }
+                }
+            };
                 }
             };
             
