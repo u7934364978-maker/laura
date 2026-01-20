@@ -4821,3 +4821,325 @@ input[type="button"] {
     }
 }
 
+/* ============================================
+   PRICING SECTION - Programes i Preus
+   ============================================ */
+
+.pricing {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #f0f9f9 0%, #ffffff 100%);
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin: 50px 0;
+}
+
+.pricing-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(45, 125, 125, 0.15);
+}
+
+.pricing-card.featured {
+    border: 3px solid #2d7d7d;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9f9 100%);
+}
+
+.pricing-badge {
+    position: absolute;
+    top: 20px;
+    right: -35px;
+    background: linear-gradient(135deg, #2d7d7d 0%, #3fb5b5 100%);
+    color: white;
+    padding: 8px 45px;
+    font-size: 13px;
+    font-weight: 600;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.pricing-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.pricing-card h3 {
+    font-size: 28px;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.pricing-description {
+    font-size: 15px;
+    color: #64748b;
+}
+
+.pricing-price {
+    text-align: center;
+    padding: 25px 0;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e5e7eb;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+}
+
+.price-currency {
+    font-size: 24px;
+    color: #2d7d7d;
+    font-weight: 600;
+}
+
+.price-amount {
+    font-size: 56px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.price-period {
+    font-size: 18px;
+    color: #64748b;
+}
+
+.pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px 0;
+}
+
+.pricing-features li {
+    padding: 12px 0;
+    color: #475569;
+    font-size: 15px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.pricing-features li:last-child {
+    border-bottom: none;
+}
+
+.pricing-cta {
+    text-align: center;
+}
+
+.btn-pricing {
+    display: inline-block;
+    width: 100%;
+    padding: 16px 24px;
+    background: white;
+    color: #2d7d7d;
+    border: 2px solid #2d7d7d;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-pricing:hover {
+    background: #2d7d7d;
+    color: white;
+    transform: scale(1.02);
+}
+
+.btn-pricing.btn-primary {
+    background: linear-gradient(135deg, #2d7d7d 0%, #3fb5b5 100%);
+    color: white;
+    border: none;
+}
+
+.btn-pricing.btn-primary:hover {
+    background: linear-gradient(135deg, #236363 0%, #2d8a8a 100%);
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(45, 125, 125, 0.3);
+}
+
+.pricing-note {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 12px;
+}
+
+/* Additional Services */
+.additional-services {
+    margin-top: 60px;
+    padding: 40px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.additional-services h3 {
+    text-align: center;
+    font-size: 28px;
+    color: #1e293b;
+    margin-bottom: 30px;
+}
+
+.services-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.service-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    background: #f0f9f9;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.service-item:hover {
+    background: #e6f7f7;
+    transform: translateX(5px);
+}
+
+.service-item .service-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+}
+
+.service-info {
+    flex: 1;
+}
+
+.service-info h4 {
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.service-info p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.service-price {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.service-price .price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2d7d7d;
+    display: block;
+}
+
+.service-price .price-unit {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.btn-service {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #2d7d7d 0%, #3fb5b5 100%);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.btn-service:hover {
+    background: linear-gradient(135deg, #236363 0%, #2d8a8a 100%);
+    transform: scale(1.05);
+}
+
+.pricing-footer {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 40px;
+    border-top: 2px solid #e5e7eb;
+}
+
+.pricing-footer p {
+    font-size: 18px;
+    color: #475569;
+    margin-bottom: 20px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 14px 32px;
+    background: white;
+    color: #2d7d7d;
+    border: 2px solid #2d7d7d;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #2d7d7d;
+    color: white;
+}
+
+/* Responsive Pricing */
+@media (max-width: 968px) {
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .services-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .service-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .service-price {
+        text-align: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .pricing {
+        padding: 60px 0;
+    }
+    
+    .pricing-card {
+        padding: 30px 20px;
+    }
+    
+    .price-amount {
+        font-size: 48px;
+    }
+    
+    .additional-services {
+        padding: 30px 20px;
+    }
+}
+

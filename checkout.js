@@ -1,0 +1,376 @@
+// Checkout.js - Payment Processing with Stripe
+// IMPORTANTE: Reemplaza 'TU_PUBLISHABLE_KEY_DE_STRIPE' con tu clave real de Stripe
+
+// Configuración de Stripe
+// Para obtener tu clave: https://dashboard.stripe.com/apikeys
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_TU_PUBLISHABLE_KEY_DE_STRIPE'; // ⚠️ REEMPLAZAR CON TU CLAVE REAL
+const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+const elements = stripe.elements();
+
+// Configurar el elemento de tarjeta de Stripe
+const cardElement = elements.create('card', {
+    style: {
+        base: {
+            fontSize: '16px',
+            color: '#1e293b',
+            fontFamily: 'Inter, sans-serif',
+            '::placeholder': {
+                color: '#94a3b8',
+            },
+        },
+        invalid: {
+            color: '#dc2626',
+        },
+    },
+});
+
+cardElement.mount('#card-element');
+
+// Manejar errores de validación de tarjeta
+cardElement.on('change', (event) => {
+    const displayError = document.getElementById('card-errors');
+    if (event.error) {
+        displayError.textContent = event.error.message;
+        displayError.classList.add('show');
+    } else {
+        displayError.textContent = '';
+        displayError.classList.remove('show');
+    }
+});
+
+// Programas disponibles
+const programs = {
+    'grup-fonteta': {
+        name: 'Grup Fonteta',
+        description: 'Entrenament en grup - Dilluns i dimecres 17:15-18:15h',
+        price: 35,
+        period: '/mes',
+        sessions: 2
+    },
+    'trail-runners-mensual': {
+        name: 'Trail Runners - Mensual',
+        description: 'Seguiment personalitzat online amb entrenaments progressius',
+        price: 55,
+        period: '/mes',
+        sessions: 0
+    },
+    'trail-runners-trimestral': {
+        name: 'Trail Runners - Trimestral',
+        description: 'Seguiment personalitzat online - Pack trimestral (estalvia 15€)',
+        price: 150,
+        period: '/trimestre',
+        sessions: 0
+    },
+    'pla-basic': {
+        name: 'Pla Bàsic',
+        description: 'Entrevista inicial + avaluació + pla mensual personalitzat',
+        price: 70,
+        period: '/mes',
+        sessions: 0
+    },
+    'sessio-presencial': {
+        name: 'Sessió Presencial',
+        description: 'Sortida trail running o entrenament de força personalitzat',
+        price: 45,
+        period: '/sessió',
+        sessions: 1
+    },
+    'acompanyament-online': {
+        name: 'Acompanyament Online',
+        description: 'Entrenament de força en directe per videocall',
+        price: 25,
+        period: '/hora',
+        sessions: 1
+    },
+    'prova-gratuita': {
+        name: 'Prova Gratuïta',
+        description: 'Primera sessió d\'avaluació gratuïta',
+        price: 0,
+        period: '',
+        sessions: 1
+    }
+};
+
+// Variables globales
+let currentPaymentMethod = 'card';
+let selectedProgram = null;
+
+// Inicializar página
+document.addEventListener('DOMContentLoaded', () => {
+    loadSelectedProgram();
+    setupPaymentMethods();
+    setupForm();
+});
+
+// Cargar programa seleccionado desde URL
+function loadSelectedProgram() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const programId = urlParams.get('program') || 'wild-starter';
+    
+    selectedProgram = programs[programId];
+    
+    if (selectedProgram) {
+        displayProgramInfo(selectedProgram);
+        calculateTotal(selectedProgram.price);
+    }
+}
+
+// Mostrar información del programa
+function displayProgramInfo(program) {
+    document.getElementById('programName').textContent = program.name;
+    document.getElementById('programDescription').textContent = program.description;
+    document.getElementById('programPrice').textContent = `€${program.price}`;
+    document.getElementById('programPeriod').textContent = program.period;
+}
+
+// Calcular totales con IVA
+function calculateTotal(price) {
+    const subtotal = price;
+    const iva = Math.round(subtotal * 0.21 * 100) / 100; // 21% IVA
+    const total = subtotal + iva;
+    
+    document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2)}`;
+    document.getElementById('iva').textContent = `€${iva.toFixed(2)}`;
+    document.getElementById('total').textContent = `€${total.toFixed(2)}`;
+}
+
+// Configurar métodos de pago
+function setupPaymentMethods() {
+    const paymentMethodBtns = document.querySelectorAll('.payment-method-btn');
+    
+    paymentMethodBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remover clase active de todos
+            paymentMethodBtns.forEach(b => b.classList.remove('active'));
+            
+            // Añadir clase active al seleccionado
+            btn.classList.add('active');
+            
+            // Cambiar método de pago
+            currentPaymentMethod = btn.dataset.method;
+            togglePaymentElements(currentPaymentMethod);
+        });
+    });
+}
+
+// Alternar elementos de pago
+function togglePaymentElements(method) {
+    const cardPayment = document.getElementById('card-payment');
+    const bizumPayment = document.getElementById('bizum-payment');
+    
+    if (method === 'card') {
+        cardPayment.style.display = 'block';
+        bizumPayment.style.display = 'none';
+    } else if (method === 'bizum') {
+        cardPayment.style.display = 'none';
+        bizumPayment.style.display = 'block';
+    }
+}
+
+// Configurar formulario
+function setupForm() {
+    const form = document.getElementById('payment-form');
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Validar términos y condiciones
+        const acceptTerms = document.getElementById('acceptTerms').checked;
+        if (!acceptTerms) {
+            showErrorModal('Si us plau, accepta els termes i condicions per continuar.');
+            return;
+        }
+        
+        // Validar datos del cliente
+        const customerName = document.getElementById('customerName').value.trim();
+        const customerEmail = document.getElementById('customerEmail').value.trim();
+        const customerPhone = document.getElementById('customerPhone').value.trim();
+        
+        if (!customerName || !customerEmail || !customerPhone) {
+            showErrorModal('Si us plau, omple tots els camps obligatoris.');
+            return;
+        }
+        
+        // Mostrar loader
+        setLoading(true);
+        
+        try {
+            if (currentPaymentMethod === 'card') {
+                await processCardPayment(customerName, customerEmail, customerPhone);
+            } else if (currentPaymentMethod === 'bizum') {
+                await processBizumPayment(customerName, customerEmail, customerPhone);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showErrorModal(error.message || 'Hi ha hagut un error processant el pagament.');
+            setLoading(false);
+        }
+    });
+}
+
+// Procesar pago con tarjeta
+async function processCardPayment(name, email, phone) {
+    try {
+        // 1. Crear Payment Intent en el servidor
+        const paymentIntent = await createPaymentIntent({
+            amount: calculateTotalAmount(),
+            currency: 'eur',
+            paymentMethod: 'card',
+            customerName: name,
+            customerEmail: email,
+            customerPhone: phone,
+            programName: selectedProgram.name
+        });
+        
+        // 2. Confirmar el pago con Stripe
+        const { error, paymentIntent: confirmedPayment } = await stripe.confirmCardPayment(
+            paymentIntent.clientSecret,
+            {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                    },
+                },
+            }
+        );
+        
+        if (error) {
+            throw new Error(error.message);
+        }
+        
+        if (confirmedPayment.status === 'succeeded') {
+            showSuccessModal(confirmedPayment.id);
+        }
+        
+    } catch (error) {
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+}
+
+// Procesar pago con Bizum
+async function processBizumPayment(name, email, phone) {
+    const bizumPhone = document.getElementById('bizum-phone').value.trim();
+    
+    if (!bizumPhone) {
+        throw new Error('Si us plau, introdueix el teu número de telèfon Bizum.');
+    }
+    
+    try {
+        // Bizum en Stripe se maneja mediante payment_method_types: ['card', 'bizum']
+        // Nota: Bizum requiere configuración adicional con tu banco en España
+        
+        const paymentIntent = await createPaymentIntent({
+            amount: calculateTotalAmount(),
+            currency: 'eur',
+            paymentMethod: 'bizum',
+            customerName: name,
+            customerEmail: email,
+            customerPhone: bizumPhone,
+            programName: selectedProgram.name
+        });
+        
+        // Para Bizum, necesitarías redirigir al usuario a la página de autenticación
+        // Esto es un ejemplo simplificado
+        alert('Funcionalitat Bizum: Rebràs una notificació al teu telèfon per confirmar el pagament.\n\n' +
+              'Nota: Per activar Bizum amb Stripe, contacta amb el teu banc i configura la integració.');
+        
+        // Simulación para demo (eliminar en producción)
+        setTimeout(() => {
+            showSuccessModal('bizum_demo_' + Date.now());
+        }, 2000);
+        
+    } catch (error) {
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+}
+
+// Crear Payment Intent en el servidor
+async function createPaymentIntent(data) {
+    // IMPORTANTE: Esta función debe llamar a tu backend
+    // El siguiente código es un EJEMPLO que debes reemplazar con tu implementación real
+    
+    // En producción, necesitas un endpoint en tu servidor que:
+    // 1. Reciba los datos del pago
+    // 2. Cree un Payment Intent usando la API de Stripe desde el servidor
+    // 3. Devuelva el client_secret al frontend
+    
+    // Ejemplo de llamada al backend:
+    /*
+    const response = await fetch('https://tu-backend.com/create-payment-intent', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+    
+    if (!response.ok) {
+        throw new Error('Error creant el pagament');
+    }
+    
+    return await response.json();
+    */
+    
+    // ⚠️ DEMO MODE - ELIMINAR EN PRODUCCIÓN
+    console.warn('⚠️ DEMO MODE: Necesitas implementar un backend real para procesar pagos');
+    console.log('Datos del pago:', data);
+    
+    throw new Error('Per processar pagaments reals, necessites configurar un backend amb Stripe.\n\n' +
+                    'Consulta la documentació a: STRIPE_SETUP.md');
+}
+
+// Calcular monto total en centavos
+function calculateTotalAmount() {
+    const subtotal = selectedProgram.price;
+    const iva = Math.round(subtotal * 0.21 * 100) / 100;
+    const total = subtotal + iva;
+    return Math.round(total * 100); // Convertir a centavos
+}
+
+// Mostrar/ocultar loader
+function setLoading(isLoading) {
+    const btn = document.getElementById('submit-payment');
+    const btnText = btn.querySelector('.btn-text');
+    const btnLoader = btn.querySelector('.btn-loader');
+    
+    if (isLoading) {
+        btn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'flex';
+    } else {
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
+    }
+}
+
+// Mostrar modal de éxito
+function showSuccessModal(paymentId) {
+    document.getElementById('payment-id').textContent = paymentId;
+    document.getElementById('success-modal').style.display = 'flex';
+}
+
+// Mostrar modal de error
+function showErrorModal(message) {
+    document.getElementById('error-message').textContent = message;
+    document.getElementById('error-modal').style.display = 'flex';
+}
+
+// Cerrar modal de error
+function closeErrorModal() {
+    document.getElementById('error-modal').style.display = 'none';
+}
+
+// Cerrar modales al hacer clic fuera
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+    }
+});
