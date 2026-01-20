@@ -41,8 +41,8 @@ id = "TU_KV_NAMESPACE_ID"  # Reemplazar con tu ID del KV namespace
 #    npx wrangler login
 #
 # 3. Crear KV Namespace (para sincronizar actividades):
-#    wrangler kv:namespace create ACTIVITIES_KV
-#    Copiar el ID que te devuelve y pegarlo arriba en "id"
+#    wrangler kv namespace create ACTIVITIES_KV
+#    Copiar el ID que te devuelve y pegarlo arriba en la línea 28
 #
 # 4. Configurar API Key de Resend:
 #    npx wrangler secret put RESEND_API_KEY
