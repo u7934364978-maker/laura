@@ -70,21 +70,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // ============================================
-    // SYNC: Listen for changes from admin panel
-    // This enables real-time updates when admin creates/edits/deletes activities
+    // SYNC: Real-time synchronization system
+    // Uses BroadcastChannel API for instant updates across tabs
     // ============================================
+    
+    // Create broadcast channel for real-time sync
+    let syncChannel;
+    try {
+        syncChannel = new BroadcastChannel('wild_fitness_sync');
+        
+        // Listen for sync messages from other tabs
+        syncChannel.onmessage = (event) => {
+            if (event.data.type === 'activities_updated') {
+                console.log('🔄 Activitats actualitzades des d\'un altre panell (BroadcastChannel)');
+                loadActivities();
+                renderActivities();
+                showNotification('🔄 Calendari actualitzat', 'Les activitats s\'han actualitzat automàticament');
+            }
+        };
+        
+        console.log('✅ BroadcastChannel activat per sincronització');
+    } catch (e) {
+        console.warn('⚠️ BroadcastChannel no disponible, usant storage events');
+    }
+    
+    // Fallback: Listen for storage events (works between different windows)
     window.addEventListener('storage', (e) => {
         if (e.key === STORAGE_KEY && e.newValue !== e.oldValue) {
-            console.log('🔄 Activitats actualitzades des d\'un altre panell');
+            console.log('🔄 Activitats actualitzades (storage event)');
             loadActivities();
             renderActivities();
-            
-            // Show notification to user
             showNotification('🔄 Calendari actualitzat', 'Les activitats s\'han actualitzat automàticament');
         }
     });
     
-    // Also check for updates periodically (fallback)
+    // Fallback: Periodic polling every 3 seconds
     setInterval(() => {
         const stored = localStorage.getItem(STORAGE_KEY);
         const currentStored = JSON.stringify(activities);
@@ -92,8 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('🔄 Actualització periòdica detectada');
             loadActivities();
             renderActivities();
+            showNotification('🔄 Calendari actualitzat', 'Les activitats s\'han actualitzat');
         }
-    }, 5000); // Check every 5 seconds
+    }, 3000); // Check every 3 seconds
 });
 
 // ============================================
@@ -395,16 +416,24 @@ function loadActivities() {
 function saveActivities() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
+        console.log('💾 Activities saved to localStorage');
         
-        // Trigger storage event for same-window synchronization
-        // (storage event doesn't fire in the same window by default)
+        // Broadcast to other tabs using BroadcastChannel
+        try {
+            const channel = new BroadcastChannel('wild_fitness_sync');
+            channel.postMessage({ type: 'activities_updated', timestamp: Date.now() });
+            channel.close();
+            console.log('📡 Sync message sent via BroadcastChannel');
+        } catch (e) {
+            console.warn('⚠️ BroadcastChannel not available');
+        }
+        
+        // Trigger storage event for same-window synchronization (fallback)
         window.dispatchEvent(new StorageEvent('storage', {
             key: STORAGE_KEY,
             newValue: JSON.stringify(activities),
             url: window.location.href
         }));
-        
-        console.log('💾 Activities saved to localStorage');
         
         // Sincronizar con el servidor (KV Storage) para emails programados
         syncActivitiesToServer();
