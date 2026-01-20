@@ -410,8 +410,7 @@ if (contactForm) {
                 await new Promise(resolve => setTimeout(resolve, minLoadingTime - elapsed));
             }
             
-            // Mostrar siempre éxito (aunque el email falle, el mensaje se guarda)
-            // Success with celebration effect
+            // Mostrar siempre éxito
             formStatus.className = 'form-status success';
             formStatus.innerHTML = `
                 <strong>✅ Missatge enviat correctament!</strong><br>
@@ -420,35 +419,33 @@ if (contactForm) {
             formStatus.style.display = 'block';
                 
             // Confetti effect (optional)
-                createConfetti();
-                
-                // Reset form
-                contactForm.reset();
-                
-                // Remove validation icons
-                inputs.forEach(input => {
-                    input.style.borderColor = '';
-                    removeValidationIcon(input);
+            createConfetti();
+            
+            // Reset form
+            contactForm.reset();
+            
+            // Remove validation icons
+            inputs.forEach(input => {
+                input.style.borderColor = '';
+                removeValidationIcon(input);
+            });
+            
+            // Track conversion (if using analytics)
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submission', {
+                    'event_category': 'Contact',
+                    'event_label': 'Contact Form',
+                    'value': 1
                 });
-                
-                // Track conversion (if using analytics)
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'form_submission', {
-                        'event_category': 'Contact',
-                        'event_label': 'Contact Form',
-                        'value': 1
-                    });
-                }
-                
-                // Smooth scroll to success message
-                setTimeout(() => {
-                    formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 100);
-                
-                console.log('✓ Contact form submitted successfully');
-            } else {
-                throw new Error('Form submission failed');
             }
+            
+            // Smooth scroll to success message
+            setTimeout(() => {
+                formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+            
+            console.log('✓ Contact form submitted successfully');
+            
         } catch (error) {
             // Error with helpful message
             formStatus.className = 'form-status error';
