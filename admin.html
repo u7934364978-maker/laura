@@ -872,12 +872,33 @@
             checkAuth();
             
             // ============================================
-            // SYNC: Listen for changes from other tabs/windows
-            // This enables real-time updates across admin and public calendar
+            // SYNC: Real-time synchronization system
+            // Uses BroadcastChannel API for instant updates
             // ============================================
+            
+            // Create broadcast channel for real-time sync
+            let syncChannel;
+            try {
+                syncChannel = new BroadcastChannel('wild_fitness_sync');
+                
+                // Listen for sync messages from other tabs
+                syncChannel.onmessage = (event) => {
+                    if (event.data.type === 'activities_updated') {
+                        console.log('🔄 Activitats actualitzades (BroadcastChannel)');
+                        loadActivities();
+                        updateDashboard();
+                    }
+                };
+                
+                console.log('✅ BroadcastChannel activat per sincronització');
+            } catch (e) {
+                console.warn('⚠️ BroadcastChannel no disponible');
+            }
+            
+            // Fallback: Listen for storage events
             window.addEventListener('storage', (e) => {
                 if (e.key === 'wild_fitness_activities' && e.newValue !== e.oldValue) {
-                    console.log('🔄 Activitats actualitzades des d\'un altre panell');
+                    console.log('🔄 Activitats actualitzades (storage event)');
                     loadActivities();
                     updateDashboard();
                 }
@@ -981,9 +1002,19 @@
             
             function saveActivities() {
                 localStorage.setItem('wild_fitness_activities', JSON.stringify(activities));
+                console.log('💾 Activities saved');
                 
-                // Trigger storage event for same-window synchronization
-                // (storage event doesn't fire in the same window by default)
+                // Broadcast to other tabs using BroadcastChannel
+                try {
+                    const channel = new BroadcastChannel('wild_fitness_sync');
+                    channel.postMessage({ type: 'activities_updated', timestamp: Date.now() });
+                    channel.close();
+                    console.log('📡 Sync message sent via BroadcastChannel');
+                } catch (e) {
+                    console.warn('⚠️ BroadcastChannel not available');
+                }
+                
+                // Trigger storage event (fallback)
                 window.dispatchEvent(new StorageEvent('storage', {
                     key: 'wild_fitness_activities',
                     newValue: JSON.stringify(activities),
