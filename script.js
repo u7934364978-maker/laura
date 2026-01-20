@@ -80,9 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Close menu when clicking on overlay (outside nav-list)
+        navList.addEventListener('click', (e) => {
+            // Si el clic es en el overlay (después del ancho del menú), cerrar
+            if (e.target === navList) {
+                navList.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+        });
+
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
-            if (!mainNav.contains(e.target) && navList.classList.contains('active')) {
+            if (!mainNav.contains(e.target) && 
+                !navToggle.contains(e.target) && 
+                navList.classList.contains('active')) {
                 navList.classList.remove('active');
                 navToggle.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = '';
