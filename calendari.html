@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Calendari d'activitats Wild Fitness - Apunta't a sortides guiades, sessions d'entrenament i activitats de trail running amb Laura Ramírez">
+    <meta name="keywords" content="calendari activitats trail, sortides guiades Pirineus, esdeveniments trail running, activitats muntanya Catalunya">
+    <meta name="author" content="Laura Ramírez - Wild Fitness">
+    
+    <title>Calendari d'Activitats - Wild Fitness | Laura Ramírez</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://wildbreathing.com/calendari.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="calendari.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header" id="mainHeader">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/" aria-label="Wild Fitness - Inici">
+                        <span class="logo-icon">🏔️</span>
+                        <span class="logo-text">WILD FITNESS</span>
+                    </a>
+                </div>
+                
+                <nav class="nav" id="mainNav" aria-label="Navegació principal">
+                    <ul class="nav-list">
+                        <li><a href="/#inici" class="nav-link">Inici</a></li>
+                        <li><a href="/#qui-soc" class="nav-link">Sobre Laura</a></li>
+                        <li><a href="/#serveis" class="nav-link">Serveis</a></li>
+                        <li><a href="/blog.html" class="nav-link">Blog</a></li>
+                        <li><a href="/calendari.html" class="nav-link active">Calendari d'activitats</a></li>
+                        <li><a href="/contacte.html" class="nav-link">Contacte</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-toggle" id="navToggle" aria-label="Menú de navegació" aria-expanded="false">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="calendar-page">
+        <!-- Hero Section -->
+        <section class="calendar-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>📅 Calendari d'Activitats</h1>
+                    <p class="hero-subtitle">Apunta't a les nostres sortides guiades, sessions d'entrenament i esdeveniments especials</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Panel (Hidden by default) -->
+        <section class="admin-panel" id="adminPanel" style="display: none;">
+            <div class="container">
+                <div class="admin-card">
+                    <div class="admin-header">
+                        <h2>🔧 Panell d'Administració</h2>
+                        <button class="btn-close" id="closeAdminBtn">✕</button>
+                    </div>
+                    <form id="activityForm" class="activity-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="activityTitle">
+                                    <span class="label-icon">📝</span>
+                                    <span>Títol de l'activitat</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" id="activityTitle" name="title" required placeholder="Ex: Trail Running als Pirineus">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityType">
+                                    <span class="label-icon">🏃</span>
+                                    <span>Tipus d'activitat</span>
+                                </label>
+                                <select id="activityType" name="type">
+                                    <option value="trail">🏃 Trail Running</option>
+                                    <option value="trekking">⛰️ Trekking</option>
+                                    <option value="training">💪 Entrenament</option>
+                                    <option value="yoga">🧘 Yoga</option>
+                                    <option value="workshop">🎯 Workshop</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="activityDate">
+                                    <span class="label-icon">📅</span>
+                                    <span>Data</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="date" id="activityDate" name="date" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityTime">
+                                    <span class="label-icon">⏰</span>
+                                    <span>Hora</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="time" id="activityTime" name="time" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="activityLocation">
+                                    <span class="label-icon">📍</span>
+                                    <span>Lloc</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" id="activityLocation" name="location" required placeholder="Ex: Parc Natural Cadí-Moixeró">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityCapacity">
+                                    <span class="label-icon">👥</span>
+                                    <span>Aforament màxim</span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="number" id="activityCapacity" name="capacity" min="1" max="50" required placeholder="12">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="activityLatitude">
+                                    <span class="label-icon">🗺️</span>
+                                    <span>Latitud</span>
+                                </label>
+                                <input type="text" id="activityLatitude" name="latitude" placeholder="42.304482" pattern="-?[0-9]+\.?[0-9]*">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="activityLongitude">
+                                    <span class="label-icon">🗺️</span>
+                                    <span>Longitud</span>
+                                </label>
+                                <input type="text" id="activityLongitude" name="longitude" placeholder="1.863868" pattern="-?[0-9]+\.?[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activityDescription">
+                                <span class="label-icon">📄</span>
+                                <span>Descripció / Comentaris</span>
+                            </label>
+                            <textarea id="activityDescription" name="description" rows="4" placeholder="Descripció de l'activitat, nivell recomanat, material necessari, etc."></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary btn-submit">
+                                <span class="btn-icon">✓</span>
+                                <span>Crear Activitat</span>
+                            </button>
+                            <button type="button" class="btn-secondary" id="cancelFormBtn">Cancel·lar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activities List -->
+        <section class="activities-section">
+            <div class="container">
+                <div class="section-controls">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">Totes</button>
+                        <button class="filter-tab" data-filter="trail">Trail Running</button>
+                        <button class="filter-tab" data-filter="trekking">Trekking</button>
+                        <button class="filter-tab" data-filter="training">Entrenament</button>
+                        <button class="filter-tab" data-filter="yoga">Yoga</button>
+                    </div>
+                    <button class="btn-admin" id="toggleAdminBtn">
+                        <span>🔧</span>
+                        <span>Admin</span>
+                    </button>
+                </div>
+
+                <div id="activitiesList" class="activities-grid">
+                    <!-- Activities will be rendered here by JavaScript -->
+                    <div class="empty-state">
+                        <div class="empty-icon">📅</div>
+                        <h3>No hi ha activitats programades</h3>
+                        <p>De moment no hi ha cap activitat al calendari. Torna aviat per veure les pròximes sortides!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-text">WILD FITNESS</span>
+                    <p>Entrenament de força, trail running i trekking amb Laura Ramírez</p>
+                </div>
+                
+                <nav class="footer-nav" aria-label="Navegació del peu de pàgina">
+                    <h4>Enllaços</h4>
+                    <ul>
+                        <li><a href="/#inici">Inici</a></li>
+                        <li><a href="/#qui-soc">Sobre Laura</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                        <li><a href="/calendari.html">Calendari</a></li>
+                        <li><a href="/contacte.html">Contacte</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Wild Fitness - Laura Ramírez</p>
+                <div class="footer-legal-links">
+                    <a href="/politica-privacitat.html">Política de Privacitat</a>
+                    <a href="/avis-legal.html">Avís Legal</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 Reserva la teva plaça</h2>
+                <button class="modal-close" id="closeModalBtn">✕</button>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="calendari.js"></script>
+</body>
+</html>

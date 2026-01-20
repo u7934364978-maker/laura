@@ -1,0 +1,763 @@
+// ============================================
+// CALENDARI D'ACTIVITATS - WILD FITNESS
+// Activity Management System with Admin Authentication
+// ============================================
+
+// Storage Keys
+const STORAGE_KEY = 'wild_fitness_activities';
+const AUTH_KEY = 'wild_fitness_admin_auth';
+const ADMIN_CREDENTIALS_KEY = 'wild_fitness_admin_credentials';
+
+// Default Admin Credentials (will be hashed)
+const DEFAULT_ADMIN = {
+    username: 'admin',
+    password: 'WildFitness2024!' // Cambiar esta contraseña en producción
+};
+
+// Activity Type Icons and Labels
+const ACTIVITY_TYPES = {
+    trail: { icon: '🏃', label: 'Trail Running' },
+    trekking: { icon: '⛰️', label: 'Trekking' },
+    training: { icon: '💪', label: 'Entrenament' },
+    yoga: { icon: '🧘', label: 'Yoga' },
+    workshop: { icon: '🎯', label: 'Workshop' }
+};
+
+// State Management
+let activities = [];
+let currentFilter = 'all';
+let isAdminLoggedIn = false;
+
+// ============================================
+// Initialize Calendar
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('📅 Initializing Calendar...');
+    
+    // Initialize admin credentials if not exists
+    initAdminCredentials();
+    
+    // Check if admin is logged in
+    checkAdminAuth();
+    
+    // Load activities from localStorage
+    loadActivities();
+    
+    // Initialize event listeners
+    initEventListeners();
+    
+    // Render activities
+    renderActivities();
+    
+    // Update UI based on auth status
+    updateUIForAuthState();
+    
+    // Set minimum date to today
+    const dateInput = document.getElementById('activityDate');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+});
+
+// ============================================
+// Authentication System
+// ============================================
+function initAdminCredentials() {
+    const stored = localStorage.getItem(ADMIN_CREDENTIALS_KEY);
+    if (!stored) {
+        // Store default credentials (in production, use proper hashing)
+        const credentials = {
+            username: DEFAULT_ADMIN.username,
+            // Simple encoding (en producción usar bcrypt o similar)
+            passwordHash: btoa(DEFAULT_ADMIN.password)
+        };
+        localStorage.setItem(ADMIN_CREDENTIALS_KEY, JSON.stringify(credentials));
+        console.log('✅ Admin credentials initialized');
+        console.log('📝 Usuario: admin');
+        console.log('🔑 Contraseña: WildFitness2024!');
+    }
+}
+
+function checkAdminAuth() {
+    const authData = localStorage.getItem(AUTH_KEY);
+    if (authData) {
+        try {
+            const auth = JSON.parse(authData);
+            const now = new Date().getTime();
+            // Session expires after 24 hours
+            if (auth.expiry && auth.expiry > now) {
+                isAdminLoggedIn = true;
+                console.log('✅ Admin session active');
+                return;
+            }
+        } catch (e) {
+            console.error('❌ Error checking auth:', e);
+        }
+    }
+    isAdminLoggedIn = false;
+    localStorage.removeItem(AUTH_KEY);
+}
+
+function loginAdmin(username, password) {
+    const stored = localStorage.getItem(ADMIN_CREDENTIALS_KEY);
+    if (!stored) {
+        return { success: false, message: 'No s\'han trobat credencials d\'administrador' };
+    }
+    
+    try {
+        const credentials = JSON.parse(stored);
+        const passwordHash = btoa(password);
+        
+        if (username === credentials.username && passwordHash === credentials.passwordHash) {
+            // Create session with 24 hour expiry
+            const expiry = new Date().getTime() + (24 * 60 * 60 * 1000);
+            const authData = {
+                username: username,
+                expiry: expiry,
+                loginTime: new Date().toISOString()
+            };
+            localStorage.setItem(AUTH_KEY, JSON.stringify(authData));
+            isAdminLoggedIn = true;
+            console.log('✅ Admin login successful');
+            return { success: true, message: 'Login correcte' };
+        } else {
+            console.log('❌ Invalid credentials');
+            return { success: false, message: 'Usuari o contrasenya incorrectes' };
+        }
+    } catch (e) {
+        console.error('❌ Login error:', e);
+        return { success: false, message: 'Error en el login' };
+    }
+}
+
+function logoutAdmin() {
+    localStorage.removeItem(AUTH_KEY);
+    isAdminLoggedIn = false;
+    console.log('👋 Admin logged out');
+}
+
+function updateUIForAuthState() {
+    const adminPanel = document.getElementById('adminPanel');
+    const toggleAdminBtn = document.getElementById('toggleAdminBtn');
+    
+    if (isAdminLoggedIn) {
+        // Show admin button
+        if (toggleAdminBtn) {
+            toggleAdminBtn.style.display = 'flex';
+            toggleAdminBtn.innerHTML = `
+                <span>🔧</span>
+                <span>Admin</span>
+            `;
+        }
+    } else {
+        // Show login button
+        if (toggleAdminBtn) {
+            toggleAdminBtn.style.display = 'flex';
+            toggleAdminBtn.innerHTML = `
+                <span>🔐</span>
+                <span>Login Admin</span>
+            `;
+        }
+        // Hide admin panel
+        if (adminPanel) {
+            adminPanel.style.display = 'none';
+        }
+    }
+    
+    // Update delete buttons visibility
+    updateDeleteButtonsVisibility();
+}
+
+function updateDeleteButtonsVisibility() {
+    const deleteButtons = document.querySelectorAll('.btn-delete');
+    deleteButtons.forEach(btn => {
+        btn.style.display = isAdminLoggedIn ? 'block' : 'none';
+    });
+}
+
+function showLoginModal() {
+    const modal = document.getElementById('bookingModal');
+    const modalBody = document.getElementById('modalBody');
+    
+    modalBody.innerHTML = `
+        <div class="login-form-container">
+            <div class="login-header">
+                <div class="login-icon">🔐</div>
+                <h3>Login d'Administrador</h3>
+                <p>Introdueix les teves credencials per accedir al panell d'administració</p>
+            </div>
+            
+            <form id="loginForm" class="booking-form">
+                <div class="form-group">
+                    <label for="adminUsername">
+                        <span class="label-icon">👤</span>
+                        <span>Usuari</span>
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" id="adminUsername" name="username" required placeholder="admin" autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminPassword">
+                        <span class="label-icon">🔑</span>
+                        <span>Contrasenya</span>
+                        <span class="required">*</span>
+                    </label>
+                    <input type="password" id="adminPassword" name="password" required placeholder="••••••••" autocomplete="current-password">
+                </div>
+                
+                <div id="loginError" class="form-error" style="display: none; color: var(--error-color); margin-bottom: 1rem;"></div>
+                
+                <button type="submit" class="btn-submit">
+                    <span class="btn-icon">✓</span>
+                    <span>Iniciar Sessió</span>
+                </button>
+                
+                <div class="login-info" style="margin-top: 1rem; padding: 1rem; background: var(--bg-light); border-radius: var(--radius-sm); font-size: 0.9rem;">
+                    <strong>ℹ️ Credencials per defecte:</strong><br>
+                    <strong>Usuari:</strong> admin<br>
+                    <strong>Contrasenya:</strong> WildFitness2024!
+                </div>
+            </form>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+    
+    // Focus on username field
+    setTimeout(() => {
+        document.getElementById('adminUsername')?.focus();
+    }, 100);
+    
+    // Handle login form submission
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleLogin(e);
+    });
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const username = formData.get('username');
+    const password = formData.get('password');
+    
+    const result = loginAdmin(username, password);
+    
+    if (result.success) {
+        // Close modal
+        document.getElementById('bookingModal').classList.remove('active');
+        
+        // Update UI
+        updateUIForAuthState();
+        
+        // Show success message
+        alert('✅ Login correcte! Ara pots gestionar les activitats.');
+        
+        // Render activities to show delete buttons
+        renderActivities();
+    } else {
+        // Show error
+        const errorDiv = document.getElementById('loginError');
+        if (errorDiv) {
+            errorDiv.textContent = result.message;
+            errorDiv.style.display = 'block';
+        }
+    }
+}
+
+// ============================================
+// Event Listeners
+// ============================================
+function initEventListeners() {
+    // Admin panel toggle
+    const toggleAdminBtn = document.getElementById('toggleAdminBtn');
+    const closeAdminBtn = document.getElementById('closeAdminBtn');
+    const cancelFormBtn = document.getElementById('cancelFormBtn');
+    const adminPanel = document.getElementById('adminPanel');
+    
+    if (toggleAdminBtn) {
+        toggleAdminBtn.addEventListener('click', () => {
+            if (!isAdminLoggedIn) {
+                // Show login modal
+                showLoginModal();
+            } else {
+                // Toggle admin panel
+                const isVisible = adminPanel.style.display !== 'none';
+                adminPanel.style.display = isVisible ? 'none' : 'block';
+                if (!isVisible) {
+                    adminPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    }
+    
+    if (closeAdminBtn) {
+        closeAdminBtn.addEventListener('click', () => {
+            adminPanel.style.display = 'none';
+        });
+    }
+    
+    if (cancelFormBtn) {
+        cancelFormBtn.addEventListener('click', () => {
+            adminPanel.style.display = 'none';
+            document.getElementById('activityForm').reset();
+        });
+    }
+    
+    // Activity form submission
+    const activityForm = document.getElementById('activityForm');
+    if (activityForm) {
+        activityForm.addEventListener('submit', handleActivitySubmit);
+    }
+    
+    // Filter tabs
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentFilter = tab.dataset.filter;
+            renderActivities();
+        });
+    });
+    
+    // Modal close
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const bookingModal = document.getElementById('bookingModal');
+    
+    if (closeModalBtn && bookingModal) {
+        closeModalBtn.addEventListener('click', () => {
+            bookingModal.classList.remove('active');
+        });
+        
+        bookingModal.addEventListener('click', (e) => {
+            if (e.target === bookingModal) {
+                bookingModal.classList.remove('active');
+            }
+        });
+    }
+}
+
+// ============================================
+// Activity Management
+// ============================================
+function loadActivities() {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        activities = stored ? JSON.parse(stored) : [];
+        console.log('✅ Activities loaded:', activities.length);
+    } catch (error) {
+        console.error('❌ Error loading activities:', error);
+        activities = [];
+    }
+}
+
+function saveActivities() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
+        console.log('💾 Activities saved to localStorage');
+        
+        // Sincronizar con el servidor (KV Storage) para emails programados
+        syncActivitiesToServer();
+    } catch (error) {
+        console.error('❌ Error saving activities:', error);
+    }
+}
+
+// Sincronizar actividades con el servidor
+async function syncActivitiesToServer() {
+    try {
+        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname.includes('sandbox')
+            ? 'http://localhost:8787/api/sync-activities'  // Desarrollo local
+            : 'https://wild-fitness.com/api/sync-activities';  // Producción
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                activities: activities,
+                timestamp: new Date().toISOString()
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            console.log(`✅ Activitats sincronitzades amb el servidor: ${result.count}`);
+        } else {
+            console.warn('⚠️ No s\'ha pogut sincronitzar amb el servidor:', response.statusText);
+        }
+    } catch (error) {
+        // No mostrar error al usuario, solo log
+        console.warn('⚠️ Sincronització amb servidor no disponible:', error.message);
+    }
+}
+
+function handleActivitySubmit(e) {
+    e.preventDefault();
+    
+    if (!isAdminLoggedIn) {
+        alert('❌ Has d\'estar autenticat per crear activitats');
+        return;
+    }
+    
+    const formData = new FormData(e.target);
+    const activity = {
+        id: Date.now(),
+        title: formData.get('title'),
+        type: formData.get('type'),
+        date: formData.get('date'),
+        time: formData.get('time'),
+        location: formData.get('location'),
+        latitude: formData.get('latitude') || '',
+        longitude: formData.get('longitude') || '',
+        capacity: parseInt(formData.get('capacity')),
+        enrolled: 0,
+        description: formData.get('description') || '',
+        participants: [],
+        createdAt: new Date().toISOString(),
+        createdBy: 'admin'
+    };
+    
+    activities.push(activity);
+    activities.sort((a, b) => new Date(a.date) - new Date(b.date));
+    saveActivities();
+    renderActivities();
+    
+    // Reset form and hide admin panel
+    e.target.reset();
+    document.getElementById('adminPanel').style.display = 'none';
+    
+    // Show success message
+    alert('✅ Activitat creada correctament!');
+}
+
+function deleteActivity(id) {
+    if (!isAdminLoggedIn) {
+        alert('❌ Has d\'estar autenticat per eliminar activitats');
+        return;
+    }
+    
+    if (confirm('Segur que vols eliminar aquesta activitat?')) {
+        activities = activities.filter(a => a.id !== id);
+        saveActivities();
+        renderActivities();
+    }
+}
+
+// ============================================
+// Rendering
+// ============================================
+function renderActivities() {
+    const container = document.getElementById('activitiesList');
+    if (!container) return;
+    
+    // Filter activities
+    let filtered = activities;
+    if (currentFilter !== 'all') {
+        filtered = activities.filter(a => a.type === currentFilter);
+    }
+    
+    // Filter only future activities
+    const today = new Date().toISOString().split('T')[0];
+    filtered = filtered.filter(a => a.date >= today);
+    
+    // Sort by date
+    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    // Render
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📅</div>
+                <h3>No hi ha activitats ${currentFilter !== 'all' ? 'per aquest tipus' : 'programades'}</h3>
+                <p>${isAdminLoggedIn ? 'Utilitza el panell d\'administració per crear noves activitats.' : 'De moment no hi ha cap activitat al calendari. Torna aviat per veure les pròximes sortides!'}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = filtered.map(activity => createActivityCard(activity)).join('');
+    
+    // Add event listeners to booking buttons
+    container.querySelectorAll('.btn-book').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.closest('[data-id]').dataset.id);
+            openBookingModal(id);
+        });
+    });
+    
+    // Add event listeners to delete buttons (only if admin)
+    if (isAdminLoggedIn) {
+        container.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(e.target.closest('[data-id]').dataset.id);
+                deleteActivity(id);
+            });
+        });
+    }
+    
+    // Add event listeners to map buttons
+    container.querySelectorAll('.btn-map').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.closest('[data-id]').dataset.id);
+            const activity = activities.find(a => a.id === id);
+            if (activity && activity.latitude && activity.longitude) {
+                window.open(`https://www.google.com/maps?q=${activity.latitude},${activity.longitude}`, '_blank');
+            }
+        });
+    });
+}
+
+function createActivityCard(activity) {
+    const typeInfo = ACTIVITY_TYPES[activity.type];
+    const date = new Date(activity.date + 'T00:00:00');
+    const formattedDate = date.toLocaleDateString('ca-ES', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    
+    const capacityPercent = (activity.enrolled / activity.capacity) * 100;
+    let capacityClass = '';
+    if (capacityPercent >= 90) capacityClass = 'full';
+    else if (capacityPercent >= 70) capacityClass = 'medium';
+    
+    const isFull = activity.enrolled >= activity.capacity;
+    
+    return `
+        <div class="activity-card" data-id="${activity.id}">
+            <div class="activity-header">
+                <div class="activity-type-badge">
+                    ${typeInfo.icon} ${typeInfo.label}
+                </div>
+                <h3 class="activity-title">${activity.title}</h3>
+            </div>
+            
+            <div class="activity-body">
+                <div class="activity-info">
+                    <div class="activity-info-item">
+                        <span class="info-icon">📅</span>
+                        <div class="info-content">
+                            <span class="info-label">Data</span>
+                            <span class="info-value">${formattedDate}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-info-item">
+                        <span class="info-icon">⏰</span>
+                        <div class="info-content">
+                            <span class="info-label">Hora</span>
+                            <span class="info-value">${activity.time}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-info-item">
+                        <span class="info-icon">📍</span>
+                        <div class="info-content">
+                            <span class="info-label">Lloc</span>
+                            <span class="info-value">${activity.location}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                ${activity.description ? `
+                    <div class="activity-description">
+                        ${activity.description}
+                    </div>
+                ` : ''}
+                
+                <div class="capacity-indicator">
+                    <div class="capacity-bar">
+                        <div class="capacity-fill ${capacityClass}" style="width: ${capacityPercent}%"></div>
+                    </div>
+                    <span class="capacity-text">${activity.enrolled}/${activity.capacity}</span>
+                </div>
+            </div>
+            
+            <div class="activity-footer">
+                <button class="btn-book" ${isFull ? 'disabled' : ''}>
+                    <span>${isFull ? '❌ Complet' : '✓ Reservar plaça'}</span>
+                </button>
+                ${activity.latitude && activity.longitude ? `
+                    <button class="btn-map" title="Veure mapa">
+                        <span>🗺️</span>
+                    </button>
+                ` : ''}
+                ${isAdminLoggedIn ? `
+                    <button class="btn-delete" title="Eliminar activitat">
+                        <span>🗑️</span>
+                    </button>
+                ` : ''}
+            </div>
+        </div>
+    `;
+}
+
+// ============================================
+// Booking System
+// ============================================
+function openBookingModal(activityId) {
+    const activity = activities.find(a => a.id === activityId);
+    if (!activity) return;
+    
+    const modal = document.getElementById('bookingModal');
+    const modalBody = document.getElementById('modalBody');
+    
+    const typeInfo = ACTIVITY_TYPES[activity.type];
+    const date = new Date(activity.date + 'T00:00:00');
+    const formattedDate = date.toLocaleDateString('ca-ES', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    
+    modalBody.innerHTML = `
+        <div class="booking-summary">
+            <h3>Resum de l'activitat</h3>
+            <div class="booking-summary-item">
+                <strong>${typeInfo.icon} ${typeInfo.label}:</strong> ${activity.title}
+            </div>
+            <div class="booking-summary-item">
+                <strong>📅 Data:</strong> ${formattedDate}
+            </div>
+            <div class="booking-summary-item">
+                <strong>⏰ Hora:</strong> ${activity.time}
+            </div>
+            <div class="booking-summary-item">
+                <strong>📍 Lloc:</strong> ${activity.location}
+            </div>
+            <div class="booking-summary-item">
+                <strong>👥 Places disponibles:</strong> ${activity.capacity - activity.enrolled}/${activity.capacity}
+            </div>
+        </div>
+        
+        <form id="bookingForm" class="booking-form">
+            <div class="form-group">
+                <label for="participantName">
+                    <span class="label-icon">👤</span>
+                    <span>Nom complet</span>
+                    <span class="required">*</span>
+                </label>
+                <input type="text" id="participantName" name="name" required placeholder="El teu nom">
+            </div>
+            
+            <div class="form-group">
+                <label for="participantEmail">
+                    <span class="label-icon">📧</span>
+                    <span>Email</span>
+                    <span class="required">*</span>
+                </label>
+                <input type="email" id="participantEmail" name="email" required placeholder="el.teu.email@exemple.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="participantPhone">
+                    <span class="label-icon">📱</span>
+                    <span>Telèfon</span>
+                    <span class="required">*</span>
+                </label>
+                <input type="tel" id="participantPhone" name="phone" required placeholder="+34 600 000 000">
+            </div>
+            
+            <div class="form-group">
+                <label for="participantNotes">
+                    <span class="label-icon">📝</span>
+                    <span>Comentaris o necessitats especials</span>
+                </label>
+                <textarea id="participantNotes" name="notes" rows="3" placeholder="Algun comentari que vulguis compartir..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn-submit">
+                <span class="btn-icon">✓</span>
+                <span>Confirmar Reserva</span>
+            </button>
+        </form>
+    `;
+    
+    modal.classList.add('active');
+    
+    // Handle booking form submission
+    const bookingForm = modalBody.querySelector('#bookingForm');
+    bookingForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleBookingSubmit(e, activityId);
+    });
+}
+
+function handleBookingSubmit(e, activityId) {
+    e.preventDefault();
+    
+    const activity = activities.find(a => a.id === activityId);
+    if (!activity) return;
+    
+    const formData = new FormData(e.target);
+    const participant = {
+        id: Date.now(),
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        notes: formData.get('notes') || '',
+        bookedAt: new Date().toISOString()
+    };
+    
+    // Add participant to activity
+    if (!activity.participants) activity.participants = [];
+    activity.participants.push(participant);
+    activity.enrolled = activity.participants.length;
+    
+    saveActivities();
+    renderActivities();
+    
+    // Enviar email de confirmación a través de Cloudflare Worker
+    const sendConfirmationEmail = async () => {
+        try {
+            const response = await fetch('/api/send-booking-confirmation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    booking: participant,
+                    activity: activity
+                })
+            });
+            
+            return response.ok;
+        } catch (error) {
+            console.error('Error enviando email de confirmación:', error);
+            return false;
+        }
+    };
+    
+    // Enviar email (no bloquear la UI)
+    const emailSent = await sendConfirmationEmail();
+    
+    // Show success message
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+        <div class="booking-success">
+            <div class="success-icon">✅</div>
+            <h3>Reserva confirmada!</h3>
+            <p>Hem registrat la teva plaça per a aquesta activitat.</p>
+            <p>${emailSent ? 
+                `Rebràs un email de confirmació a <strong>${participant.email}</strong>` :
+                'No s\'ha pogut enviar l\'email de confirmació, però la teva reserva està registrada.'
+            }</p>
+            <button class="btn-submit" onclick="document.getElementById('bookingModal').classList.remove('active')">
+                Tancar
+            </button>
+        </div>
+    `;
+}
+
+console.log('✅ Calendar JavaScript loaded');
+console.log('🔐 Sistema d\'autenticació activat');
+console.log('📝 Credencials per defecte: admin / WildFitness2024!');

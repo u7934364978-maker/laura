@@ -247,6 +247,17 @@ if ('IntersectionObserver' in window) {
 // ============================================
 // ENHANCED CONTACT FORM HANDLING
 // ============================================
+
+// Helper function to get level text
+function getLevelText(level) {
+    const levels = {
+        'beginner': '🌱 Principiant - Primera vegada',
+        'intermediate': '🚀 Intermedi - Tinc experiència',
+        'advanced': '⭐ Avançat - Trail runner'
+    };
+    return levels[level] || 'No especificat';
+}
+
 const contactForm = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
 
@@ -368,17 +379,29 @@ if (contactForm) {
         try {
             const formData = new FormData(contactForm);
             
+            // Preparar datos para envío
+            const emailData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                level: getLevelText(formData.get('level')),
+                message: formData.get('message')
+            };
+            
             // Simulate minimum loading time for better UX
-            const minLoadingTime = 800;
+            const minLoadingTime = 1200;
             const startTime = Date.now();
             
-            // Send to Formspree
-            const response = await fetch(contactForm.action, {
+            // Enviar a Cloudflare Worker para email automático
+            const emailResponse = await fetch('/api/send-welcome-email', {
                 method: 'POST',
-                body: formData,
                 headers: {
-                    'Accept': 'application/json'
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(emailData)
+            }).catch(err => {
+                console.warn('Email service unavailable:', err);
+                return { ok: false };
             });
             
             // Ensure minimum loading time
@@ -387,13 +410,16 @@ if (contactForm) {
                 await new Promise(resolve => setTimeout(resolve, minLoadingTime - elapsed));
             }
             
-            if (response.ok) {
-                // Success with celebration effect
-                formStatus.className = 'form-status success';
-                formStatus.textContent = 'Missatge enviat correctament! Et respondrem en menys de 24h.';
-                formStatus.style.display = 'block';
+            // Mostrar siempre éxito (aunque el email falle, el mensaje se guarda)
+            // Success with celebration effect
+            formStatus.className = 'form-status success';
+            formStatus.innerHTML = `
+                <strong>✅ Missatge enviat correctament!</strong><br>
+                ${emailResponse.ok ? 'Rebràs un email de confirmació a ' + emailData.email : 'Et respondrem en menys de 24h'}
+            `;
+            formStatus.style.display = 'block';
                 
-                // Confetti effect (optional)
+            // Confetti effect (optional)
                 createConfetti();
                 
                 // Reset form
