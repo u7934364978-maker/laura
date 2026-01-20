@@ -24,11 +24,11 @@
 
 // Configuración
 const CONFIG = {
-  fromEmail: 'Wild Fitness <noreply@wild-fitness.com>',
-  adminEmail: 'info@wild-fitness.com',
+  fromEmail: 'Wild Fitness <noreply@wildbreathing.com>',
+  adminEmail: 'info@wildbreathing.com',
   allowedOrigins: [
-    'https://wild-fitness.com',
-    'https://www.wild-fitness.com',
+    'https://wildbreathing.com',
+    'https://www.wildbreathing.com',
     'http://localhost:8080' // Para desarrollo
   ]
 };
@@ -37,7 +37,7 @@ const CONFIG = {
 // CORS Headers
 // ============================================
 function corsHeaders(origin) {
-  const isAllowed = CONFIG.allowedOrigins.includes(origin) || origin?.includes('sandbox.novita.ai') || origin?.includes('wild-fitness.com');
+  const isAllowed = CONFIG.allowedOrigins.includes(origin) || origin?.includes('sandbox.novita.ai') || origin?.includes('wildbreathing.com');
   
   return {
     'Access-Control-Allow-Origin': isAllowed ? origin : CONFIG.allowedOrigins[0],
@@ -99,7 +99,7 @@ const EmailTemplates = {
       </div>
       
       <div style="text-align: center; margin: 30px 0;">
-        <a href="https://wild-fitness.com/calendari.html" class="cta-button">
+        <a href="https://wildbreathing.com/calendari.html" class="cta-button">
           📅 Veure Calendari d'Activitats
         </a>
       </div>
@@ -107,7 +107,7 @@ const EmailTemplates = {
       <div class="message">
         <p><strong>Mentrestant, pots:</strong></p>
         <ul>
-          <li>🗓️ Consultar el <a href="https://wild-fitness.com/calendari.html">calendari d'activitats</a></li>
+          <li>🗓️ Consultar el <a href="https://wildbreathing.com/calendari.html">calendari d'activitats</a></li>
           <li>📱 Contactar-me per <a href="https://wa.me/34640915772">WhatsApp</a> (+34 640 915 772)</li>
           <li>📷 Seguir-me a <a href="https://instagram.com/wildbreathing">Instagram</a> @wildbreathing</li>
         </ul>
@@ -120,7 +120,7 @@ const EmailTemplates = {
       ROPEC 062645</p>
       
       <div class="social-links">
-        <a href="https://wild-fitness.com">🌐 Web</a>
+        <a href="https://wildbreathing.com">🌐 Web</a>
         <a href="https://wa.me/34640915772">💬 WhatsApp</a>
         <a href="https://instagram.com/wildbreathing">📷 Instagram</a>
       </div>
@@ -143,7 +143,7 @@ El teu missatge: "${data.message || 'Sense missatge'}"
 ${data.level ? `Nivell: ${data.level}` : ''}
 
 Mentrestant, pots:
-- Consultar el calendari d'activitats: https://wild-fitness.com/calendari.html
+- Consultar el calendari d'activitats: https://www.wild-fitness.com/calendari.html
 - Contactar-me per WhatsApp: +34 640 915 772
 - Seguir-me a Instagram: @wildbreathing
 
