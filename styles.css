@@ -221,6 +221,18 @@ body {
 /* 🔴 CRÍTICO: Optimizar logo para móviles pequeños */
 @media (max-width: 480px) {
     .logo-text {
+        font-size: 1.2rem; /* Reducido de 1.5rem */
+        letter-spacing: 1px; /* Reducido de 2px */
+    }
+    
+    .logo-icon {
+        font-size: 1.3rem;
+    }
+}
+
+/* 🔴 CRÍTICO: Optimizar logo para móviles pequeños */
+@media (max-width: 480px) {
+    .logo-text {
         font-size: 1.2rem;
         letter-spacing: 1px;
     }
@@ -1547,15 +1559,35 @@ a, button, .feature-item, .gallery-item img {
     box-shadow: var(--shadow-md);
 }
 
-/* Mobile Navigation (hamburger menu defined in media query below) */
+/* ============================================
+   🔴 CRÍTICO: NAVEGACIÓN MOBILE OPTIMIZADA
+   ============================================ */
 @media (max-width: 768px) {
+    /* Header fixed simplificado - Unificado para todos los navegadores */
+    .header {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: 0.75rem 0;
+    }
+    
+    body {
+        padding-top: 70px; /* Compensar header fixed */
+    }
+    
+    /* Hamburger menu mejorado */
     .nav-toggle {
         display: block;
         background: none;
         border: none;
         cursor: pointer;
         padding: 0.5rem;
-        z-index: 101;
+        z-index: 1001;
+        min-height: 44px; /* Tap target iOS */
+        min-width: 44px;
     }
 
     .hamburger {
@@ -1599,10 +1631,11 @@ a, button, .feature-item, .gallery-item img {
         transform: rotate(-45deg);
     }
 
+    /* Menú mobile optimizado con mejor posicionamiento */
     .nav-list {
         position: fixed;
         top: 70px;
-        left: -100%;
+        left: 0;
         width: 100%;
         height: calc(100vh - 70px);
         background: var(--bg-white);
@@ -1610,18 +1643,23 @@ a, button, .feature-item, .gallery-item img {
         justify-content: flex-start;
         padding: var(--spacing-lg);
         box-shadow: var(--shadow-lg);
-        transition: left 0.3s ease;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
         z-index: 100;
+        overflow-y: auto;
     }
 
     .nav-list.active {
-        left: 0;
+        transform: translateX(0);
     }
 
     .nav-link {
         width: 100%;
-        padding: var(--spacing-sm) 0;
+        padding: var(--spacing-sm) var(--spacing-md);
         font-size: 1.1rem;
+        min-height: 44px; /* Tap target iOS */
+        display: flex;
+        align-items: center;
     }
 }
 
