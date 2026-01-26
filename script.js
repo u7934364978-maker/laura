@@ -420,6 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusDiv.className = 'form-status success show';
                     contactForm.reset();
                 } else {
+                    console.error('❌ Detalls de l\'error API:', result.details || result.error);
                     throw new Error(result.error || 'Error enviant el missatge');
                 }
             } catch (error) {
