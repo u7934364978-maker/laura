@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(menuOverlay);
     }
 
-    console.log('Navigation elements:', { navToggle, mainNav, navList, menuOverlay }); // Debug
 
     function toggleMenu(isActive) {
         navList.classList.toggle('active', isActive);
@@ -82,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('menu-active', isActive);
         navToggle.setAttribute('aria-expanded', isActive);
         
-        console.log('Menu toggled:', isActive); // Debug
     }
 
     if (navToggle && navList) {
@@ -122,8 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleMenu(false);
             }
         });
-    } else {
-        console.error('Navigation elements not found!'); // Debug
     }
 });
 
@@ -225,19 +221,6 @@ rippleStyle.textContent = `
 `;
 document.head.appendChild(rippleStyle);
 
-// WhatsApp button tracking
-document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
-    link.addEventListener('click', () => {
-        console.log('WhatsApp link clicked');
-    });
-});
-
-// Email button tracking
-document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
-    link.addEventListener('click', () => {
-        console.log('Email link clicked');
-    });
-});
 
 // Gallery lazy loading
 if ('IntersectionObserver' in window) {
