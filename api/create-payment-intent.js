@@ -12,6 +12,7 @@ const corsHeaders = {
 };
 
 export default async function handler(req) {
+  console.log('💳 Create Payment Intent Request received');
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -22,10 +23,12 @@ export default async function handler(req) {
 
   try {
     const data = await req.json();
+    console.log('📝 Payment Data:', data);
     
     // Validar datos
     const validation = validatePaymentData(data);
     if (!validation.valid) {
+      console.error('❌ Validation error:', validation.error);
       return jsonResponse({ error: validation.error }, 400);
     }
 
@@ -33,9 +36,11 @@ export default async function handler(req) {
     const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
     if (!STRIPE_SECRET_KEY) {
+      console.error('❌ STRIPE_SECRET_KEY is not defined');
       throw new Error('STRIPE_SECRET_KEY is not configured');
     }
 
+    console.log('🏦 Creating Stripe Payment Intent for:', customerName);
     // Crear Payment Intent
     const paymentIntent = await createStripePaymentIntent(STRIPE_SECRET_KEY, {
       amount,
@@ -51,11 +56,13 @@ export default async function handler(req) {
         source: 'wild-fitness',
       },
     });
+    console.log('✅ Stripe Payment Intent created:', paymentIntent.id);
 
     // Guardar en Supabase (opcional)
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_KEY = process.env.SUPABASE_KEY;
     if (SUPABASE_URL && SUPABASE_KEY) {
+      console.log('📊 Saving payment record to Supabase');
       try {
         await savePaymentToDatabase({
           payment_intent_id: paymentIntent.id,
@@ -68,10 +75,13 @@ export default async function handler(req) {
           status: 'pending',
           created_at: new Date().toISOString(),
         }, { SUPABASE_URL, SUPABASE_KEY });
+        console.log('✅ Payment saved to Supabase');
       } catch (dbError) {
-        console.error('Database error:', dbError);
+        console.error('❌ Database error:', dbError);
         // Continuamos aunque falle el guardado inicial
       }
+    } else {
+      console.warn('⚠️ SUPABASE_URL or SUPABASE_KEY not defined, skipping DB save');
     }
 
     return jsonResponse({

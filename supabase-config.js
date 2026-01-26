@@ -75,13 +75,30 @@ async function createActivity(activity) {
     if (!client) return null;
     
     try {
+        console.log('📤 Intentando insertar actividad:', activity);
         const { data, error } = await client
             .from('activities')
             .insert([activity])
             .select()
             .single();
         
-        if (error) throw error;
+        if (error) {
+            console.error('❌ Error de Supabase al insertar:', error);
+            // Si el error es por la columna price, intentamos sin ella como fallback temporal
+            if (error.message && error.message.includes('price')) {
+                console.warn('⚠️ Columna "price" no encontrada. Reintentando sin ella...');
+                const { price, ...activityWithoutPrice } = activity;
+                const retry = await client
+                    .from('activities')
+                    .insert([activityWithoutPrice])
+                    .select()
+                    .single();
+                
+                if (retry.error) throw retry.error;
+                return retry.data;
+            }
+            throw error;
+        }
         
         console.log('✅ Actividad creada:', data);
         return data;

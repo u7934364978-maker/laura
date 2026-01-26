@@ -14,6 +14,7 @@ const corsHeaders = {
 };
 
 export default async function handler(req) {
+  console.log('🪝 Stripe Webhook received');
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -26,31 +27,35 @@ export default async function handler(req) {
   const signature = req.headers.get('stripe-signature');
 
   if (!signature) {
+    console.error('❌ No Stripe signature found');
     return jsonResponse({ error: 'No signature provided' }, 400);
   }
 
   try {
     // Verificar firma del webhook
     const event = await verifyWebhookSignature(body, signature, STRIPE_WEBHOOK_SECRET);
+    console.log('✅ Webhook signature verified. Event:', event.type);
 
     // Procesar eventos
     switch (event.type) {
       case 'payment_intent.succeeded':
+        console.log('💰 PaymentIntent succeeded:', event.data.object.id);
         await handlePaymentSuccess(event.data.object);
         break;
 
       case 'payment_intent.payment_failed':
+        console.error('❌ PaymentIntent failed:', event.data.object.id);
         await handlePaymentFailed(event.data.object);
         break;
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        console.log(`ℹ️ Unhandled event type: ${event.type}`);
     }
 
     return jsonResponse({ received: true });
 
   } catch (error) {
-    console.error('Webhook error:', error);
+    console.error('❌ Webhook error:', error.message);
     return jsonResponse({ error: 'Webhook processing failed', message: error.message }, 400);
   }
 }
