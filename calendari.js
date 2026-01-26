@@ -203,7 +203,7 @@ async function handleBizumCallback() {
                                 notes,
                                 bookedAt: new Date().toISOString(),
                                 paymentId: paymentIntent.id,
-                                amount: 10.00,
+                                amount: activity.price || 10.00,
                                 status: 'paid'
                             };
                             
@@ -664,6 +664,7 @@ function handleActivitySubmit(e) {
         latitude: formData.get('latitude') || '',
         longitude: formData.get('longitude') || '',
         capacity: parseInt(formData.get('capacity')),
+        price: parseFloat(formData.get('price')) || 10.00,
         enrolled: 0,
         description: formData.get('description') || '',
         participants: [],
@@ -817,6 +818,14 @@ function createActivityCard(activity) {
                         <div class="info-content">
                             <span class="info-label">Lloc</span>
                             <span class="info-value">${activity.location}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-info-item">
+                        <span class="info-icon">💰</span>
+                        <div class="info-content">
+                            <span class="info-label">Preu</span>
+                            <span class="info-value">${activity.price ? activity.price.toFixed(2) : '10.00'} €</span>
                         </div>
                     </div>
                 </div>
@@ -1018,7 +1027,7 @@ function openBookingModal(activityId) {
                     </label>
                 </div>
 
-                <div class="price-tag">Total: 10,00 €</div>
+                <div class="price-tag">Total: ${activity.price ? activity.price.toFixed(2).replace('.', ',') : '10,00'} €</div>
                 
                 <div id="card-element-container">
                     <div id="card-element">
@@ -1146,13 +1155,14 @@ async function handleBookingSubmit(e, activityId) {
     btnLoader.style.display = 'flex';
     
     try {
-        // 2. Crear Payment Intent al worker (10 euros = 1000 cèntims)
+        // 2. Crear Payment Intent al worker
+        const amount = Math.round((activity.price || 10.00) * 100);
         const workerUrl = 'https://wild-fitness-payments.w5kvt5ypsr.workers.dev/create-payment-intent';
         const response = await fetch(workerUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                amount: 1000, // 10€
+                amount: amount,
                 currency: 'eur',
                 paymentMethod: paymentMethod, // 'card' o 'bizum'
                 customerName: participantData.name,
@@ -1223,7 +1233,7 @@ async function handleBookingSubmit(e, activityId) {
         const participant = {
             ...participantData,
             paymentId: paymentResult.id,
-            amount: 10.00,
+            amount: activity.price || 10.00,
             status: 'paid'
         };
         
