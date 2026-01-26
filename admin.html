@@ -979,9 +979,9 @@
             function validateCredentials(username, password) {
                 const credentials = JSON.parse(
                     localStorage.getItem('wild_fitness_admin_credentials') || 
-                    '{"username":"admin","password":"' + btoa('WildFitness2024!') + '"}'
+                    '{"username":"admin","passwordHash":"' + btoa('WildFitness2024!') + '"}'
                 );
-                return username === credentials.username && btoa(password) === credentials.password;
+                return username === credentials.username && btoa(password) === credentials.passwordHash;
             }
             
             function showDashboard() {
