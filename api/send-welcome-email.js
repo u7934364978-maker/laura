@@ -104,7 +104,20 @@ export default async function handler(req) {
     });
     
     const clientResult = await clientRes.json();
+    console.log('📊 Client email status:', clientRes.status);
     console.log('✅ Client email response:', clientResult);
+
+    if (!clientRes.ok) {
+      console.error('❌ Resend Client Email Error:', clientResult);
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: 'Error enviant el mail de benvinguda',
+        details: clientResult 
+      }), {
+        status: clientRes.status,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     // Notificación al admin
     console.log('📤 Sending notification to admin:', ADMIN_EMAIL);
@@ -124,9 +137,14 @@ export default async function handler(req) {
     });
     
     const adminResult = await adminRes.json();
+    console.log('📊 Admin email status:', adminRes.status);
     console.log('✅ Admin notification response:', adminResult);
 
-    return new Response(JSON.stringify({ success: true }), {
+    if (!adminRes.ok) {
+      console.warn('⚠️ Admin notification failed, but client email was sent');
+    }
+
+    return new Response(JSON.stringify({ success: true, clientResult }), {
       headers: { 'Content-Type': 'application/json' }
     });
 
