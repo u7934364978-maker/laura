@@ -28,22 +28,34 @@ window.addEventListener('load', () => {
 // Enhanced Header Scroll Effect
 // ============================================
 const header = document.querySelector('.header');
+const scrollProgress = document.getElementById('scrollProgress');
 let lastScroll = 0;
+let ticking = false;
 
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            const currentScroll = window.pageYOffset;
+            
+            // Header sticky effect
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
 
-    // Add scrolled class for styling
-    if (currentScroll > 50) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
+            // Scroll progress bar
+            if (scrollProgress) {
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (currentScroll / windowHeight) * 100;
+                scrollProgress.style.width = scrolled + '%';
+            }
+
+            lastScroll = currentScroll;
+            ticking = false;
+        });
+        ticking = true;
     }
-
-    // Keep header always visible (sticky)
-    // Removed hide/show behavior to maintain sticky header at all times
-    
-    lastScroll = currentScroll;
 });
 
 // ============================================
@@ -379,7 +391,7 @@ if (contactForm) {
         try {
             const formData = new FormData(contactForm);
             
-            // Preparar datos para envío
+            // Preparar dades per enviament
             const emailData = {
                 name: formData.get('name'),
                 email: formData.get('email'),
@@ -396,20 +408,20 @@ if (contactForm) {
             if (typeof saveContactSubmission === 'function') {
                 try {
                     await saveContactSubmission(emailData);
-                    console.log('✅ Contacto guardado en Supabase');
+                    console.log('✅ Contacte guardat a Supabase');
                 } catch (supabaseError) {
-                    console.warn('⚠️ Error guardando en Supabase:', supabaseError);
-                    // Continuar aunque falle Supabase - no bloquear el envío de email
+                    console.warn('⚠️ Error guardant a Supabase:', supabaseError);
+                    // Continuar encara que falli Supabase - no bloquejar l'enviament d'email
                 }
             }
             
-            // Preparar datos para email con texto legible del nivel
+            // Preparar dades per email amb text llegible del nivell
             const emailDataWithLevel = {
                 ...emailData,
                 level: getLevelText(emailData.level)
             };
             
-            // Enviar a Cloudflare Worker para email automático
+            // Enviar a Cloudflare Worker per email automàtic
             const emailResponse = await fetch('/api/send-welcome-email', {
                 method: 'POST',
                 headers: {
@@ -427,7 +439,7 @@ if (contactForm) {
                 await new Promise(resolve => setTimeout(resolve, minLoadingTime - elapsed));
             }
             
-            // Mostrar siempre éxito
+            // Mostrar sempre èxit
             formStatus.className = 'form-status success';
             formStatus.innerHTML = `
                 <strong>✅ Missatge enviat correctament!</strong><br>
