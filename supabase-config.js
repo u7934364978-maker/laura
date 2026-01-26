@@ -87,7 +87,7 @@ async function createActivity(activity) {
         return data;
     } catch (error) {
         console.error('❌ Error al crear actividad:', error);
-        return null;
+        throw error;
     }
 }
 
@@ -110,7 +110,7 @@ async function updateActivity(id, updates) {
         return data;
     } catch (error) {
         console.error('❌ Error al actualizar actividad:', error);
-        return null;
+        throw error;
     }
 }
 
@@ -131,7 +131,7 @@ async function deleteActivityFromDB(id) {
         return true;
     } catch (error) {
         console.error('❌ Error al eliminar actividad:', error);
-        return false;
+        throw error;
     }
 }
 

@@ -1052,6 +1052,9 @@
                 }
                 
                 updateDashboard();
+                
+                // Sincronizar con el servidor para emails programados (KV Storage)
+                syncActivitiesToServer();
             }
             
             async function syncActivitiesToServer() {
@@ -1308,16 +1311,18 @@
             
             window.deleteActivity = async function(id) {
                 if (confirm('⚠️ Estàs segur que vols eliminar aquesta activitat?')) {
-                    console.log('🗑️ Eliminando actividad:', id);
-                    
-                    const success = await deleteActivityFromDB(id);
-                    
-                    if (success) {
-                        activities = activities.filter(a => a.id !== id);
-                        await saveActivities();
-                        alert('✅ Activitat eliminada correctament!');
-                    } else {
-                        alert('❌ Error al eliminar la activitat. Intenta de nou.');
+                    try {
+                        console.log('🗑️ Eliminando actividad:', id);
+                        const success = await deleteActivityFromDB(id);
+                        
+                        if (success) {
+                            activities = activities.filter(a => a.id !== id);
+                            await saveActivities();
+                            alert('✅ Activitat eliminada correctament!');
+                        }
+                    } catch (error) {
+                        console.error('❌ Error:', error);
+                        alert('❌ Error al eliminar la activitat: ' + error.message);
                     }
                 }
             };
