@@ -219,7 +219,11 @@ info@wild-fitness.com
   }),
 
   // Confirmación de reserva de actividad
-  bookingConfirmation: (booking, activity) => ({
+  bookingConfirmation: (booking, activity) => {
+    const qrData = encodeURIComponent(`WF-VERIFY:${activity.id}:${booking.id}:${booking.paymentId || 'PAID'}`);
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+    
+    return {
     subject: `✅ Reserva confirmada: ${activity.title}`,
     html: `
 <!DOCTYPE html>
@@ -234,6 +238,8 @@ info@wild-fitness.com
     .content { background: #ffffff; padding: 40px 30px; }
     .activity-card { background: #f0f9f9; border: 2px solid #2d7d7d; border-radius: 10px; padding: 25px; margin: 20px 0; }
     .activity-title { color: #2d7d7d; font-size: 22px; font-weight: 700; margin: 0 0 15px; }
+    .qr-section { text-align: center; margin: 30px 0; padding: 20px; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1; }
+    .qr-code { background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     .detail-row { margin: 12px 0; font-size: 16px; }
     .icon { margin-right: 8px; }
     .cta-button { display: inline-block; background: #2d7d7d; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 10px 5px; }
@@ -252,6 +258,12 @@ info@wild-fitness.com
       
       <p>La teva plaça ha estat reservada correctament. Estic molt contenta de compartir aquesta experiència amb tu!</p>
       
+      <div class="qr-section">
+        <h4 style="margin-top: 0; color: #1e293b;">🎟️ El teu Codi de Verificació</h4>
+        <img src="${qrCodeUrl}" alt="QR Verification Code" class="qr-code">
+        <p style="font-size: 12px; color: #64748b; margin-top: 10px;">Mostra aquest codi a la teva arribada per verificar la teva reserva.</p>
+      </div>
+
       <div class="activity-card">
         <div class="activity-title">${activity.title}</div>
         
@@ -317,7 +329,8 @@ info@wild-fitness.com
 </body>
 </html>
     `
-  })
+  }
+}
 };
 
 // ============================================

@@ -12,6 +12,8 @@
 // Configuración
 const STRIPE_API_URL = 'https://api.stripe.com/v1';
 const ALLOWED_ORIGINS = [
+    'https://wild-fitness.com',
+    'https://www.wild-fitness.com',
     'https://wildbreathing.com',
     'https://www.wildbreathing.com',
     'https://laura-morada.pages.dev',
@@ -96,7 +98,7 @@ async function createPaymentIntent(request, STRIPE_SECRET_KEY, env) {
         return jsonResponse({ error: validation.error }, 400);
     }
 
-    const { amount, currency, paymentMethod, customerName, customerEmail, customerPhone, programName } = data;
+    const { amount, currency, paymentMethod, activityId, customerName, customerEmail, customerPhone, customerNotes, programName } = data;
 
     try {
         // Crear Payment Intent en Stripe
@@ -105,9 +107,11 @@ async function createPaymentIntent(request, STRIPE_SECRET_KEY, env) {
             currency: currency || 'eur',
             paymentMethodTypes: paymentMethod === 'bizum' ? ['card', 'bizum'] : ['card'],
             metadata: {
+                activityId,
                 customerName,
                 customerEmail,
                 customerPhone,
+                customerNotes,
                 programName,
                 source: 'wild-fitness',
             },
@@ -148,7 +152,7 @@ async function createPaymentIntent(request, STRIPE_SECRET_KEY, env) {
 /**
  * Manejar webhooks de Stripe
  */
-async function handleWebhook(request) {
+async function handleWebhook(request, env) {
     if (request.method !== 'POST') {
         return jsonResponse({ error: 'Method not allowed' }, 405);
     }
@@ -162,24 +166,24 @@ async function handleWebhook(request) {
 
     try {
         // Verificar firma del webhook
-        const event = await verifyWebhookSignature(body, signature);
+        const event = await verifyWebhookSignature(body, signature, env);
 
         // Procesar eventos
         switch (event.type) {
             case 'payment_intent.succeeded':
-                await handlePaymentSuccess(event.data.object);
+                await handlePaymentSuccess(event.data.object, env);
                 break;
 
             case 'payment_intent.payment_failed':
-                await handlePaymentFailed(event.data.object);
+                await handlePaymentFailed(event.data.object, env);
                 break;
 
             case 'charge.refunded':
-                await handleRefund(event.data.object);
+                await handleRefund(event.data.object, env);
                 break;
 
             case 'charge.dispute.created':
-                await handleDispute(event.data.object);
+                await handleDispute(event.data.object, env);
                 break;
 
             default:
@@ -206,6 +210,8 @@ async function createStripePaymentIntent(STRIPE_SECRET_KEY, params) {
         'metadata[customerName]': metadata.customerName,
         'metadata[customerEmail]': metadata.customerEmail,
         'metadata[customerPhone]': metadata.customerPhone,
+        'metadata[customerNotes]': metadata.customerNotes || '',
+        'metadata[activityId]': metadata.activityId || '',
         'metadata[programName]': metadata.programName,
         'metadata[source]': metadata.source,
     });
@@ -235,58 +241,199 @@ async function createStripePaymentIntent(STRIPE_SECRET_KEY, params) {
 /**
  * Verificar firma del webhook
  */
-async function verifyWebhookSignature(body, signature) {
-    // Nota: Para una verificación completa, necesitarías implementar
-    // la verificación de firma de Stripe. Por ahora, parseamos el evento.
+async function verifyWebhookSignature(body, signature, env) {
+    const endpointSecret = env.STRIPE_WEBHOOK_SECRET;
     
-    // En producción, usa la librería de Stripe o implementa la verificación HMAC
-    
+    // Si no hay secreto configurado, solo parseamos (no recomendado para producción)
+    if (!endpointSecret) {
+        console.warn('⚠️ STRIPE_WEBHOOK_SECRET no configurada. Saltando verificación de firma.');
+        try {
+            return JSON.parse(body);
+        } catch (error) {
+            throw new Error('Invalid webhook payload');
+        }
+    }
+
     try {
+        // La firma de Stripe tiene el formato t=timestamp,v1=signature
+        const parts = signature.split(',');
+        const timestamp = parts.find(p => p.startsWith('t='))?.split('=')[1];
+        const v1 = parts.find(p => p.startsWith('v1='))?.split('=')[1];
+
+        if (!timestamp || !v1) {
+            throw new Error('Invalid Stripe signature format');
+        }
+
+        // Verificar que el timestamp no sea muy antiguo (5 minutos)
+        const now = Math.floor(Date.now() / 1000);
+        if (Math.abs(now - parseInt(timestamp)) > 300) {
+            throw new Error('Webhook timestamp too old');
+        }
+
+        // Crear la cadena para firmar: timestamp + "." + body
+        const signedPayload = `${timestamp}.${body}`;
+        
+        // Verificar firma usando HMAC-SHA256
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(endpointSecret);
+        const key = await crypto.subtle.importKey(
+            'raw',
+            keyData,
+            { name: 'HMAC', hash: 'SHA-256' },
+            false,
+            ['verify']
+        );
+
+        const signatureData = hexToBytes(v1);
+        const isValid = await crypto.subtle.verify(
+            'HMAC',
+            key,
+            signatureData,
+            encoder.encode(signedPayload)
+        );
+
+        if (!isValid) {
+            throw new Error('Invalid Stripe signature');
+        }
+
         return JSON.parse(body);
     } catch (error) {
-        throw new Error('Invalid webhook payload');
+        console.error('Signature verification error:', error);
+        throw new Error(`Webhook signature verification failed: ${error.message}`);
     }
 }
 
 /**
+ * Helper para convertir hex a Uint8Array
+ */
+function hexToBytes(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+    }
+    return bytes;
+}
+
+
+/**
  * Manejar pago exitoso
  */
-async function handlePaymentSuccess(paymentIntent) {
+async function handlePaymentSuccess(paymentIntent, env) {
     console.log('Payment succeeded:', paymentIntent.id);
+    const { SUPABASE_URL, SUPABASE_KEY } = env;
 
-    // Actualizar base de datos
+    // 1. Actualizar estado del pago en la tabla 'payments'
     if (SUPABASE_URL && SUPABASE_KEY) {
-        await updatePaymentStatus(paymentIntent.id, 'succeeded');
+        await updatePaymentStatus(paymentIntent.id, 'succeeded', env);
+        
+        // 2. Registrar al participante en la actividad
+        if (paymentIntent.metadata.activityId) {
+            await registerParticipantInActivity(paymentIntent, env);
+        }
     }
 
-    // Enviar email de confirmación al cliente
+    // 3. Enviar email de confirmación al cliente
     await sendConfirmationEmail({
         to: paymentIntent.metadata.customerEmail,
         name: paymentIntent.metadata.customerName,
+        phone: paymentIntent.metadata.customerPhone,
         programName: paymentIntent.metadata.programName,
+        activityId: paymentIntent.metadata.activityId,
         amount: paymentIntent.amount / 100,
         paymentId: paymentIntent.id,
-    });
+    }, env);
 
-    // Enviar notificación al administrador
+    // 4. Enviar notificación al administrador
     await sendAdminNotification({
         type: 'payment_success',
         customerName: paymentIntent.metadata.customerName,
         programName: paymentIntent.metadata.programName,
         amount: paymentIntent.amount / 100,
         paymentId: paymentIntent.id,
-    });
+    }, env);
 }
+
+/**
+ * Registrar participante en la actividad correspondiente
+ */
+async function registerParticipantInActivity(paymentIntent, env) {
+    const { SUPABASE_URL, SUPABASE_KEY } = env;
+    const activityId = paymentIntent.metadata.activityId;
+    
+    try {
+        // 1. Obtener la actividad actual
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/activities?id=eq.${activityId}`, {
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+        });
+        
+        if (!response.ok) throw new Error('Failed to fetch activity');
+        
+        const activities = await response.json();
+        if (activities.length === 0) throw new Error('Activity not found');
+        
+        const activity = activities[0];
+        let participants = activity.participants || [];
+        
+        // 2. Verificar si ya existe (evitar duplicados por reintentos de webhook)
+        const alreadyRegistered = participants.some(p => p.paymentId === paymentIntent.id);
+        if (alreadyRegistered) {
+            console.log('Participant already registered for this payment');
+            return;
+        }
+        
+        // 3. Añadir nuevo participante
+        const newParticipant = {
+            id: Date.now(),
+            name: paymentIntent.metadata.customerName,
+            email: paymentIntent.metadata.customerEmail,
+            phone: paymentIntent.metadata.customerPhone,
+            notes: paymentIntent.metadata.customerNotes || '',
+            bookedAt: new Date().toISOString(),
+            paymentId: paymentIntent.id,
+            amount: paymentIntent.amount / 100,
+            status: 'paid'
+        };
+        
+        participants.push(newParticipant);
+        
+        // 4. Actualizar la actividad en Supabase
+        const updateResponse = await fetch(`${SUPABASE_URL}/rest/v1/activities?id=eq.${activityId}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+                participants: participants,
+                enrolled: participants.length
+            })
+        });
+        
+        if (!updateResponse.ok) throw new Error('Failed to update activity participants');
+        
+        console.log(`✅ Participant registered in activity ${activityId}`);
+        
+    } catch (error) {
+        console.error('Error registering participant in activity:', error);
+    }
+}
+
 
 /**
  * Manejar pago fallido
  */
-async function handlePaymentFailed(paymentIntent) {
+async function handlePaymentFailed(paymentIntent, env) {
     console.log('Payment failed:', paymentIntent.id);
+    const { SUPABASE_URL, SUPABASE_KEY } = env;
 
     // Actualizar base de datos
     if (SUPABASE_URL && SUPABASE_KEY) {
-        await updatePaymentStatus(paymentIntent.id, 'failed');
+        await updatePaymentStatus(paymentIntent.id, 'failed', env);
     }
 
     // Notificar al administrador
@@ -297,25 +444,26 @@ async function handlePaymentFailed(paymentIntent) {
         amount: paymentIntent.amount / 100,
         paymentId: paymentIntent.id,
         error: paymentIntent.last_payment_error?.message,
-    });
+    }, env);
 }
 
 /**
  * Manejar reembolso
  */
-async function handleRefund(charge) {
+async function handleRefund(charge, env) {
     console.log('Refund processed:', charge.id);
+    const { SUPABASE_URL, SUPABASE_KEY } = env;
 
     // Actualizar base de datos
     if (SUPABASE_URL && SUPABASE_KEY) {
-        await updatePaymentStatus(charge.payment_intent, 'refunded');
+        await updatePaymentStatus(charge.payment_intent, 'refunded', env);
     }
 }
 
 /**
  * Manejar disputa
  */
-async function handleDispute(dispute) {
+async function handleDispute(dispute, env) {
     console.log('Dispute created:', dispute.id);
 
     // Notificar urgentemente al administrador
@@ -324,13 +472,14 @@ async function handleDispute(dispute) {
         disputeId: dispute.id,
         amount: dispute.amount / 100,
         reason: dispute.reason,
-    });
+    }, env);
 }
 
 /**
  * Guardar pago en base de datos
  */
-async function savePaymentToDatabase(data) {
+async function savePaymentToDatabase(data, env) {
+    const { SUPABASE_URL, SUPABASE_KEY } = env;
     const response = await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
         method: 'POST',
         headers: {
@@ -350,7 +499,8 @@ async function savePaymentToDatabase(data) {
 /**
  * Actualizar estado del pago
  */
-async function updatePaymentStatus(paymentIntentId, status) {
+async function updatePaymentStatus(paymentIntentId, status, env) {
+    const { SUPABASE_URL, SUPABASE_KEY } = env;
     const response = await fetch(
         `${SUPABASE_URL}/rest/v1/payments?payment_intent_id=eq.${paymentIntentId}`,
         {
@@ -369,25 +519,50 @@ async function updatePaymentStatus(paymentIntentId, status) {
     }
 }
 
+
 /**
  * Enviar email de confirmación
  */
-async function sendConfirmationEmail(data) {
-    // Implementar envío de email
-    // Puedes usar SendGrid, Mailgun, o el worker de email existente
+async function sendConfirmationEmail(data, env) {
     console.log('Sending confirmation email to:', data.to);
     
-    // TODO: Integrar con tu sistema de emails actual
+    // Llamar al worker principal para enviar el email
+    // El worker principal tiene la lógica de plantillas y Resend
+    try {
+        const response = await fetch('https://wild-fitness.com/api/send-booking-confirmation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                booking: {
+                    id: Date.now(),
+                    name: data.name,
+                    email: data.to,
+                    phone: data.phone || '',
+                    paymentId: data.paymentId,
+                    amount: data.amount
+                },
+                activity: {
+                    title: data.programName,
+                    id: data.activityId
+                }
+            })
+        });
+        
+        if (!response.ok) {
+            console.error('Failed to send confirmation email via main worker');
+        }
+    } catch (error) {
+        console.error('Error calling main worker for email:', error);
+    }
 }
 
 /**
  * Enviar notificación al administrador
  */
-async function sendAdminNotification(data) {
-    // Implementar notificación al admin
+async function sendAdminNotification(data, env) {
     console.log('Sending admin notification:', data.type);
     
-    // TODO: Integrar con tu sistema de notificaciones
+    // Similar al anterior, podemos usar el worker principal
 }
 
 /**

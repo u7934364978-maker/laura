@@ -1165,9 +1165,11 @@ async function handleBookingSubmit(e, activityId) {
                 amount: amount,
                 currency: 'eur',
                 paymentMethod: paymentMethod, // 'card' o 'bizum'
+                activityId: activity.id,
                 customerName: participantData.name,
                 customerEmail: participantData.email,
                 customerPhone: participantData.phone,
+                customerNotes: participantData.notes,
                 programName: `Reserva Activitat: ${activity.title}`
             }),
         });
@@ -1238,19 +1240,25 @@ async function handleBookingSubmit(e, activityId) {
         };
         
         if (!activity.participants) activity.participants = [];
-        activity.participants.push(participant);
-        activity.enrolled = activity.participants.length;
         
-        // Actualitzar a Supabase si la funció existeix
-        if (typeof updateActivity === 'function') {
-            await updateActivity(activity.id, {
-                participants: activity.participants,
-                enrolled: activity.enrolled
-            });
+        // Evitar duplicats (per si el webhook ja l'ha registrat)
+        const alreadyExists = activity.participants.some(p => p.paymentId === paymentResult.id);
+        
+        if (!alreadyExists) {
+            activity.participants.push(participant);
+            activity.enrolled = activity.participants.length;
+            
+            // Actualitzar a Supabase si la funció existeix
+            if (typeof updateActivity === 'function') {
+                await updateActivity(activity.id, {
+                    participants: activity.participants,
+                    enrolled: activity.enrolled
+                });
+            }
+            
+            saveActivities();
+            renderActivities();
         }
-        
-        saveActivities();
-        renderActivities();
         
         // 5. Enviar email de confirmació
         const emailSent = await sendConfirmationEmail(participant, activity);
@@ -1262,7 +1270,7 @@ async function handleBookingSubmit(e, activityId) {
                 <div class="success-icon">✅</div>
                 <h3>Reserva i Pagament Completats!</h3>
                 <p>Hem registrat la teva plaça per a <strong>${activity.title}</strong>.</p>
-                <p>ID de pagament: <small>${paymentIntent.id}</small></p>
+                <p>ID de pagament: <small>${paymentResult.id}</small></p>
                 <p>${emailSent ? 
                     `Rebràs un email de confirmació a <strong>${participant.email}</strong>` :
                     'La teva reserva està registrada, però no s\'ha pogut enviar l\'email de confirmació.'
