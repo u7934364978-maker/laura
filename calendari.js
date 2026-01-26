@@ -179,12 +179,19 @@ async function handleBizumCallback() {
             }
             
             if (paymentIntent.status === 'succeeded') {
-                // 3. Pagament confirmat, recuperar dades de la URL
+                // 3. Pagament confirmat, recuperar dades del PaymentIntent metadata
                 const activityId = parseInt(urlParams.get('activity_id'));
-                const name = urlParams.get('name');
-                const email = urlParams.get('email');
-                const phone = urlParams.get('phone');
-                const notes = urlParams.get('notes') || '';
+                const { 
+                    customerName: name, 
+                    customerEmail: email, 
+                    customerPhone: phone, 
+                    customerNotes: notes = '' 
+                } = paymentIntent.metadata;
+                
+                if (!name || !email) {
+                    console.error('Metadata missing in PaymentIntent:', paymentIntent.metadata);
+                    throw new Error('No s\'han trobat les dades del participant en el pagament.');
+                }
                 
                 // Necessitem esperar que les activitats s'hagin carregat
                 let attempts = 0;
@@ -1180,6 +1187,7 @@ async function handleBookingSubmit(e, activityId) {
         }
         
         const { clientSecret } = await response.json();
+        console.log('🔑 Client Secret rebut');
         
         // 3. Confirmar pagament segons el mètode
         let paymentResult;
@@ -1187,10 +1195,11 @@ async function handleBookingSubmit(e, activityId) {
         if (paymentMethod === 'bizum') {
             // Confirmació Bizum (Redirecció)
             console.log('🚀 Iniciant confirmació Bizum amb return_url...');
-            const returnUrl = `${window.location.origin}/calendari.html?booking_success=true&activity_id=${activityId}&name=${encodeURIComponent(participantData.name)}&email=${encodeURIComponent(participantData.email)}&phone=${encodeURIComponent(participantData.phone)}&notes=${encodeURIComponent(participantData.notes)}`;
+            // Solo pasamos el success y el ID de actividad, el resto se recupera del PaymentIntent metadata
+            const returnUrl = `${window.location.origin}/calendari.html?booking_success=true&activity_id=${activity.id}`;
             console.log('🔗 Return URL:', returnUrl);
 
-            const { error: bizumError } = await stripe.confirmBizumPayment(clientSecret, {
+            const result = await stripe.confirmBizumPayment(clientSecret, {
                 payment_method: {
                     billing_details: {
                         name: participantData.name,
@@ -1200,16 +1209,17 @@ async function handleBookingSubmit(e, activityId) {
                 return_url: returnUrl,
             });
             
-            if (bizumError) {
-                console.error('❌ Error confirmant Bizum:', bizumError);
-                throw new Error(bizumError.message);
+            if (result.error) {
+                console.error('❌ Error confirmant Bizum:', result.error);
+                throw new Error(result.error.message);
             }
             
             // Si no hi ha error, Stripe redirigeix a Bizum
             return;
         } else {
             // Confirmació Targeta
-            const { error: cardError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+            console.log('💳 Confirmant pagament amb targeta...');
+            const result = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
                     card: cardElement,
                     billing_details: {
@@ -1220,15 +1230,18 @@ async function handleBookingSubmit(e, activityId) {
                 },
             });
             
-            if (cardError) {
-                throw new Error(cardError.message);
+            if (result.error) {
+                console.error('❌ Error confirmant Targeta:', result.error);
+                throw new Error(result.error.message);
             }
             
-            if (paymentIntent.status !== 'succeeded') {
+            if (result.paymentIntent.status !== 'succeeded') {
+                console.warn('⚠️ Estat del pagament no exitós:', result.paymentIntent.status);
                 throw new Error('El pagament no s\'ha completat correctament.');
             }
             
-            paymentResult = paymentIntent;
+            paymentResult = result.paymentIntent;
+            console.log('✅ Pagament amb targeta confirmat');
         }
         
         // 4. Pagament correcte, guardar participant
@@ -1243,6 +1256,7 @@ async function handleBookingSubmit(e, activityId) {
         
         // Evitar duplicats (per si el webhook ja l'ha registrat)
         const alreadyExists = activity.participants.some(p => p.paymentId === paymentResult.id);
+        let emailSent = false;
         
         if (!alreadyExists) {
             activity.participants.push(participant);
@@ -1258,10 +1272,13 @@ async function handleBookingSubmit(e, activityId) {
             
             saveActivities();
             renderActivities();
+            
+            // 5. Enviar email de confirmació
+            emailSent = await sendConfirmationEmail(participant, activity);
+        } else {
+            console.log('✅ Participant ja registrat pel webhook.');
+            emailSent = true;
         }
-        
-        // 5. Enviar email de confirmació
-        const emailSent = await sendConfirmationEmail(participant, activity);
         
         // 6. Mostrar èxit
         const modalBody = document.getElementById('modalBody');

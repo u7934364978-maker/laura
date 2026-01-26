@@ -328,20 +328,35 @@ async function handlePaymentSuccess(paymentIntent, env) {
         
         // 2. Registrar al participante en la actividad
         if (paymentIntent.metadata.activityId) {
-            await registerParticipantInActivity(paymentIntent, env);
+            const result = await registerParticipantInActivity(paymentIntent, env);
+            
+            // 3. Enviar email de confirmación al cliente solo si es un registro nuevo
+            // o si por alguna razón no se ha enviado (podemos confiar en el flag isNew)
+            if (result && result.activity && result.isNew) {
+                await sendConfirmationEmail({
+                    to: paymentIntent.metadata.customerEmail,
+                    name: paymentIntent.metadata.customerName,
+                    phone: paymentIntent.metadata.customerPhone,
+                    paymentId: paymentIntent.id,
+                    amount: paymentIntent.amount / 100,
+                }, result.activity, env);
+            } else if (!result) {
+                // Fallback si falla el registro pero queremos intentar enviar email
+                console.warn('Registro fallido, enviando email de fallback');
+                await sendConfirmationEmail({
+                    to: paymentIntent.metadata.customerEmail,
+                    name: paymentIntent.metadata.customerName,
+                    phone: paymentIntent.metadata.customerPhone,
+                    programName: paymentIntent.metadata.programName,
+                    activityId: paymentIntent.metadata.activityId,
+                    amount: paymentIntent.amount / 100,
+                    paymentId: paymentIntent.id,
+                }, null, env);
+            } else {
+                console.log('Skipping email: participant already registered and email likely sent');
+            }
         }
     }
-
-    // 3. Enviar email de confirmación al cliente
-    await sendConfirmationEmail({
-        to: paymentIntent.metadata.customerEmail,
-        name: paymentIntent.metadata.customerName,
-        phone: paymentIntent.metadata.customerPhone,
-        programName: paymentIntent.metadata.programName,
-        activityId: paymentIntent.metadata.activityId,
-        amount: paymentIntent.amount / 100,
-        paymentId: paymentIntent.id,
-    }, env);
 
     // 4. Enviar notificación al administrador
     await sendAdminNotification({
@@ -355,6 +370,7 @@ async function handlePaymentSuccess(paymentIntent, env) {
 
 /**
  * Registrar participante en la actividad correspondiente
+ * @returns {Promise<{activity: Object, isNew: boolean}|null>} La actividad actualizada y si es nuevo
  */
 async function registerParticipantInActivity(paymentIntent, env) {
     const { SUPABASE_URL, SUPABASE_KEY } = env;
@@ -381,7 +397,7 @@ async function registerParticipantInActivity(paymentIntent, env) {
         const alreadyRegistered = participants.some(p => p.paymentId === paymentIntent.id);
         if (alreadyRegistered) {
             console.log('Participant already registered for this payment');
-            return;
+            return { activity, isNew: false };
         }
         
         // 3. Añadir nuevo participante
@@ -394,7 +410,8 @@ async function registerParticipantInActivity(paymentIntent, env) {
             bookedAt: new Date().toISOString(),
             paymentId: paymentIntent.id,
             amount: paymentIntent.amount / 100,
-            status: 'paid'
+            status: 'paid',
+            emailSent: true // Marcamos que el email será enviado por el webhook
         };
         
         participants.push(newParticipant);
@@ -406,7 +423,7 @@ async function registerParticipantInActivity(paymentIntent, env) {
                 'apikey': SUPABASE_KEY,
                 'Authorization': `Bearer ${SUPABASE_KEY}`,
                 'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
+                'Prefer': 'return=representation'
             },
             body: JSON.stringify({
                 participants: participants,
@@ -416,10 +433,17 @@ async function registerParticipantInActivity(paymentIntent, env) {
         
         if (!updateResponse.ok) throw new Error('Failed to update activity participants');
         
+        const updatedActivities = await updateResponse.json();
         console.log(`✅ Participant registered in activity ${activityId}`);
+        
+        return { 
+            activity: updatedActivities[0] || activity, 
+            isNew: true 
+        };
         
     } catch (error) {
         console.error('Error registering participant in activity:', error);
+        return null;
     }
 }
 
@@ -523,29 +547,31 @@ async function updatePaymentStatus(paymentIntentId, status, env) {
 /**
  * Enviar email de confirmación
  */
-async function sendConfirmationEmail(data, env) {
-    console.log('Sending confirmation email to:', data.to);
+async function sendConfirmationEmail(bookingData, activity, env) {
+    console.log('Sending confirmation email to:', bookingData.to);
     
     // Llamar al worker principal para enviar el email
-    // El worker principal tiene la lógica de plantillas y Resend
     try {
+        const payload = {
+            booking: {
+                id: Date.now(),
+                name: bookingData.name,
+                email: bookingData.to,
+                phone: bookingData.phone || '',
+                paymentId: bookingData.paymentId,
+                amount: bookingData.amount
+            },
+            // Si tenemos la actividad completa, la pasamos
+            activity: activity || {
+                title: bookingData.programName,
+                id: bookingData.activityId
+            }
+        };
+
         const response = await fetch('https://wild-fitness.com/api/send-booking-confirmation', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                booking: {
-                    id: Date.now(),
-                    name: data.name,
-                    email: data.to,
-                    phone: data.phone || '',
-                    paymentId: data.paymentId,
-                    amount: data.amount
-                },
-                activity: {
-                    title: data.programName,
-                    id: data.activityId
-                }
-            })
+            body: JSON.stringify(payload)
         });
         
         if (!response.ok) {
