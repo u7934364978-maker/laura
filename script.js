@@ -152,12 +152,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 const observerOptions = {
     threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
+    rootMargin: '0px 0px -50px 0px' // Reduït de -100px per a millor UX en mòbil
 };
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
             observer.unobserve(entry.target);
@@ -167,14 +168,21 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for animation
 const animateElements = document.querySelectorAll(
-    '.schedule-content, .pricing, .gallery-grid, .contact-wrapper, .blog-grid, .feature-item'
+    '.schedule-content, .pricing, .gallery-grid, .contact-wrapper, .blog-grid, .feature-item, .about-content, .experience-section'
 );
 
 animateElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    observer.observe(el);
+    // Si l'element ja és visible (per exemple, per sobre del fold)
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+    } else {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(el);
+    }
 });
 
 // ============================================
@@ -222,421 +230,6 @@ rippleStyle.textContent = `
 document.head.appendChild(rippleStyle);
 
 
-// Gallery lazy loading
-if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.classList.add('loaded');
-                observer.unobserve(img);
-            }
-        });
-    });
-
-    document.querySelectorAll('.gallery-item img').forEach(img => {
-        imageObserver.observe(img);
-    });
-}
-
-// ============================================
-// ENHANCED CONTACT FORM HANDLING
-// ============================================
-
-// Helper function to get level text
-function getLevelText(level) {
-    const levels = {
-        'beginner': '🌱 Principiant - Primera vegada',
-        'intermediate': '🚀 Intermedi - Tinc experiència',
-        'advanced': '⭐ Avançat - Trail runner'
-    };
-    return levels[level] || 'No especificat';
-}
-
-const contactForm = document.getElementById('contactForm');
-const formStatus = document.getElementById('formStatus');
-
-if (contactForm) {
-    // Add placeholder animations
-    const inputs = contactForm.querySelectorAll('input, textarea, select');
-    inputs.forEach(input => {
-        // Float label effect
-        input.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
-        });
-        
-        input.addEventListener('blur', function() {
-            if (!this.value) {
-                this.parentElement.classList.remove('focused');
-            }
-        });
-    });
-    
-    // Real-time validation with visual feedback
-    const emailInput = contactForm.querySelector('#email');
-    const phoneInput = contactForm.querySelector('#phone');
-    const nameInput = contactForm.querySelector('#name');
-    const messageInput = contactForm.querySelector('#message');
-    
-    // Email validation
-    if (emailInput) {
-        emailInput.addEventListener('input', function() {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (this.value && emailRegex.test(this.value)) {
-                this.style.borderColor = 'var(--success-color)';
-                showValidationIcon(this, true);
-            } else if (this.value) {
-                this.style.borderColor = 'var(--error-color)';
-                showValidationIcon(this, false);
-            } else {
-                this.style.borderColor = '';
-                removeValidationIcon(this);
-            }
-        });
-    }
-    
-    // Phone validation and formatting
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function() {
-            // Allow only numbers, spaces, +, and -
-            this.value = this.value.replace(/[^0-9\s\+\-]/g, '');
-            
-            // Simple validation: at least 9 digits
-            const digitsOnly = this.value.replace(/[^\d]/g, '');
-            if (digitsOnly.length >= 9) {
-                this.style.borderColor = 'var(--success-color)';
-                showValidationIcon(this, true);
-            } else if (this.value) {
-                this.style.borderColor = '';
-                removeValidationIcon(this);
-            }
-        });
-    }
-    
-    // Name validation (at least 2 characters)
-    if (nameInput) {
-        nameInput.addEventListener('input', function() {
-            if (this.value.length >= 2) {
-                this.style.borderColor = 'var(--success-color)';
-                showValidationIcon(this, true);
-            } else if (this.value) {
-                this.style.borderColor = '';
-                removeValidationIcon(this);
-            }
-        });
-    }
-    
-    // Message character counter
-    if (messageInput) {
-        const charCounter = document.createElement('div');
-        charCounter.className = 'char-counter';
-        messageInput.parentElement.appendChild(charCounter);
-        
-        messageInput.addEventListener('input', function() {
-            const length = this.value.length;
-            const max = 500; // Optional max length
-            charCounter.textContent = `${length} caràcters`;
-            
-            if (length >= max) {
-                charCounter.style.color = 'var(--warning-color)';
-            } else {
-                charCounter.style.color = 'var(--text-secondary)';
-            }
-            
-            if (length >= 10) {
-                this.style.borderColor = 'var(--success-color)';
-            }
-        });
-    }
-    
-    // Form submission with enhanced UX
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const submitBtn = contactForm.querySelector('.btn-submit');
-        const originalBtnText = submitBtn.textContent;
-        
-        // Add loading state
-        submitBtn.disabled = true;
-        submitBtn.classList.add('loading');
-        submitBtn.textContent = '';
-        
-        // Hide previous status messages
-        formStatus.className = 'form-status';
-        formStatus.style.display = 'none';
-        
-        // Add subtle shake animation to form
-        contactForm.style.animation = 'none';
-        setTimeout(() => {
-            contactForm.style.animation = '';
-        }, 10);
-        
-        try {
-            const formData = new FormData(contactForm);
-            
-            // Preparar dades per enviament
-            const emailData = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                phone: formData.get('phone'),
-                level: formData.get('level'),
-                message: formData.get('message')
-            };
-            
-            // Simulate minimum loading time for better UX
-            const minLoadingTime = 1200;
-            const startTime = Date.now();
-            
-            // 📊 GUARDAR EN SUPABASE
-            if (typeof saveContactSubmission === 'function') {
-                try {
-                    await saveContactSubmission(emailData);
-                    console.log('✅ Contacte guardat a Supabase');
-                } catch (supabaseError) {
-                    console.warn('⚠️ Error guardant a Supabase:', supabaseError);
-                    // Continuar encara que falli Supabase - no bloquejar l'enviament d'email
-                }
-            }
-            
-            // Preparar dades per email amb text llegible del nivell
-            const emailDataWithLevel = {
-                ...emailData,
-                level: getLevelText(emailData.level)
-            };
-            
-            // Enviar a Cloudflare Worker per email automàtic
-            const emailResponse = await fetch('/api/send-welcome-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(emailDataWithLevel)
-            }).catch(err => {
-                console.warn('Email service unavailable:', err);
-                return { ok: false };
-            });
-            
-            // Ensure minimum loading time
-            const elapsed = Date.now() - startTime;
-            if (elapsed < minLoadingTime) {
-                await new Promise(resolve => setTimeout(resolve, minLoadingTime - elapsed));
-            }
-            
-            // Mostrar sempre èxit
-            formStatus.className = 'form-status success';
-            formStatus.innerHTML = `
-                <strong>✅ Missatge enviat correctament!</strong><br>
-                ${emailResponse.ok ? 'Rebràs un email de confirmació a ' + emailData.email : 'Et respondrem en menys de 24h'}
-            `;
-            formStatus.style.display = 'block';
-                
-            // Confetti effect (optional)
-            createConfetti();
-            
-            // Reset form
-            contactForm.reset();
-            
-            // Remove validation icons
-            inputs.forEach(input => {
-                input.style.borderColor = '';
-                removeValidationIcon(input);
-            });
-            
-            // Track conversion (if using analytics)
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'form_submission', {
-                    'event_category': 'Contact',
-                    'event_label': 'Contact Form',
-                    'value': 1
-                });
-            }
-            
-            // Smooth scroll to success message
-            setTimeout(() => {
-                formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
-            
-            console.log('✓ Contact form submitted successfully');
-            
-        } catch (error) {
-            // Error with helpful message
-            formStatus.className = 'form-status error';
-            formStatus.textContent = 'Error enviant el missatge. Prova-ho de nou o contacta per WhatsApp.';
-            formStatus.style.display = 'block';
-            
-            // Shake animation on error
-            formStatus.style.animation = 'shake 0.5s';
-            
-            console.error('✗ Form submission error:', error);
-        } finally {
-            // Re-enable button
-            submitBtn.disabled = false;
-            submitBtn.classList.remove('loading');
-            submitBtn.textContent = originalBtnText;
-        }
-    });
-}
-
-// Helper function to show validation icon
-function showValidationIcon(input, isValid) {
-    removeValidationIcon(input);
-    
-    const icon = document.createElement('span');
-    icon.className = 'validation-icon';
-    icon.textContent = isValid ? '✓' : '✗';
-    icon.style.cssText = `
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: ${isValid ? 'var(--success-color)' : 'var(--error-color)'};
-        font-weight: bold;
-        font-size: 1.2rem;
-        pointer-events: none;
-    `;
-    
-    const parent = input.parentElement;
-    parent.style.position = 'relative';
-    parent.appendChild(icon);
-}
-
-// Helper function to remove validation icon
-function removeValidationIcon(input) {
-    const existingIcon = input.parentElement.querySelector('.validation-icon');
-    if (existingIcon) {
-        existingIcon.remove();
-    }
-}
-
-// Simple confetti effect
-function createConfetti() {
-    const colors = ['#3fb5b5', '#5fcaca', '#2d7d7d', '#10b981'];
-    const confettiCount = 30;
-    
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.cssText = `
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: ${colors[Math.floor(Math.random() * colors.length)]};
-            left: ${Math.random() * 100}%;
-            top: -10px;
-            opacity: 1;
-            border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none;
-        `;
-        
-        document.body.appendChild(confetti);
-        
-        const duration = Math.random() * 3 + 2;
-        const delay = Math.random() * 0.5;
-        
-        confetti.animate([
-            { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-            { transform: `translateY(${window.innerHeight + 10}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
-        ], {
-            duration: duration * 1000,
-            delay: delay * 1000,
-            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-        }).onfinish = () => confetti.remove();
-    }
-}
-
-// Add shake animation
-const shakeStyle = document.createElement('style');
-shakeStyle.textContent = `
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-`;
-document.head.appendChild(shakeStyle);
-
-
-// ============================================
-// Tracking & Analytics
-// ============================================
-// WhatsApp button tracking
-document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
-    link.addEventListener('click', () => {
-        console.log('📱 WhatsApp link clicked');
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'click', {
-                'event_category': 'Contact',
-                'event_label': 'WhatsApp Button'
-            });
-        }
-    });
-});
-
-// Email button tracking
-document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
-    link.addEventListener('click', () => {
-        console.log('📧 Email link clicked');
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'click', {
-                'event_category': 'Contact',
-                'event_label': 'Email Button'
-            });
-        }
-    });
-});
-
-// ============================================
-// Image Lazy Loading with Fade In
-// ============================================
-if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.style.opacity = '0';
-                img.style.transition = 'opacity 0.5s ease';
-                
-                if (img.dataset.src) {
-                    img.src = img.dataset.src;
-                }
-                
-                img.onload = () => {
-                    img.style.opacity = '1';
-                };
-                
-                img.classList.add('loaded');
-                observer.unobserve(img);
-            }
-        });
-    });
-
-    document.querySelectorAll('.gallery-item img, .blog-image img').forEach(img => {
-        imageObserver.observe(img);
-    });
-}
-
-// ============================================
-// Keyboard Navigation Enhancement
-// ============================================
-// Tab trap for modal/menu (if needed)
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
-        const focusableElements = document.querySelectorAll(
-            'a[href], button:not([disabled]), textarea, input, select'
-        );
-        
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-        
-        // Improve focus visibility
-        const currentElement = document.activeElement;
-        if (currentElement) {
-            currentElement.style.outline = '2px solid var(--secondary-color)';
-            currentElement.style.outlineOffset = '2px';
-        }
-    }
-});
-
 // ============================================
 // Image Loading Optimization and Error Handling
 // ============================================
@@ -652,13 +245,33 @@ document.addEventListener('DOMContentLoaded', () => {
         blog: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="600" height="400"%3E%3Crect fill="%23eeeeee" width="600" height="400"/%3E%3Ctext fill="rgba(0,0,0,0.3)" font-family="sans-serif" font-size="24" dy="10.5" font-weight="bold" x="50%25" y="50%25" text-anchor="middle"%3E%F0%9F%93%B8%3C/text%3E%3C/svg%3E'
     };
     
-    images.forEach((img, index) => {
+    // Image Observer for fade-in effect
+    const imageFadeObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.complete && img.naturalHeight !== 0) {
+                    img.classList.add('image-loaded');
+                }
+                observer.unobserve(img);
+            }
+        });
+    }, { threshold: 0.01 });
+
+    images.forEach((img) => {
         // Skip if already processed
         if (img.dataset.processed) return;
         img.dataset.processed = 'true';
         
-        // Add loading state
-        img.classList.add('image-loading');
+        // Add loading state if not already loaded
+        if (!img.complete || img.naturalHeight === 0) {
+            img.classList.add('image-loading');
+        } else {
+            img.classList.add('image-loaded');
+        }
+        
+        // Observe for fade-in
+        imageFadeObserver.observe(img);
         
         // Determine image category
         let category = 'gallery';
@@ -670,64 +283,51 @@ document.addEventListener('DOMContentLoaded', () => {
             img.classList.remove('image-loading');
             img.classList.add('image-loaded');
             loadedImages++;
-            console.log(`✓ Image ${loadedImages} loaded: ${img.alt || 'unnamed'}`);
         };
         
         // Handle loading errors with retry mechanism
         const handleError = () => {
             failedImages++;
-            console.warn(`✗ Failed to load image (attempt ${img.dataset.retries || 0}): ${img.src}`);
-            
             const retries = parseInt(img.dataset.retries || '0');
             
             if (retries === 0) {
-                // First retry: try without srcset
                 img.dataset.retries = '1';
-                img.removeAttribute('srcset');
-                const newSrc = img.src.replace('&fm=jpg&fit=crop', '').replace('?w=', '?auto=format&w=');
-                console.log(`🔄 Retry 1: Removing srcset and updating URL`);
-                setTimeout(() => {
-                    img.src = newSrc;
-                }, 500);
+                // Solo reintentar si es una URL externa o tiene parámetros que podamos limpiar
+                if (img.src.includes('unsplash.com') || img.src.includes('?')) {
+                    const newSrc = img.src.split('?')[0] + '?auto=format&w=800';
+                    setTimeout(() => { img.src = newSrc; }, 500);
+                } else {
+                    // Si es local y falla, ir directo al fallback
+                    handleError(); 
+                }
             } else if (retries === 1) {
-                // Second retry: use data URI fallback
                 img.dataset.retries = '2';
-                console.log(`🔄 Retry 2: Using fallback placeholder`);
                 setTimeout(() => {
                     img.src = fallbackImages[category];
                     img.classList.remove('image-loading');
                     img.classList.add('image-loaded', 'image-fallback');
                 }, 500);
             } else {
-                // Final fallback
                 img.classList.remove('image-loading');
                 img.classList.add('image-error');
-                console.error(`❌ All retries failed for: ${img.alt || 'unnamed'}`);
             }
         };
         
-        // Attach event listeners
         img.addEventListener('load', handleLoad);
         img.addEventListener('error', handleError);
         
         // If image is already cached and loaded
-        if (img.complete) {
-            if (img.naturalHeight !== 0) {
-                handleLoad();
-            } else {
-                handleError();
-            }
+        if (img.complete && img.naturalHeight !== 0) {
+            handleLoad();
         }
     });
-    
-    // Log summary after 5 seconds
+
+    // Log summary after 5 seconds (only if there are errors)
     setTimeout(() => {
-        const total = images.length;
-        const pending = total - loadedImages - failedImages;
-        console.log(`📊 Image Loading Summary: ${loadedImages} loaded, ${failedImages} failed, ${pending} pending, ${total} total`);
-        
         if (failedImages > 0) {
-            console.warn(`⚠️ Some images failed to load. This might be due to network issues or CORS restrictions.`);
+            const total = images.length;
+            const pending = total - loadedImages - failedImages;
+            console.warn(`⚠️ Image Loading: ${failedImages} failed, ${loadedImages} loaded, ${pending} pending of ${total} total.`);
         }
     }, 5000);
 });
