@@ -50,10 +50,21 @@ Save to `/Users/lidia/Documents/laura/.zencoder/chats/10bc3243-1f5e-4e25-be16-66
 
 ---
 
-### [ ] Step: Implementation
+### [x] Step: Implementation
 
 Implement the task according to the technical specification and general engineering best practices.
 
-1. Add Trustpilot domain verification meta tag to `index.html`.
-2. Verify existence and content of `e5de9737-9cb3-4262-a558-d8c1107f4319.html`.
-3. After completion, write a report to `/Users/lidia/Documents/laura/.zencoder/chats/10bc3243-1f5e-4e25-be16-66da3a27edd9/report.md`.
+1. [x] Add Trustpilot domain verification meta tag to `index.html`.
+2. [x] Verify existence and content of `e5de9737-9cb3-4262-a558-d8c1107f4319.html`.
+3. [x] Add TrustBox bootstrap script and Review Collector widget to `index.html`.
+4. [ ] After completion, write a report to `/Users/lidia/Documents/laura/.zencoder/chats/10bc3243-1f5e-4e25-be16-66da3a27edd9/report.md`.
+
+---
+
+### [ ] Step: Stripe Live Mode Transition
+
+Switch Stripe configuration from test mode to live mode.
+
+1. **Frontend**: Update `checkout.js` with the Live Publishable Key.
+2. **Backend**: Provide instructions to update Cloudflare Secrets with the Live Secret Key.
+3. **Verification**: Verify that the environment is set to production where applicable.
