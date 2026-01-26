@@ -57,7 +57,8 @@ Implement the task according to the technical specification and general engineer
 1. [x] Add Trustpilot domain verification meta tag to `index.html`.
 2. [x] Verify existence and content of `e5de9737-9cb3-4262-a558-d8c1107f4319.html`.
 3. [x] Add TrustBox bootstrap script and Review Collector widget to `index.html`.
-4. [ ] After completion, write a report to `/Users/lidia/Documents/laura/.zencoder/chats/10bc3243-1f5e-4e25-be16-66da3a27edd9/report.md`.
+4. [x] Add a "Deixa una ressenya" button that links to the Trustpilot review page.
+5. [ ] After completion, write a report to `/Users/lidia/Documents/laura/.zencoder/chats/10bc3243-1f5e-4e25-be16-66da3a27edd9/report.md`.
 
 ---
 
