@@ -28,11 +28,24 @@ let activities = [];
 let currentFilter = 'all';
 let isAdminLoggedIn = false;
 
+// Stripe Configuration
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf';
+let stripe = null;
+let elements = null;
+let cardElement = null;
+
 // ============================================
 // Initialize Calendar
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     console.log('📅 Initializing Calendar...');
+    
+    // Initialize Stripe
+    if (typeof Stripe !== 'undefined') {
+        stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+        elements = stripe.elements();
+        console.log('💳 Stripe inicialitzat');
+    }
     
     // Check if accessed from admin panel
     const urlParams = new URLSearchParams(window.location.search);
@@ -690,6 +703,9 @@ function createActivityCard(activity) {
                     </button>
                 ` : ''}
                 ${isAdminLoggedIn ? `
+                    <button class="btn-participants" title="Veure participants">
+                        <span>👥</span>
+                    </button>
                     <button class="btn-delete" title="Eliminar activitat">
                         <span>🗑️</span>
                     </button>
@@ -774,14 +790,65 @@ function openBookingModal(activityId) {
                 <textarea id="participantNotes" name="notes" rows="3" placeholder="Algun comentari que vulguis compartir..."></textarea>
             </div>
             
-            <button type="submit" class="btn-submit">
+            <!-- Payment Section -->
+            <div class="payment-container">
+                <div class="payment-title">
+                    <span>💳 Pagament de la Reserva</span>
+                </div>
+                <div class="price-tag">Total: 10,00 €</div>
+                
+                <div id="card-element">
+                    <!-- Stripe Element will be inserted here -->
+                </div>
+                <div id="card-errors" role="alert"></div>
+                
+                <div class="payment-info">
+                    <span>🔒 Pagament segur processat per Stripe</span>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-submit" id="submitBooking">
                 <span class="btn-icon">✓</span>
-                <span>Confirmar Reserva</span>
+                <span class="btn-text">Pagar i Confirmar Reserva</span>
+                <div class="btn-loader" style="display: none;">
+                    <div class="spinner"></div>
+                    <span>Processant...</span>
+                </div>
             </button>
         </form>
     `;
     
     modal.classList.add('active');
+    
+    // Initialize Stripe Card Element
+    if (elements) {
+        cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#1e293b',
+                    fontFamily: 'Inter, sans-serif',
+                    '::placeholder': {
+                        color: '#94a3b8',
+                    },
+                },
+                invalid: {
+                    color: '#dc2626',
+                },
+            },
+        });
+        cardElement.mount('#card-element');
+        
+        // Handle real-time validation errors
+        cardElement.on('change', (event) => {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+    }
     
     // Handle booking form submission
     const bookingForm = modalBody.querySelector('#bookingForm');
@@ -797,8 +864,14 @@ async function handleBookingSubmit(e, activityId) {
     const activity = activities.find(a => a.id === activityId);
     if (!activity) return;
     
-    const formData = new FormData(e.target);
-    const participant = {
+    const form = e.target;
+    const submitBtn = document.getElementById('submitBooking');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoader = submitBtn.querySelector('.btn-loader');
+    const displayError = document.getElementById('card-errors');
+    
+    const formData = new FormData(form);
+    const participantData = {
         id: Date.now(),
         name: formData.get('name'),
         email: formData.get('email'),
@@ -807,54 +880,123 @@ async function handleBookingSubmit(e, activityId) {
         bookedAt: new Date().toISOString()
     };
     
-    // Add participant to activity
-    if (!activity.participants) activity.participants = [];
-    activity.participants.push(participant);
-    activity.enrolled = activity.participants.length;
+    // 1. Mostrar estat de càrrega
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'flex';
     
-    saveActivities();
-    renderActivities();
-    
-    // Enviar email de confirmación a través de Cloudflare Worker
-    const sendConfirmationEmail = async () => {
-        try {
-            const response = await fetch('/api/send-booking-confirmation', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    booking: participant,
-                    activity: activity
-                })
-            });
-            
-            return response.ok;
-        } catch (error) {
-            console.error('Error enviando email de confirmación:', error);
-            return false;
+    try {
+        // 2. Crear Payment Intent al worker (10 euros = 1000 cèntims)
+        const workerUrl = 'https://wild-fitness-payments.w5kvt5ypsr.workers.dev/create-payment-intent';
+        const response = await fetch(workerUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                amount: 1000, // 10€
+                currency: 'eur',
+                paymentMethod: 'card',
+                customerName: participantData.name,
+                customerEmail: participantData.email,
+                customerPhone: participantData.phone,
+                programName: `Reserva Activitat: ${activity.title}`
+            }),
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error?.message || 'Error creant el Payment Intent');
         }
-    };
-    
-    // Enviar email (no bloquear la UI)
-    const emailSent = await sendConfirmationEmail();
-    
-    // Show success message
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = `
-        <div class="booking-success">
-            <div class="success-icon">✅</div>
-            <h3>Reserva confirmada!</h3>
-            <p>Hem registrat la teva plaça per a aquesta activitat.</p>
-            <p>${emailSent ? 
-                `Rebràs un email de confirmació a <strong>${participant.email}</strong>` :
-                'No s\'ha pogut enviar l\'email de confirmació, però la teva reserva està registrada.'
-            }</p>
-            <button class="btn-submit" onclick="document.getElementById('bookingModal').classList.remove('active')">
-                Tancar
-            </button>
-        </div>
-    `;
+        
+        const { clientSecret } = await response.json();
+        
+        // 3. Confirmar pagament amb Stripe
+        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: cardElement,
+                billing_details: {
+                    name: participantData.name,
+                    email: participantData.email,
+                    phone: participantData.phone,
+                },
+            },
+        });
+        
+        if (error) {
+            throw new Error(error.message);
+        }
+        
+        if (paymentIntent.status !== 'succeeded') {
+            throw new Error('El pagament no s\'ha completat correctament.');
+        }
+        
+        // 4. Pagament correcte, guardar participant
+        const participant = {
+            ...participantData,
+            paymentId: paymentIntent.id,
+            amount: 10.00,
+            status: 'paid'
+        };
+        
+        if (!activity.participants) activity.participants = [];
+        activity.participants.push(participant);
+        activity.enrolled = activity.participants.length;
+        
+        // Actualitzar a Supabase si la funció existeix
+        if (typeof updateActivity === 'function') {
+            await updateActivity(activity.id, {
+                participants: activity.participants,
+                enrolled: activity.enrolled
+            });
+        }
+        
+        saveActivities();
+        renderActivities();
+        
+        // 5. Enviar email de confirmació
+        const emailSent = await sendConfirmationEmail(participant, activity);
+        
+        // 6. Mostrar èxit
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+            <div class="booking-success">
+                <div class="success-icon">✅</div>
+                <h3>Reserva i Pagament Completats!</h3>
+                <p>Hem registrat la teva plaça per a <strong>${activity.title}</strong>.</p>
+                <p>ID de pagament: <small>${paymentIntent.id}</small></p>
+                <p>${emailSent ? 
+                    `Rebràs un email de confirmació a <strong>${participant.email}</strong>` :
+                    'La teva reserva està registrada, però no s\'ha pogut enviar l\'email de confirmació.'
+                }</p>
+                <button class="btn-submit" onclick="document.getElementById('bookingModal').classList.remove('active')">
+                    Tancar
+                </button>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error en el procés de reserva:', error);
+        if (displayError) displayError.textContent = error.message;
+        submitBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
+    }
+}
+
+async function sendConfirmationEmail(participant, activity) {
+    try {
+        const response = await fetch('/api/send-booking-confirmation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                booking: participant,
+                activity: activity
+            })
+        });
+        return response.ok;
+    } catch (error) {
+        console.error('Error enviant email de confirmació:', error);
+        return false;
+    }
 }
 
 // ============================================
