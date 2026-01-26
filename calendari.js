@@ -625,9 +625,7 @@ function saveActivities() {
 // Sincronizar actividades con el servidor
 async function syncActivitiesToServer() {
     try {
-        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname.includes('sandbox')
-            ? 'http://localhost:8787/api/sync-activities'  // Desarrollo local
-            : 'https://wild-fitness.com/api/sync-activities';  // Producción
+        const apiUrl = '/api/sync-activities';
         
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -1164,7 +1162,7 @@ async function handleBookingSubmit(e, activityId) {
     try {
         // 2. Crear Payment Intent al worker
         const amount = Math.round((activity.price || 10.00) * 100);
-        const workerUrl = 'https://wild-fitness-payments.w5kvt5ypsr.workers.dev/create-payment-intent';
+        const workerUrl = '/api/create-payment-intent';
         const response = await fetch(workerUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

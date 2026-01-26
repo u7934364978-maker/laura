@@ -298,7 +298,7 @@ async function createPaymentIntent(data) {
     try {
         // Llamar al Cloudflare Worker para crear el Payment Intent
         // El worker maneja la clave secreta de forma segura
-        const workerUrl = 'https://wild-fitness-payments.w5kvt5ypsr.workers.dev/create-payment-intent';
+        const workerUrl = '/api/create-payment-intent';
         
         const response = await fetch(workerUrl, {
             method: 'POST',
