@@ -739,6 +739,7 @@
                                 <th>Data</th>
                                 <th>Hora</th>
                                 <th>Ubicació</th>
+                                <th>Preu</th>
                                 <th>Capacitat</th>
                                 <th>Accions</th>
                             </tr>
@@ -812,6 +813,11 @@
                     <div class="form-group">
                         <label for="activityLocation">Ubicació *</label>
                         <input type="text" id="activityLocation" placeholder="Ex: Parc Natural Cadí-Moixeró" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activityPrice">Preu (€) *</label>
+                        <input type="number" id="activityPrice" min="0" step="0.01" value="10.00" required>
                     </div>
                     
                     <div class="form-row">
@@ -1133,6 +1139,7 @@
                             <td>${formatDate(activity.date)}</td>
                             <td>${activity.time}</td>
                             <td>${activity.location}</td>
+                            <td>${activity.price ? activity.price.toFixed(2) : '10.00'}€</td>
                             <td>
                                 <div>${activity.enrolled || 0} / ${activity.capacity}</div>
                                 <div class="capacity-bar">
@@ -1220,6 +1227,7 @@
                     latitude: parseFloat(document.getElementById('activityLatitude').value) || null,
                     longitude: parseFloat(document.getElementById('activityLongitude').value) || null,
                     capacity: parseInt(document.getElementById('activityCapacity').value),
+                    price: parseFloat(document.getElementById('activityPrice').value) || 10.00,
                     description: document.getElementById('activityDescription').value,
                     participants: [],
                     created_at: new Date().toISOString(),
@@ -1292,6 +1300,7 @@
                 document.getElementById('activityLatitude').value = activity.latitude || '';
                 document.getElementById('activityLongitude').value = activity.longitude || '';
                 document.getElementById('activityCapacity').value = activity.capacity;
+                document.getElementById('activityPrice').value = activity.price || '10.00';
                 document.getElementById('activityDescription').value = activity.description || '';
                 
                 document.getElementById('activityModal').classList.add('active');
