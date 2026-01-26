@@ -2,8 +2,8 @@
 // IMPORTANTE: Reemplaza 'TU_PUBLISHABLE_KEY_DE_STRIPE' con tu clave real de Stripe
 
 // Configuración de Stripe
-// Publishable key configurada (modo TEST)
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_51Srimv3rBdQp0c0dVXQkSImuczLve4tnbyNnLdeU7XslPIoM2e1AezPYUl6F7xlRjGHXZmyuykX42N89DxBGZkFX00fwy2YkWB';
+// Publishable key configurada (modo LIVE)
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf';
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 const elements = stripe.elements();
 
