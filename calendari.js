@@ -137,7 +137,147 @@ document.addEventListener('DOMContentLoaded', () => {
         loadActivities();
         showNotification('🔄 Calendari actualitzat', 'Nova activitat disponible!');
     });
+
+    // Check for Bizum redirect success
+    handleBizumCallback();
 });
+
+/**
+ * Handle success callback from Bizum redirect
+ */
+async function handleBizumCallback() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingSuccess = urlParams.get('booking_success');
+    const paymentIntentId = urlParams.get('payment_intent');
+    const clientSecret = urlParams.get('payment_intent_client_secret');
+    
+    if (bookingSuccess === 'true' && paymentIntentId && clientSecret) {
+        console.log('📱 Procesant retorn de Bizum...');
+        
+        try {
+            // 1. Mostrar modal de càrrega
+            const modal = document.getElementById('bookingModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            if (modalBody) {
+                modalBody.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <div class="spinner" style="width: 40px; height: 40px; border-width: 4px; border-top-color: var(--primary-color); margin: 0 auto 1.5rem; animation: rotate 2s linear infinite; border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--primary-color); border-radius: 50%;"></div>
+                        <h3>Verificant pagament...</h3>
+                        <p>Estem confirmant la teva reserva amb Bizum.</p>
+                    </div>
+                `;
+                modal.classList.add('active');
+            }
+
+            // 2. Verificar estat del PaymentIntent amb Stripe
+            if (!stripe && typeof Stripe !== 'undefined') {
+                stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+            }
+            
+            if (!stripe) throw new Error('Stripe no s\'ha pogut carregar.');
+
+            const { paymentIntent, error } = await stripe.retrievePaymentIntent(clientSecret);
+            
+            if (error) {
+                throw new Error(error.message);
+            }
+            
+            if (paymentIntent.status === 'succeeded') {
+                // 3. Pagament confirmat, recuperar dades de la URL
+                const activityId = parseInt(urlParams.get('activity_id'));
+                const name = urlParams.get('name');
+                const email = urlParams.get('email');
+                const phone = urlParams.get('phone');
+                const notes = urlParams.get('notes') || '';
+                
+                // Necessitem esperar que les activitats s'hagin carregat
+                let attempts = 0;
+                const waitForActivities = setInterval(async () => {
+                    attempts++;
+                    if (activities.length > 0 || attempts > 20) {
+                        clearInterval(waitForActivities);
+                        
+                        const activity = activities.find(a => a.id === activityId);
+                        if (activity) {
+                            const participant = {
+                                id: Date.now(),
+                                name,
+                                email,
+                                phone,
+                                notes,
+                                bookedAt: new Date().toISOString(),
+                                paymentId: paymentIntent.id,
+                                amount: 10.00,
+                                status: 'paid'
+                            };
+                            
+                            if (!activity.participants) activity.participants = [];
+                            
+                            // Evitar duplicats si l'usuari recarrega la pàgina
+                            const exists = activity.participants.some(p => p.paymentId === paymentIntent.id);
+                            
+                            if (!exists) {
+                                activity.participants.push(participant);
+                                activity.enrolled = activity.participants.length;
+                                
+                                // Actualitzar Supabase
+                                if (typeof updateActivity === 'function') {
+                                    await updateActivity(activity.id, {
+                                        participants: activity.participants,
+                                        enrolled: activity.enrolled
+                                    });
+                                }
+                                
+                                saveActivities();
+                                renderActivities();
+                                
+                                // Enviar email
+                                sendConfirmationEmail(participant, activity);
+                            }
+                            
+                            // Mostrar èxit
+                            if (modalBody) {
+                                modalBody.innerHTML = `
+                                    <div class="booking-success">
+                                        <div class="success-icon">✅</div>
+                                        <h3>Reserva i Pagament Completats!</h3>
+                                        <p>Hem registrat la teva plaça per a <strong>${activity.title}</strong>.</p>
+                                        <p>Pagament realitzat correctament via <strong>Bizum</strong>.</p>
+                                        <p>ID: <small>${paymentIntent.id}</small></p>
+                                        <button class="btn-submit" onclick="window.history.replaceState({}, '', window.location.pathname); document.getElementById('bookingModal').classList.remove('active')">
+                                            Tancar
+                                        </button>
+                                    </div>
+                                `;
+                            }
+                        } else {
+                            console.error('Activitat no trobada:', activityId);
+                        }
+                    }
+                }, 500);
+            } else {
+                throw new Error(`L'estat del pagament és: ${paymentIntent.status}`);
+            }
+            
+        } catch (error) {
+            console.error('Error procesant retorn de Bizum:', error);
+            const modalBody = document.getElementById('modalBody');
+            if (modalBody) {
+                modalBody.innerHTML = `
+                    <div class="booking-success">
+                        <div class="success-icon" style="color: var(--error-color);">❌</div>
+                        <h3>Error en el pagament</h3>
+                        <p>${error.message}</p>
+                        <button class="btn-submit" onclick="window.history.replaceState({}, '', window.location.pathname); document.getElementById('bookingModal').classList.remove('active')">
+                            Tancar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    }
+}
 
 // ============================================
 // Authentication System
@@ -606,6 +746,13 @@ function renderActivities() {
     
     // Add event listeners to delete buttons (only if admin)
     if (isAdminLoggedIn) {
+        container.querySelectorAll('.btn-participants').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(e.target.closest('[data-id]').dataset.id);
+                openParticipantsModal(id);
+            });
+        });
+
         container.querySelectorAll('.btn-delete').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = parseInt(e.target.closest('[data-id]').dataset.id);
@@ -716,6 +863,73 @@ function createActivityCard(activity) {
 }
 
 // ============================================
+// Admin: Participants View
+// ============================================
+function openParticipantsModal(activityId) {
+    const activity = activities.find(a => a.id === activityId);
+    if (!activity) return;
+    
+    const modal = document.getElementById('bookingModal');
+    const modalBody = document.getElementById('modalBody');
+    const participants = activity.participants || [];
+    
+    modalBody.innerHTML = `
+        <div class="participants-view">
+            <h3>Participants: ${activity.title}</h3>
+            <p style="margin-bottom: 1rem;">Total inscrits: <strong>${activity.enrolled}/${activity.capacity}</strong></p>
+            
+            <div class="participants-container">
+                ${participants.length === 0 ? `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        No hi ha cap participant inscrit encara.
+                    </div>
+                ` : `
+                    <table class="participants-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email / Telèfon</th>
+                                <th>Estat</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${participants.map(p => `
+                                <tr>
+                                    <td>
+                                        <strong>${p.name}</strong>
+                                        ${p.notes ? `<div style="font-size: 0.8rem; color: #64748b; margin-top: 0.25rem;">📝 ${p.notes}</div>` : ''}
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 0.85rem;">${p.email}</div>
+                                        <div style="font-size: 0.85rem;">${p.phone}</div>
+                                    </td>
+                                    <td>
+                                        <span class="payment-badge success">PAID</span>
+                                        <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 0.25rem;">${p.paymentId ? p.paymentId.substring(0, 12) + '...' : 'N/A'}</div>
+                                    </td>
+                                    <td style="font-size: 0.8rem; color: #64748b;">
+                                        ${new Date(p.bookedAt).toLocaleDateString('ca-ES', { day: '2-digit', month: '2-digit' })}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `}
+            </div>
+            
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                <button class="btn-secondary" onclick="document.getElementById('bookingModal').classList.remove('active')" style="flex: 1;">
+                    Tancar
+                </button>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('active');
+}
+
+// ============================================
 // Booking System
 // ============================================
 function openBookingModal(activityId) {
@@ -793,14 +1007,34 @@ function openBookingModal(activityId) {
             <!-- Payment Section -->
             <div class="payment-container">
                 <div class="payment-title">
-                    <span>💳 Pagament de la Reserva</span>
+                    <span>💳 Mètode de Pagament</span>
                 </div>
+                
+                <div class="payment-methods">
+                    <label class="payment-method-option active" data-method="card">
+                        <input type="radio" name="paymentMethod" value="card" checked style="display: none;">
+                        <span class="method-icon">💳</span>
+                        <span class="method-label">Targeta</span>
+                    </label>
+                    <label class="payment-method-option" data-method="bizum">
+                        <input type="radio" name="paymentMethod" value="bizum" style="display: none;">
+                        <span class="method-icon">📲</span>
+                        <span class="method-label">Bizum</span>
+                    </label>
+                </div>
+
                 <div class="price-tag">Total: 10,00 €</div>
                 
-                <div id="card-element">
-                    <!-- Stripe Element will be inserted here -->
+                <div id="card-element-container">
+                    <div id="card-element">
+                        <!-- Stripe Element will be inserted here -->
+                    </div>
+                    <div id="card-errors" role="alert"></div>
                 </div>
-                <div id="card-errors" role="alert"></div>
+
+                <div id="bizum-info" style="display: none; padding: 1rem; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 1rem; border-left: 4px solid #00adef;">
+                    <p style="margin: 0; font-size: 0.9rem;">Se't redirigirà a la plataforma de <strong>Bizum</strong> per completar el pagament de forma segura.</p>
+                </div>
                 
                 <div class="payment-info">
                     <span>🔒 Pagament segur processat per Stripe</span>
@@ -849,6 +1083,36 @@ function openBookingModal(activityId) {
             }
         });
     }
+
+    // Handle payment method switching
+    const methodOptions = modalBody.querySelectorAll('.payment-method-option');
+    const cardContainer = document.getElementById('card-element-container');
+    const bizumInfo = document.getElementById('bizum-info');
+    const submitBtnText = modalBody.querySelector('.btn-text');
+
+    methodOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const method = option.dataset.method;
+            
+            // Update active state
+            methodOptions.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            
+            // Check radio button
+            option.querySelector('input').checked = true;
+            
+            // Toggle containers
+            if (method === 'card') {
+                cardContainer.style.display = 'block';
+                bizumInfo.style.display = 'none';
+                submitBtnText.textContent = 'Pagar i Confirmar Reserva';
+            } else {
+                cardContainer.style.display = 'none';
+                bizumInfo.style.display = 'block';
+                submitBtnText.textContent = 'Continuar amb Bizum';
+            }
+        });
+    });
     
     // Handle booking form submission
     const bookingForm = modalBody.querySelector('#bookingForm');
@@ -871,6 +1135,7 @@ async function handleBookingSubmit(e, activityId) {
     const displayError = document.getElementById('card-errors');
     
     const formData = new FormData(form);
+    const paymentMethod = formData.get('paymentMethod');
     const participantData = {
         id: Date.now(),
         name: formData.get('name'),
@@ -894,7 +1159,7 @@ async function handleBookingSubmit(e, activityId) {
             body: JSON.stringify({
                 amount: 1000, // 10€
                 currency: 'eur',
-                paymentMethod: 'card',
+                paymentMethod: paymentMethod, // 'card' o 'bizum'
                 customerName: participantData.name,
                 customerEmail: participantData.email,
                 customerPhone: participantData.phone,
@@ -909,30 +1174,56 @@ async function handleBookingSubmit(e, activityId) {
         
         const { clientSecret } = await response.json();
         
-        // 3. Confirmar pagament amb Stripe
-        const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: cardElement,
-                billing_details: {
-                    name: participantData.name,
-                    email: participantData.email,
-                    phone: participantData.phone,
+        // 3. Confirmar pagament segons el mètode
+        let paymentResult;
+        
+        if (paymentMethod === 'bizum') {
+            // Confirmació Bizum (Redirecció)
+            const { error: bizumError } = await stripe.confirmBizumPayment(clientSecret, {
+                payment_method: {
+                    billing_details: {
+                        name: participantData.name,
+                        email: participantData.email,
+                        phone: participantData.phone,
+                    },
                 },
-            },
-        });
-        
-        if (error) {
-            throw new Error(error.message);
-        }
-        
-        if (paymentIntent.status !== 'succeeded') {
-            throw new Error('El pagament no s\'ha completat correctament.');
+                return_url: `${window.location.origin}/calendari.html?booking_success=true&activity_id=${activityId}&name=${encodeURIComponent(participantData.name)}&email=${encodeURIComponent(participantData.email)}&phone=${encodeURIComponent(participantData.phone)}&notes=${encodeURIComponent(participantData.notes)}`,
+            });
+            
+            if (bizumError) {
+                throw new Error(bizumError.message);
+            }
+            
+            // Si no hi ha error, Stripe redirigeix a Bizum
+            return;
+        } else {
+            // Confirmació Targeta
+            const { error: cardError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: participantData.name,
+                        email: participantData.email,
+                        phone: participantData.phone,
+                    },
+                },
+            });
+            
+            if (cardError) {
+                throw new Error(cardError.message);
+            }
+            
+            if (paymentIntent.status !== 'succeeded') {
+                throw new Error('El pagament no s\'ha completat correctament.');
+            }
+            
+            paymentResult = paymentIntent;
         }
         
         // 4. Pagament correcte, guardar participant
         const participant = {
             ...participantData,
-            paymentId: paymentIntent.id,
+            paymentId: paymentResult.id,
             amount: 10.00,
             status: 'paid'
         };
