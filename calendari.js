@@ -791,7 +791,7 @@ function openBookingModal(activityId) {
     });
 }
 
-function handleBookingSubmit(e, activityId) {
+async function handleBookingSubmit(e, activityId) {
     e.preventDefault();
     
     const activity = activities.find(a => a.id === activityId);
