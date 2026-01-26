@@ -369,6 +369,80 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add loaded class to body for CSS animations
     document.body.classList.add('loaded');
+
+    // Contact Form Handler
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = contactForm.querySelector('.btn-submit');
+            const statusDiv = document.getElementById('formStatus');
+            const originalBtnText = submitBtn.querySelector('.btn-text')?.textContent || 'Enviar';
+            
+            // Set loading state
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                contactForm.classList.add('loading');
+                if (submitBtn.querySelector('.btn-text')) {
+                    submitBtn.querySelector('.btn-text').textContent = 'Enviant...';
+                }
+            }
+            
+            const formData = new FormData(contactForm);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                location: formData.get('location'),
+                level: formData.get('level'),
+                message: formData.get('message')
+            };
+            
+            try {
+                // 1. Guardar en Supabase
+                if (typeof saveContactSubmission === 'function') {
+                    await saveContactSubmission(data);
+                }
+                
+                // 2. Enviar emails vía Vercel API
+                const response = await fetch('/api/send-welcome-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Success state
+                    statusDiv.textContent = '✅ Missatge enviat correctament! Et contactaré aviat.';
+                    statusDiv.className = 'form-status success show';
+                    contactForm.reset();
+                } else {
+                    throw new Error(result.error || 'Error enviant el missatge');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.textContent = '❌ Hi ha hagut un error. Si us plau, intenta-ho de nou o escriu-me per WhatsApp.';
+                statusDiv.className = 'form-status error show';
+            } finally {
+                // Reset loading state
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    contactForm.classList.remove('loading');
+                    if (submitBtn.querySelector('.btn-text')) {
+                        submitBtn.querySelector('.btn-text').textContent = originalBtnText;
+                    }
+                }
+                
+                // Hide status message after 5 seconds
+                setTimeout(() => {
+                    statusDiv.classList.remove('show');
+                }, 5000);
+            }
+        });
+    }
 });
 
 // Prevent form resubmission on page refresh

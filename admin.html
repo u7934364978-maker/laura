@@ -1059,9 +1059,7 @@
             
             async function syncActivitiesToServer() {
                 try {
-                    const apiUrl = window.location.hostname === 'localhost' || window.location.hostname.includes('sandbox') || window.location.hostname.includes('vercel.app')
-                        ? 'https://wild-fitness.com/api/sync-activities' // O la URL de la teva API si és diferent
-                        : 'https://wild-fitness.com/api/sync-activities';
+                    const apiUrl = '/api/sync-activities';
                     
                     const response = await fetch(apiUrl, {
                         method: 'POST',
