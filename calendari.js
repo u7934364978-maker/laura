@@ -112,8 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === STORAGE_KEY && e.newValue !== e.oldValue) {
             console.log('🔄 Activitats actualitzades (storage event)');
             loadActivities();
-            renderActivities();
-            showNotification('🔄 Calendari actualitzat', 'Les activitats s\'han actualitzat automàticament');
         }
     });
     
@@ -124,8 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stored !== currentStored) {
             console.log('🔄 Actualització periòdica detectada');
             loadActivities();
-            renderActivities();
-            showNotification('🔄 Calendari actualitzat', 'Les activitats s\'han actualitzat');
         }
     }, 3000); // Check every 3 seconds
     
@@ -135,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
     subscribeToActivities((payload) => {
         console.log('🔥 Supabase real-time update:', payload.eventType);
         loadActivities();
-        showNotification('🔄 Calendari actualitzat', 'Nova activitat disponible!');
     });
 
     // Check for Bizum redirect success
@@ -1179,18 +1174,22 @@ async function handleBookingSubmit(e, activityId) {
         
         if (paymentMethod === 'bizum') {
             // Confirmació Bizum (Redirecció)
+            console.log('🚀 Iniciant confirmació Bizum amb return_url...');
+            const returnUrl = `${window.location.origin}/calendari.html?booking_success=true&activity_id=${activityId}&name=${encodeURIComponent(participantData.name)}&email=${encodeURIComponent(participantData.email)}&phone=${encodeURIComponent(participantData.phone)}&notes=${encodeURIComponent(participantData.notes)}`;
+            console.log('🔗 Return URL:', returnUrl);
+
             const { error: bizumError } = await stripe.confirmBizumPayment(clientSecret, {
                 payment_method: {
                     billing_details: {
                         name: participantData.name,
                         email: participantData.email,
-                        phone: participantData.phone,
                     },
                 },
-                return_url: `${window.location.origin}/calendari.html?booking_success=true&activity_id=${activityId}&name=${encodeURIComponent(participantData.name)}&email=${encodeURIComponent(participantData.email)}&phone=${encodeURIComponent(participantData.phone)}&notes=${encodeURIComponent(participantData.notes)}`,
+                return_url: returnUrl,
             });
             
             if (bizumError) {
+                console.error('❌ Error confirmant Bizum:', bizumError);
                 throw new Error(bizumError.message);
             }
             
