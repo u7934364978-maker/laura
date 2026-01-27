@@ -157,16 +157,27 @@ El formulario de contacto está configurado para:
 3. 🔔 **Notificar al admin** - Email a info@wild-fitness.com con los datos
 
 **📖 Guías de configuración:**
-- **Despliegue en Vercel:** [`DESPLIEGUE-VERCEL.md`](DESPLIEGUE-VERCEL.md) - ⭐ **EMPIEZA AQUÍ**
+- **Despliegue en Vercel:** [`DESPLIEGUE-VERCEL.md`](DESPLIEGUE-VERCEL.md) - ⭐ Opción 1
+- **Despliegue con Cloudflare Workers:** [`DESPLIEGUE-CLOUDFLARE-WORKERS.md`](DESPLIEGUE-CLOUDFLARE-WORKERS.md) - ⭐ Opción 2 (Alternativa)
 - **Configuración completa:** [`CONFIGURACION-FORMULARIO-CONTACTO.md`](CONFIGURACION-FORMULARIO-CONTACTO.md)
 - **DNS de Cloudflare:** [`DNS-CLOUDFLARE-RESEND.md`](DNS-CLOUDFLARE-RESEND.md)
 
-**Pasos rápidos para Vercel:**
-1. ✅ Supabase ya está configurado (`supabase-config.js`)
+**Opciones de despliegue:**
+
+### Opción 1: Vercel (Más fácil)
+1. ✅ Supabase ya está configurado
 2. 🔑 Obtener API Key de Resend
 3. ⚠️ Configurar DNS en Cloudflare (DKIM, SPF, MX)
 4. 🚀 Agregar `RESEND_API_KEY` en Vercel Environment Variables
-5. 🧪 Desplegar y probar el formulario
+5. 🧪 Desplegar y probar
+
+### Opción 2: Cloudflare Workers (Más rápido)
+1. ✅ Supabase ya está configurado
+2. 🔑 Obtener API Key de Resend
+3. ⚠️ Configurar DNS en Cloudflare (DKIM, SPF, MX)
+4. 📦 Instalar Wrangler CLI: `npm install -g wrangler`
+5. 🚀 Desplegar Worker: `cd workers/contact-form && wrangler deploy`
+6. 🔧 Configurar URL en `config.js`
 
 ### Actualizar Información de Contacto
 

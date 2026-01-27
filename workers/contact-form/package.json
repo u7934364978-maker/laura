@@ -1,0 +1,22 @@
+{
+  "name": "wild-fitness-contact-form-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker para manejar el formulario de contacto de Wild Fitness",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "keywords": [
+    "cloudflare-workers",
+    "resend",
+    "supabase",
+    "contact-form"
+  ],
+  "author": "Laura Ramírez - Wild Fitness",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
