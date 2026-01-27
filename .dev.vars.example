@@ -1,4 +1,12 @@
-# Stripe API Keys
+# ==============================================
+# RESEND API (Envío de emails)
+# ==============================================
+# Obtén tu API Key en: https://resend.com/api-keys
+RESEND_API_KEY=re_TU_API_KEY_AQUI
+
+# ==============================================
+# STRIPE API KEYS (Pagos)
+# ==============================================
 # Obtén tus claves en: https://dashboard.stripe.com/apikeys
 
 # Test Mode (para desarrollo)
@@ -10,6 +18,11 @@ STRIPE_SECRET_KEY=sk_test_TU_CLAVE_SECRETA_AQUI
 # Webhook Secret (opcional)
 # STRIPE_WEBHOOK_SECRET=whsec_TU_WEBHOOK_SECRET_AQUI
 
-# Supabase (opcional - para guardar pagos en BD)
-# SUPABASE_URL=https://tu-proyecto.supabase.co
-# SUPABASE_KEY=tu_anon_key_aqui
+# ==============================================
+# SUPABASE (Base de datos)
+# ==============================================
+# Obtén las credenciales en: https://supabase.com/dashboard/project/_/settings/api
+# IMPORTANTE: Estas credenciales ya están configuradas en supabase-config.js
+# Solo necesitas configurar Supabase si usas variables de entorno del lado del servidor
+SUPABASE_URL=https://remyvruwpvvcestvjlsa.supabase.co
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbXl2cnV3cHZ2Y2VzdHZqbHNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MjA1NTYsImV4cCI6MjA4NDQ5NjU1Nn0.VUl2tuftugAEOvyy18DsO5Qfq4SPyFcXFcLb5Nn15nU
