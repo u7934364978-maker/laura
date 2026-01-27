@@ -92,7 +92,16 @@ wild-fitness/
 
 ## 🌐 Despliegue
 
-El sitio está configurado para desplegarse automáticamente en GitHub Pages con el dominio personalizado **wildbreathing.com**.
+**Plataforma:** Vercel
+**Dominio:** wild-fitness.com
+
+El sitio se despliega automáticamente en Vercel cuando se hace push a la rama principal. Vercel proporciona:
+- ✅ Despliegues automáticos desde Git
+- ✅ Funciones serverless (API para envío de emails)
+- ✅ SSL automático y CDN global
+- ✅ Preview deployments para cada PR
+
+**📖 Guía completa:** Ver [`DESPLIEGUE-VERCEL.md`](DESPLIEGUE-VERCEL.md)
 
 ### Configuración DNS (Cloudflare)
 
@@ -138,25 +147,26 @@ CNAME www wild-fitness.com
 
 ## 🔧 Personalización
 
-### Configurar el Formulario de Contacto
+### 📧 Configurar el Formulario de Contacto
 
-**IMPORTANTE:** El formulario necesita configuración para funcionar.
+**Estado actual:** ✅ **Sistema completo implementado con Resend + Supabase**
 
-**Opción 1 - Formspree (Recomendado):**
-1. Regístrate gratis en https://formspree.io/
-2. Crea un nuevo formulario
-3. Copia tu Form ID (ej: `xvgopbld`)
-4. En `index.html` línea ~264, reemplaza:
-   ```html
-   action="https://formspree.io/f/YOUR_FORM_ID"
-   ```
-   por:
-   ```html
-   action="https://formspree.io/f/xvgopbld"
-   ```
+El formulario de contacto está configurado para:
+1. 💾 **Guardar datos en Supabase** - Gestión de contactos en base de datos
+2. 📧 **Enviar email al usuario** - Confirmación automática vía Resend
+3. 🔔 **Notificar al admin** - Email a info@wild-fitness.com con los datos
 
-**Opción 2 - Google Sheets:**
-Ver documentación completa en `FORMULARIO-CONTACTO.md`
+**📖 Guías de configuración:**
+- **Despliegue en Vercel:** [`DESPLIEGUE-VERCEL.md`](DESPLIEGUE-VERCEL.md) - ⭐ **EMPIEZA AQUÍ**
+- **Configuración completa:** [`CONFIGURACION-FORMULARIO-CONTACTO.md`](CONFIGURACION-FORMULARIO-CONTACTO.md)
+- **DNS de Cloudflare:** [`DNS-CLOUDFLARE-RESEND.md`](DNS-CLOUDFLARE-RESEND.md)
+
+**Pasos rápidos para Vercel:**
+1. ✅ Supabase ya está configurado (`supabase-config.js`)
+2. 🔑 Obtener API Key de Resend
+3. ⚠️ Configurar DNS en Cloudflare (DKIM, SPF, MX)
+4. 🚀 Agregar `RESEND_API_KEY` en Vercel Environment Variables
+5. 🧪 Desplegar y probar el formulario
 
 ### Actualizar Información de Contacto
 

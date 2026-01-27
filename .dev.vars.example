@@ -1,40 +1,8 @@
-# ============================================
-# STRIPE API KEYS
-# ============================================
-# Obtén tus claves en: https://dashboard.stripe.com/apikeys
-
-# Test Mode (para desarrollo)
-STRIPE_SECRET_KEY=sk_test_TU_CLAVE_SECRETA_AQUI
-
-# Production Mode (para producción - usar con precaución)
-# STRIPE_SECRET_KEY=sk_live_TU_CLAVE_SECRETA_AQUI
-
-# Webhook Secret (opcional)
-# STRIPE_WEBHOOK_SECRET=whsec_TU_WEBHOOK_SECRET_AQUI
-
-# ============================================
-# SUPABASE
-# ============================================
-# OBLIGATORIO - para guardar contactos en base de datos
-
-# URL del proyecto Supabase
-SUPABASE_URL=https://remyvruwpvvcestvjlsa.supabase.co
-
-# Service Role Key (bypasea RLS - solo usar en backend)
-# Obtener en: Supabase Dashboard → Settings → API → service_role key
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbXl2cnV3cHZ2Y2VzdHZqbHNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2ODkyMDU1NiwiZXhwIjoyMDg0NDk2NTU2fQ.TU_SERVICE_ROLE_KEY_AQUI
-
-# ============================================
-# RESEND (Email Service)
-# ============================================
-# Obtén tu API key en: https://resend.com/api-keys
-
-# API Key de Resend (OBLIGATORIO para enviar emails)
+# ==============================================
+# RESEND API (Envío de emails)
+# ==============================================
+# Obtén tu API Key en: https://resend.com/api-keys
 RESEND_API_KEY=re_TU_API_KEY_AQUI
-
-# ============================================
-# CONFIGURACIÓN DE EMAILS
-# ============================================
 
 # Email remitente (FROM)
 # Opción 1 (RECOMENDADO): Usa tu dominio verificado
@@ -46,6 +14,37 @@ FROM_EMAIL=Wild Fitness <noreply@wild-fitness.com>
 # Email para recibir notificaciones de contactos
 ADMIN_EMAIL=info@wild-fitness.com
 
+# ==============================================
+# STRIPE API KEYS (Pagos)
+# ==============================================
+# Obtén tus claves en: https://dashboard.stripe.com/apikeys
+
+# Test Mode (para desarrollo)
+STRIPE_SECRET_KEY=sk_test_TU_CLAVE_SECRETA_AQUI
+
+# Production Mode (para producción - usar con precaución)
+# STRIPE_SECRET_KEY=sk_live_TU_CLAVE_SECRETA_AQUI
+
+# Webhook Secret (opcional)
+# STRIPE_WEBHOOK_SECRET=whsec_TU_WEBHOOK_SECRET_AQUI
+
+# ==============================================
+# SUPABASE (Base de datos)
+# ==============================================
+# OBLIGATORIO - para guardar contactos en base de datos
+# Obtén las credenciales en: https://supabase.com/dashboard/project/remyvruwpvvcestvjlsa/settings/api
+
+# URL del proyecto Supabase
+SUPABASE_URL=https://remyvruwpvvcestvjlsa.supabase.co
+
+# Anon Key (para frontend - ya configurada en supabase-config.js)
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbXl2cnV3cHZ2Y2VzdHZqbHNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MjA1NTYsImV4cCI6MjA4NDQ5NjU1Nn0.VUl2tuftugAEOvyy18DsO5Qfq4SPyFcXFcLb5Nn15nU
+
+# Service Role Key (bypasea RLS - solo usar en backend)
+# Obtener en: Supabase Dashboard → Settings → API → service_role key
+# ⚠️ IMPORTANTE: NUNCA la expongas en el frontend
+SUPABASE_SERVICE_ROLE_KEY=TU_SERVICE_ROLE_KEY_AQUI
+
 # ============================================
 # INSTRUCCIONES PARA VERIFICAR DOMINIO
 # ============================================
@@ -55,28 +54,4 @@ ADMIN_EMAIL=info@wild-fitness.com
 # 3. Configura los registros DNS (TXT records) en tu proveedor de dominio
 # 4. Espera la verificación (puede tardar de 5 min a 48 horas)
 # 5. Una vez verificado, usa FROM_EMAIL=Wild Fitness <noreply@wild-fitness.com>
-#
-# Si necesitas que funcione YA (para pruebas):
-# - Usa FROM_EMAIL=onboarding@resend.dev
-# - Los emails pueden ir a spam
-# - No es profesional, solo para testing
-#
-
-# ============================================
-# CÓMO OBTENER SUPABASE SERVICE ROLE KEY
-# ============================================
-#
-# 1. Ve a: https://supabase.com/dashboard/project/remyvruwpvvcestvjlsa
-# 2. Click en: Settings (engranaje en menú lateral)
-# 3. Click en: API
-# 4. Busca: "service_role" key (NO la "anon" key)
-# 5. Click en: "Reveal" o el ícono del ojo
-# 6. Copia: La key completa (empieza con eyJ...)
-# 7. Pega: Aquí como SUPABASE_SERVICE_ROLE_KEY
-#
-# ⚠️ IMPORTANTE: 
-# - Esta key bypasea RLS (Row Level Security)
-# - NUNCA la expongas en el frontend
-# - Solo úsala en backend/API routes
-# - Mantenla SECRET en variables de entorno
 #
