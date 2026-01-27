@@ -10,8 +10,8 @@
 // ============================================
 
 // Opción 1: Cloudflare Workers (Recomendado)
-// Descomenta esta línea y reemplaza con la URL de tu Worker desplegado
-// window.CONTACT_API_URL = 'https://wild-fitness-contact-form.TUUSUARIO.workers.dev';
+// Worker desplegado y configurado
+window.CONTACT_API_URL = 'https://wild-fitness-contact-form.w5kvt5ypsr.workers.dev';
 
 // Opción 2: Vercel Serverless Functions (Actual)
 // Deja comentada la línea de arriba para usar la API de Vercel
@@ -25,7 +25,8 @@
 // CONFIGURACIÓN ACTUAL
 // ============================================
 
-// Por defecto, usa Vercel API (comentado = fallback a /api/send-welcome-email)
-// Si despliegas en Cloudflare Workers, descomenta y configura la URL de arriba
+// Configuración actual: Cloudflare Workers desplegado
+// URL: https://wild-fitness-contact-form.w5kvt5ypsr.workers.dev
 
 console.log('⚙️ API configurada:', window.CONTACT_API_URL || '/api/send-welcome-email (Vercel)');
+console.log('✅ Usando Cloudflare Workers para formulario de contacto');
