@@ -400,19 +400,21 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                // 1. Guardar en Supabase
-                if (typeof saveContactSubmission === 'function') {
-                    await saveContactSubmission(data);
-                }
+                // Detectar si usamos Cloudflare Workers o Vercel API
+                // Configura la URL del Worker en producción o usa la API de Vercel como fallback
+                const API_URL = window.CONTACT_API_URL || '/api/send-welcome-email';
                 
-                // 2. Enviar emails vía Vercel API
-                const response = await fetch('/api/send-welcome-email', {
+                console.log('📤 Enviando formulario a:', API_URL);
+                
+                // Enviar datos al Worker/API
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
                 const result = await response.json();
+                console.log('📊 Respuesta:', result);
                 
                 if (result.success) {
                     // Success state

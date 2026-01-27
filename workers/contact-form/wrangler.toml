@@ -1,0 +1,74 @@
+# ============================================
+# CLOUDFLARE WORKER - CONTACT FORM
+# Wild Fitness - Laura Ramírez
+# ============================================
+
+name = "wild-fitness-contact-form"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+# ============================================
+# VARIABLES DE ENTORNO
+# ============================================
+# IMPORTANTE: NO coloques valores reales aquí
+# Configúralas en el dashboard de Cloudflare:
+# Workers & Pages → tu Worker → Settings → Variables
+
+# Ejemplo de configuración (valores de ejemplo):
+# [vars]
+# ENVIRONMENT = "production"
+
+# ============================================
+# SECRETS (Variables sensibles)
+# ============================================
+# Configura estos secrets en Cloudflare Dashboard:
+# 
+# 1. RESEND_API_KEY
+#    - Tu API key de Resend (empieza con re_...)
+#    - Obténla de: https://resend.com/api-keys
+# 
+# 2. SUPABASE_URL
+#    - URL de tu proyecto Supabase
+#    - Ejemplo: https://tuproyecto.supabase.co
+# 
+# 3. SUPABASE_KEY
+#    - Anon key de Supabase
+#    - Obténla de: Settings → API en Supabase Dashboard
+#
+# Para configurar secrets:
+# Opción 1 (Dashboard): Workers → Settings → Variables → Encrypt
+# Opción 2 (CLI): wrangler secret put RESEND_API_KEY
+
+# ============================================
+# CONFIGURACIÓN DE RUTAS
+# ============================================
+# Una vez desplegado, el Worker estará disponible en:
+# https://wild-fitness-contact-form.TUUSUARIO.workers.dev
+#
+# Puedes configurar una ruta personalizada:
+# [[routes]]
+# pattern = "wild-fitness.com/api/contact"
+# zone_name = "wild-fitness.com"
+
+# ============================================
+# LÍMITES Y RECURSOS
+# ============================================
+# Plan gratuito de Cloudflare Workers:
+# - 100,000 requests/día
+# - 10ms CPU time por request
+# - Memoria ilimitada durante la ejecución
+
+# ============================================
+# COMANDOS ÚTILES
+# ============================================
+# Desarrollo local:
+#   wrangler dev
+#
+# Desplegar a producción:
+#   wrangler deploy
+#
+# Ver logs:
+#   wrangler tail
+#
+# Configurar secret:
+#   wrangler secret put RESEND_API_KEY
