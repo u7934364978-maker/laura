@@ -60,6 +60,8 @@ const EmailTemplates = {
       <p><strong>👤 Nom:</strong> ${data.name}</p>
       <p><strong>📧 Email:</strong> ${data.email}</p>
       <p><strong>📱 Telèfon:</strong> ${data.phone || 'No proporcionat'}</p>
+      <p><strong>📍 Ubicació:</strong> ${data.location || 'No proporcionada'}</p>
+      <p><strong>📊 Nivell/Interès:</strong> ${data.level || 'No proporcionat'}</p>
       <p><strong>💬 Missatge:</strong> ${data.message || 'Sense missatge'}</p>
       <p>⏰ Rebut: ${new Date().toLocaleString('ca-ES')}</p>
     `
@@ -89,32 +91,46 @@ export default async function handler(req) {
     // Email al cliente
     console.log('📤 Sending welcome email to:', data.email);
     const welcomeTemplate = EmailTemplates.welcome(data);
-    const clientRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: data.email,
-        subject: welcomeTemplate.subject,
-        html: welcomeTemplate.html,
-      })
-    });
+    let clientResult;
+    let clientRes;
     
-    const clientResult = await clientRes.json();
-    console.log('📊 Client email status:', clientRes.status);
-    console.log('✅ Client email response:', clientResult);
+    try {
+      clientRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: FROM_EMAIL,
+          to: data.email,
+          subject: welcomeTemplate.subject,
+          html: welcomeTemplate.html,
+        })
+      });
+      
+      clientResult = await clientRes.json();
+      console.log('📊 Client email status:', clientRes.status);
+      console.log('✅ Client email response:', JSON.stringify(clientResult, null, 2));
 
-    if (!clientRes.ok) {
-      console.error('❌ Resend Client Email Error:', clientResult);
+      if (!clientRes.ok) {
+        console.error('❌ Resend Client Email Error:', clientResult);
+        return new Response(JSON.stringify({ 
+          success: false, 
+          error: `Resend error (${clientRes.status}): ${clientResult.message || 'Unknown error'}`,
+          details: clientResult 
+        }), {
+          status: clientRes.status,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    } catch (fetchError) {
+      console.error('❌ Fetch error (Client Email):', fetchError);
       return new Response(JSON.stringify({ 
         success: false, 
-        error: 'Error enviant el mail de benvinguda',
-        details: clientResult 
+        error: `Network error sending client email: ${fetchError.message}` 
       }), {
-        status: clientRes.status,
+        status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
     }
@@ -122,26 +138,30 @@ export default async function handler(req) {
     // Notificación al admin
     console.log('📤 Sending notification to admin:', ADMIN_EMAIL);
     const adminTemplate = EmailTemplates.contactNotification(data);
-    const adminRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: ADMIN_EMAIL,
-        subject: adminTemplate.subject,
-        html: adminTemplate.html,
-      })
-    });
-    
-    const adminResult = await adminRes.json();
-    console.log('📊 Admin email status:', adminRes.status);
-    console.log('✅ Admin notification response:', adminResult);
+    try {
+      const adminRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: FROM_EMAIL,
+          to: ADMIN_EMAIL,
+          subject: adminTemplate.subject,
+          html: adminTemplate.html,
+        })
+      });
+      
+      const adminResult = await adminRes.json();
+      console.log('📊 Admin email status:', adminRes.status);
+      console.log('✅ Admin notification response:', JSON.stringify(adminResult, null, 2));
 
-    if (!adminRes.ok) {
-      console.warn('⚠️ Admin notification failed, but client email was sent');
+      if (!adminRes.ok) {
+        console.warn('⚠️ Admin notification failed, but client email was sent:', adminResult);
+      }
+    } catch (adminFetchError) {
+      console.warn('⚠️ Network error sending admin notification:', adminFetchError);
     }
 
     return new Response(JSON.stringify({ success: true, clientResult }), {
