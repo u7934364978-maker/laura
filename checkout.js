@@ -123,6 +123,16 @@ function loadSelectedProgram() {
     
     if (!selectedProgram) {
         console.error('❌ Error: Programa no encontrado:', programId);
+        console.error('❌ Programas disponibles:', Object.keys(programs).join(', '));
+        
+        // Deshabilitar el formulario
+        const submitBtn = document.getElementById('submit-payment');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Programa no vàlid';
+        }
+        
+        // Mostrar error
         showErrorModal('Programa no vàlid. Si us plau, torna a la pàgina principal i selecciona un programa.');
         return;
     }
@@ -185,6 +195,12 @@ function setupForm() {
     
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        // Validar que hay un programa seleccionado
+        if (!selectedProgram) {
+            showErrorModal('No s\'ha seleccionat cap programa. Si us plau, torna a la pàgina principal.');
+            return;
+        }
         
         // Validar términos y condiciones
         const acceptTerms = document.getElementById('acceptTerms').checked;
