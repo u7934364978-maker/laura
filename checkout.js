@@ -254,6 +254,14 @@ async function processCardPayment(name, email, phone) {
             programName: selectedProgram.name
         });
         
+        console.log('✅ Payment Intent received:', paymentIntent);
+        console.log('✅ Client Secret:', paymentIntent.clientSecret);
+        
+        if (!paymentIntent || !paymentIntent.clientSecret) {
+            console.error('❌ Payment Intent inválido:', paymentIntent);
+            throw new Error('No s\'ha rebut el client secret del servidor');
+        }
+        
         // 2. Confirmar el pago con Stripe
         const { error, paymentIntent: confirmedPayment } = await stripe.confirmCardPayment(
             paymentIntent.clientSecret,
@@ -365,6 +373,15 @@ async function createPaymentIntent(data) {
         }
         
         const paymentIntent = await response.json();
+        
+        console.log('📦 Raw API Response:', paymentIntent);
+        console.log('🔑 client_secret:', paymentIntent.client_secret);
+        console.log('🆔 id:', paymentIntent.id);
+        
+        if (!paymentIntent.client_secret) {
+            console.error('❌ API Response no contiene client_secret:', paymentIntent);
+            throw new Error('El servidor no ha devuelto el client_secret necesario');
+        }
         
         return {
             clientSecret: paymentIntent.client_secret,
