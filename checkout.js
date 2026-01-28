@@ -117,14 +117,18 @@ document.addEventListener('DOMContentLoaded', () => {
 // Cargar programa seleccionado desde URL
 function loadSelectedProgram() {
     const urlParams = new URLSearchParams(window.location.search);
-    const programId = urlParams.get('program') || 'wild-starter';
+    const programId = urlParams.get('program') || 'pla-basic';
     
     selectedProgram = programs[programId];
     
-    if (selectedProgram) {
-        displayProgramInfo(selectedProgram);
-        calculateTotal(selectedProgram.price);
+    if (!selectedProgram) {
+        console.error('❌ Error: Programa no encontrado:', programId);
+        showErrorModal('Programa no vàlid. Si us plau, torna a la pàgina principal i selecciona un programa.');
+        return;
     }
+    
+    displayProgramInfo(selectedProgram);
+    calculateTotal(selectedProgram.price);
 }
 
 // Mostrar información del programa
@@ -219,6 +223,10 @@ function setupForm() {
 // Procesar pago con tarjeta
 async function processCardPayment(name, email, phone) {
     try {
+        if (!selectedProgram) {
+            throw new Error('No s\'ha seleccionat cap programa');
+        }
+        
         // 1. Crear Payment Intent en el servidor
         const paymentIntent = await createPaymentIntent({
             amount: calculateTotalAmount(),
@@ -266,6 +274,10 @@ async function processBizumPayment(name, email, phone) {
     
     if (!bizumPhone) {
         throw new Error('Si us plau, introdueix el teu número de telèfon Bizum.');
+    }
+    
+    if (!selectedProgram) {
+        throw new Error('No s\'ha seleccionat cap programa');
     }
     
     try {
@@ -340,6 +352,10 @@ async function createPaymentIntent(data) {
 
 // Calcular monto total en centavos (precio con IVA incluido)
 function calculateTotalAmount() {
+    if (!selectedProgram) {
+        console.error('❌ Error: No hay programa seleccionado');
+        throw new Error('No s\'ha seleccionat cap programa');
+    }
     const total = selectedProgram.price; // El precio ya incluye IVA
     return Math.round(total * 100); // Convertir a centavos
 }
