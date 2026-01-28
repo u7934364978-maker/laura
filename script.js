@@ -400,28 +400,42 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                // 1. Guardar en Supabase
-                if (typeof saveContactSubmission === 'function') {
-                    await saveContactSubmission(data);
-                }
-                
-                // 2. Enviar emails vía Vercel API
-                const response = await fetch('/api/send-welcome-email', {
+                // 1. Guardar en Supabase vía API (bypasea RLS)
+                const saveResponse = await fetch('/api/save-contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
-                const result = await response.json();
+                const saveResult = await saveResponse.json();
                 
-                if (result.success) {
+                if (!saveResult.success) {
+                    console.error('❌ Error al guardar contacto:', saveResult);
+                    throw new Error(saveResult.error || 'Error guardando el contacto');
+                }
+                
+                console.log('✅ Contacto guardado exitosamente');
+                
+                // 2. Enviar emails vía Vercel API
+                const emailResponse = await fetch('/api/send-welcome-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const emailResult = await emailResponse.json();
+                
+                if (emailResult.success) {
                     // Success state
                     statusDiv.textContent = '✅ Missatge enviat correctament! Et contactaré aviat.';
                     statusDiv.className = 'form-status success show';
                     contactForm.reset();
                 } else {
-                    console.error('❌ Detalls de l\'error API:', result.details || result.error);
-                    throw new Error(result.error || 'Error enviant el missatge');
+                    console.error('❌ Error enviando email:', emailResult.details || emailResult.error);
+                    // Aunque el email falle, el contacto se guardó, así que mostramos éxito parcial
+                    statusDiv.textContent = '✅ Missatge rebut! (Email pendent de configuració)';
+                    statusDiv.className = 'form-status success show';
+                    contactForm.reset();
                 }
             } catch (error) {
                 console.error('Error:', error);
