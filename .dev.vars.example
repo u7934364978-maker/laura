@@ -1,4 +1,6 @@
-# Stripe API Keys
+# ============================================
+# STRIPE API KEYS
+# ============================================
 # Obtén tus claves en: https://dashboard.stripe.com/apikeys
 
 # Test Mode (para desarrollo)
@@ -10,6 +12,47 @@ STRIPE_SECRET_KEY=sk_test_TU_CLAVE_SECRETA_AQUI
 # Webhook Secret (opcional)
 # STRIPE_WEBHOOK_SECRET=whsec_TU_WEBHOOK_SECRET_AQUI
 
-# Supabase (opcional - para guardar pagos en BD)
+# ============================================
+# SUPABASE
+# ============================================
+# Opcional - para guardar datos en base de datos
 # SUPABASE_URL=https://tu-proyecto.supabase.co
 # SUPABASE_KEY=tu_anon_key_aqui
+
+# ============================================
+# RESEND (Email Service)
+# ============================================
+# Obtén tu API key en: https://resend.com/api-keys
+
+# API Key de Resend (OBLIGATORIO para enviar emails)
+RESEND_API_KEY=re_TU_API_KEY_AQUI
+
+# ============================================
+# CONFIGURACIÓN DE EMAILS
+# ============================================
+
+# Email remitente (FROM)
+# Opción 1 (RECOMENDADO): Usa tu dominio verificado
+FROM_EMAIL=Wild Fitness <noreply@wild-fitness.com>
+
+# Opción 2 (TEMPORAL): Usa dominio de prueba de Resend
+# FROM_EMAIL=onboarding@resend.dev
+
+# Email para recibir notificaciones de contactos
+ADMIN_EMAIL=info@wild-fitness.com
+
+# ============================================
+# INSTRUCCIONES PARA VERIFICAR DOMINIO
+# ============================================
+# 
+# 1. Ve a https://resend.com/domains
+# 2. Añade el dominio: wild-fitness.com
+# 3. Configura los registros DNS (TXT records) en tu proveedor de dominio
+# 4. Espera la verificación (puede tardar de 5 min a 48 horas)
+# 5. Una vez verificado, usa FROM_EMAIL=Wild Fitness <noreply@wild-fitness.com>
+#
+# Si necesitas que funcione YA (para pruebas):
+# - Usa FROM_EMAIL=onboarding@resend.dev
+# - Los emails pueden ir a spam
+# - No es profesional, solo para testing
+#
