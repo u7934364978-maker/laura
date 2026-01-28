@@ -15,9 +15,14 @@ STRIPE_SECRET_KEY=sk_test_TU_CLAVE_SECRETA_AQUI
 # ============================================
 # SUPABASE
 # ============================================
-# Opcional - para guardar datos en base de datos
-# SUPABASE_URL=https://tu-proyecto.supabase.co
-# SUPABASE_KEY=tu_anon_key_aqui
+# OBLIGATORIO - para guardar contactos en base de datos
+
+# URL del proyecto Supabase
+SUPABASE_URL=https://remyvruwpvvcestvjlsa.supabase.co
+
+# Service Role Key (bypasea RLS - solo usar en backend)
+# Obtener en: Supabase Dashboard → Settings → API → service_role key
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbXl2cnV3cHZ2Y2VzdHZqbHNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2ODkyMDU1NiwiZXhwIjoyMDg0NDk2NTU2fQ.TU_SERVICE_ROLE_KEY_AQUI
 
 # ============================================
 # RESEND (Email Service)
@@ -55,4 +60,23 @@ ADMIN_EMAIL=info@wild-fitness.com
 # - Usa FROM_EMAIL=onboarding@resend.dev
 # - Los emails pueden ir a spam
 # - No es profesional, solo para testing
+#
+
+# ============================================
+# CÓMO OBTENER SUPABASE SERVICE ROLE KEY
+# ============================================
+#
+# 1. Ve a: https://supabase.com/dashboard/project/remyvruwpvvcestvjlsa
+# 2. Click en: Settings (engranaje en menú lateral)
+# 3. Click en: API
+# 4. Busca: "service_role" key (NO la "anon" key)
+# 5. Click en: "Reveal" o el ícono del ojo
+# 6. Copia: La key completa (empieza con eyJ...)
+# 7. Pega: Aquí como SUPABASE_SERVICE_ROLE_KEY
+#
+# ⚠️ IMPORTANTE: 
+# - Esta key bypasea RLS (Row Level Security)
+# - NUNCA la expongas en el frontend
+# - Solo úsala en backend/API routes
+# - Mantenla SECRET en variables de entorno
 #
