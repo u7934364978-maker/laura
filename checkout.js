@@ -333,8 +333,19 @@ async function createPaymentIntent(data) {
         });
         
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error?.message || 'Error creant el Payment Intent');
+            const errorText = await response.text();
+            console.error('❌ Response Status:', response.status);
+            console.error('❌ Response Body:', errorText);
+            
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+            } catch (e) {
+                throw new Error(`Server error (${response.status}): ${errorText}`);
+            }
+            
+            const errorMessage = errorData.error?.message || errorData.error || errorData.message || 'Error creant el Payment Intent';
+            throw new Error(errorMessage);
         }
         
         const paymentIntent = await response.json();
@@ -345,7 +356,8 @@ async function createPaymentIntent(data) {
         };
         
     } catch (error) {
-        console.error('Error creant Payment Intent:', error);
+        console.error('❌ Error creant Payment Intent:', error);
+        console.error('❌ Error details:', error.message);
         throw error;
     }
 }
