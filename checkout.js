@@ -375,17 +375,21 @@ async function createPaymentIntent(data) {
         const paymentIntent = await response.json();
         
         console.log('📦 Raw API Response:', paymentIntent);
-        console.log('🔑 client_secret:', paymentIntent.client_secret);
+        console.log('🔑 clientSecret (camelCase):', paymentIntent.clientSecret);
+        console.log('🔑 client_secret (underscore):', paymentIntent.client_secret);
         console.log('🆔 id:', paymentIntent.id);
         
-        if (!paymentIntent.client_secret) {
-            console.error('❌ API Response no contiene client_secret:', paymentIntent);
+        // La API devuelve clientSecret (camelCase), no client_secret
+        const clientSecret = paymentIntent.clientSecret || paymentIntent.client_secret;
+        
+        if (!clientSecret) {
+            console.error('❌ API Response no contiene client_secret ni clientSecret:', paymentIntent);
             throw new Error('El servidor no ha devuelto el client_secret necesario');
         }
         
         return {
-            clientSecret: paymentIntent.client_secret,
-            paymentIntentId: paymentIntent.id,
+            clientSecret: clientSecret,
+            paymentIntentId: paymentIntent.id || paymentIntent.paymentIntentId,
         };
         
     } catch (error) {
