@@ -29,16 +29,10 @@ let currentFilter = 'all';
 let isAdminLoggedIn = false;
 
 // Stripe Configuration
-// ⚠️ CAMBIAR ENTRE TEST Y LIVE MODE:
-// TEST (cobros simulados): pk_test_... - USAR MIENTRAS SE ACTIVA LA CUENTA
-// LIVE (cobros reales): pk_live_... - USAR SOLO DESPUÉS DE ACTIVAR CUENTA STRIPE
-// 
-// INSTRUCCIONES:
-// 1. Ve a Stripe Dashboard → Cambia a "Test mode"
-// 2. Developers → API keys
-// 3. Copia tu "Publishable key" (pk_test_...)
-// 4. Pégala aquí abajo
-const STRIPE_PUBLISHABLE_KEY = 'PONER_TU_PK_TEST_AQUI';  // ← CAMBIAR ESTO
+// ✅ CONFIGURADO EN LIVE MODE - PAGOS REALES
+// Cuenta Stripe activada - Aceptando pagos reales
+// Última actualización: 2026-01-28
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SkthTC2rq0k9lQ2vMOTIeVyNvOwt2vHOQMqexkX70wZdTqHnfroFfVcy2avppv6ubycc6aFveika6LQtMBkA80800FpFi8AgM';
 let stripe = null;
 let elements = null;
 let cardElement = null;
