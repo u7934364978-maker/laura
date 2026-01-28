@@ -32,7 +32,7 @@ let isAdminLoggedIn = false;
 // ✅ CONFIGURADO EN LIVE MODE - PAGOS REALES
 // Cuenta Stripe activada - Aceptando pagos reales
 // Última actualización: 2026-01-28
-const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SkthTC2rq0k9lQ2vMOTIeVyNvOwt2vHOQMqexkX70wZdTqHnfroFfVcy2avppv6ubycc6aFveika6LQtMBkA80800FpFi8AgM';
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf';
 let stripe = null;
 let elements = null;
 let cardElement = null;

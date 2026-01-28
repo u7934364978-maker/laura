@@ -108,8 +108,8 @@ Si necesitas volver a TEST mode para pruebas:
 
 | Componente | Estado | Valor |
 |------------|--------|-------|
-| **Publishable Key (Frontend)** | ✅ Configurada | `pk_live_51Skt...` |
-| **Secret Key (Backend)** | ⚠️ Configurar en Vercel | `sk_live_51Skt...` |
+| **Publishable Key (Frontend)** | ✅ Configurada | `pk_live_51Srimk...` |
+| **Secret Key (Backend)** | ⚠️ Configurar en Vercel | `sk_live_51Srimk...` |
 | **Modo Stripe** | ✅ LIVE | Pagos reales |
 | **Cuenta Stripe** | ✅ Activada | Verificación completa |
 
