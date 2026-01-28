@@ -90,10 +90,15 @@ export default async function handler(req) {
     });
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('❌ Full Error:', error);
+    console.error('❌ Error Stack:', error.stack);
+    console.error('❌ Error Name:', error.name);
+    console.error('❌ Error Message:', error.message);
     return jsonResponse({ 
       error: 'Internal server error',
-      message: error.message 
+      message: error.message,
+      errorType: error.name,
+      details: error.toString()
     }, 500);
   }
 }

@@ -29,6 +29,9 @@ let currentFilter = 'all';
 let isAdminLoggedIn = false;
 
 // Stripe Configuration
+// ⚠️ CAMBIAR ENTRE TEST Y LIVE MODE:
+// TEST (cobros simulados): pk_test_...
+// LIVE (cobros reales): pk_live_...
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf';
 let stripe = null;
 let elements = null;
