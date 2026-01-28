@@ -173,7 +173,14 @@ function subscribeToActivities(callback) {
 }
 
 // Guardar formulario de contacto
+// ⚠️ DESHABILITADO: Ahora se guarda desde el backend (/api/send-welcome-email)
+// Para evitar problemas de RLS, el backend maneja el guardado en Supabase
 async function saveContactSubmission(contactData) {
+    console.log('⚠️ saveContactSubmission llamada desde frontend (ignorada)');
+    console.log('💡 El guardado en Supabase se hace desde el backend API');
+    return null; // No hacemos nada, el backend lo maneja
+    
+    /* CÓDIGO ORIGINAL COMENTADO
     const client = initSupabase();
     if (!client) {
         console.warn('⚠️ Supabase no disponible, saltando guardado');
@@ -203,6 +210,7 @@ async function saveContactSubmission(contactData) {
         console.error('❌ Error al guardar contacto:', error);
         return null;
     }
+    */
 }
 
 console.log('📦 supabase-config.js cargado');
