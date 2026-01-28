@@ -83,6 +83,49 @@ export default async function handler(req) {
       return new Response(JSON.stringify({ error: 'Nom i email són obligatoris' }), { status: 400 });
     }
 
+    // ============================================
+    // 1. GUARDAR EN SUPABASE (NUEVO)
+    // ============================================
+    try {
+      const SUPABASE_URL = process.env.SUPABASE_URL || 'https://yzlhczlqzvxjcnmonjaj.supabase.co';
+      const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6bGhjemxxenZ4amNubW9uamFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MTUyMDgsImV4cCI6MjA4NDk5MTIwOH0.EZGjY4AOGtpHTnVejY0P6ziTc6crttZ2UhOpxzBaDHI';
+      
+      console.log('💾 Saving to Supabase...');
+      const supabaseRes = await fetch(`${SUPABASE_URL}/rest/v1/contact_submissions`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          phone: data.phone || null,
+          location: data.location || null,
+          service: data.level || null,
+          message: data.message,
+          status: 'new'
+        })
+      });
+      
+      if (supabaseRes.ok) {
+        const supabaseData = await supabaseRes.json();
+        console.log('✅ Saved to Supabase:', supabaseData);
+      } else {
+        const error = await supabaseRes.text();
+        console.error('⚠️ Supabase save failed (continuing anyway):', error);
+        // No detenemos el flujo si Supabase falla
+      }
+    } catch (supabaseError) {
+      console.error('⚠️ Supabase error (continuing anyway):', supabaseError);
+      // No detenemos el flujo si Supabase falla
+    }
+
+    // ============================================
+    // 2. ENVIAR EMAILS (EXISTENTE)
+    // ============================================
     if (!RESEND_API_KEY) {
       console.error('❌ RESEND_API_KEY is not defined in environment variables');
       return new Response(JSON.stringify({ error: 'Server configuration error' }), { status: 500 });
