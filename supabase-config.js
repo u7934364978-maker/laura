@@ -9,9 +9,9 @@
  */
 
 const SUPABASE_CONFIG = {
-    // 🔑 Credenciales de Supabase - Wild Fitness
-    url: 'https://remyvruwpvvcestvjlsa.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbXl2cnV3cHZ2Y2VzdHZqbHNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MjA1NTYsImV4cCI6MjA4NDQ5NjU1Nn0.VUl2tuftugAEOvyy18DsO5Qfq4SPyFcXFcLb5Nn15nU'
+    // 🔑 Credenciales de Supabase - Wild Fitness (ACTUALIZADAS 2026-01-28)
+    url: 'https://yzlhczlqzvxjcnmonjaj.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6bGhjemxxenZ4amNubW9uamFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0MTUyMDgsImV4cCI6MjA4NDk5MTIwOH0.EZGjY4AOGtpHTnVejY0P6ziTc6crttZ2UhOpxzBaDHI'
 };
 
 // ✅ No toques esto - Cliente de Supabase
