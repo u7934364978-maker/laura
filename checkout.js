@@ -1,27 +1,19 @@
 // Checkout.js - Payment Processing with Stripe
 
 // ============================================
-// ⚠️ CONFIGURACIÓN DE STRIPE
+// ✅ CONFIGURACIÓN DE STRIPE - LIVE MODE
 // ============================================
 // 
-// PROBLEMA ACTUAL: Tu cuenta Stripe NO está activada
-// No puedes usar pk_live_... hasta activar la cuenta
+// Cuenta Stripe: ACTIVADA ✅
+// Modo: LIVE (Pagos Reales)
+// Última actualización: 2026-01-28
 //
-// SOLUCIÓN TEMPORAL (funciona YA):
-// 1. Ve a Stripe Dashboard → Cambia a "Test mode"
-// 2. Ve a Developers → API keys
-// 3. Copia tu "Publishable key" (pk_test_...)
-// 4. Pégala aquí abajo
-//
-// DESPUÉS (cuando se active tu cuenta):
-// - Cambia a pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf
-//
-const STRIPE_PUBLISHABLE_KEY = 'PONER_TU_PK_TEST_AQUI';  // ← CAMBIAR ESTO POR TU pk_test_...
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf';
 
-if (STRIPE_PUBLISHABLE_KEY === 'PONER_TU_PK_TEST_AQUI') {
+if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY === 'PONER_TU_PK_TEST_AQUI') {
     console.error('❌ ERROR: Stripe Publishable Key no configurada');
-    console.error('📝 Instrucciones: Lee los comentarios arriba (líneas 3-19)');
-    alert('⚠️ Stripe no está configurado. Revisa la consola para instrucciones.');
+    console.error('📝 Contacta al administrador del sitio');
+    alert('⚠️ Error de configuración de pagos. Por favor, contacta con el administrador.');
 }
 
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
