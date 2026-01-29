@@ -2,60 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <!-- Página Principal -->
     <url>
-        <loc>https://www.wild-fitness.com/</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/index.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     
     <!-- Calendario de Actividades -->
     <url>
-        <loc>https://www.wild-fitness.com/calendari.html</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/calendari.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
     
-    <!-- Blog -->
+    <!-- Blog Principal -->
     <url>
-        <loc>https://www.wild-fitness.com/blog.html</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/blog.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
-    <!-- Artículo destacado: Trail Running Pirineus -->
+    <!-- Artículos del Blog -->
     <url>
-        <loc>https://www.wild-fitness.com/blog.html#article-6</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/blog/preparar-primera-trail-running-catalunya-2026.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://wild-fitness.com/blog/nutricio-esportiva-trail-runners-catalunya-2026.html</loc>
+        <lastmod>2026-01-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://wild-fitness.com/blog/exercicis-forca-trail-runners-2026.html</loc>
+        <lastmod>2026-01-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://wild-fitness.com/blog/top-10-rutes-trail-running-catalunya-2026.html</loc>
+        <lastmod>2026-01-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://wild-fitness.com/blog/beneficis-entrenar-en-grup-trail-running.html</loc>
+        <lastmod>2026-01-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://wild-fitness.com/blog/trail-running-pirineus-catalans-guia-2026.html</loc>
+        <lastmod>2026-01-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
     </url>
     
     <!-- Página de Contacto -->
     <url>
-        <loc>https://www.wild-fitness.com/contacte.html</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/contacte.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     
     <!-- Páginas Legales -->
     <url>
-        <loc>https://www.wild-fitness.com/politica-privacitat.html</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/politica-privacitat.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://www.wild-fitness.com/avis-legal.html</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/avis-legal.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://www.wild-fitness.com/cookies.html</loc>
-        <lastmod>2026-01-20</lastmod>
+        <loc>https://wild-fitness.com/cookies.html</loc>
+        <lastmod>2026-01-29</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
