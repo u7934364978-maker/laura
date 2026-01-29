@@ -135,27 +135,67 @@ Install Command: npm install
 ```
 Name: RESEND_API_KEY
 Value: re_tu_api_key_aqui (la que copiaste en el paso 1)
-Environment: Production, Preview, Development (marca las 3)
+Environment: Production, Preview, Development
 ```
 
-#### Variable 2: SUPABASE_URL (Opcional)
+#### Variable 2: SUPABASE_URL
 ```
 Name: SUPABASE_URL
 Value: https://remyvruwpvvcestvjlsa.supabase.co
-Environment: Production, Preview, Development (marca las 3)
+Environment: Production, Preview, Development
 ```
 
-#### Variable 3: SUPABASE_KEY (Opcional)
+#### Variable 3: SUPABASE_KEY
 ```
 Name: SUPABASE_KEY
-Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-Environment: Production, Preview, Development (marca las 3)
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (Anon Key)
+Environment: Production, Preview, Development
+```
+
+#### Variable 4: SUPABASE_SERVICE_ROLE_KEY
+```
+Name: SUPABASE_SERVICE_ROLE_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (Service Role Key)
+Environment: Production
+```
+
+#### Variable 5: STRIPE_SECRET_KEY
+```
+Name: STRIPE_SECRET_KEY
+Value: sk_live_... (o sk_test_... para pruebas)
+Environment: Production, Preview, Development
+```
+
+#### Variable 6: STRIPE_WEBHOOK_SECRET
+```
+Name: STRIPE_WEBHOOK_SECRET
+Value: whsec_... (obtener en Stripe Dashboard -> Webhooks)
+Environment: Production, Preview, Development
+```
+
+#### Variable 7: CRON_SECRET
+```
+Name: CRON_SECRET
+Value: (genera una cadena aleatoria larga)
+Environment: Production
+```
+
+#### Variable 8: FROM_EMAIL (Opcional)
+```
+Name: FROM_EMAIL
+Value: Wild Fitness <noreply@wild-fitness.com>
+Environment: Production
+```
+
+#### Variable 9: ADMIN_EMAIL (Opcional)
+```
+Name: ADMIN_EMAIL
+Value: info@wild-fitness.com
+Environment: Production
 ```
 
 **Nota sobre Supabase:**
-- Las credenciales de Supabase ya están en el código frontend (`supabase-config.js`)
-- Solo agrega estas variables si quieres usarlas del lado del servidor
-- Para el formulario de contacto, NO son necesarias aquí
+- Las credenciales de Supabase ya están en el frontend (`supabase-config.js`), pero se necesitan aquí para las funciones serverless de la carpeta `api/`.
 
 ### 3.4. Desplegar
 

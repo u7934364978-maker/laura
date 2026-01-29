@@ -1233,7 +1233,7 @@ async function handleBookingSubmit(e, activityId) {
             // Confirmació Bizum (Redirecció)
             console.log('Iniciant confirmació Bizum amb return_url...');
             // Solo pasamos el success y el ID de actividad, el resto se recupera del PaymentIntent metadata
-            const returnUrl = `${window.location.origin}/calendari.html?booking_success=true&activity_id=${activity.id}`;
+            const returnUrl = `${window.location.origin}/calendari?booking_success=true&activity_id=${activity.id}`;
             console.log('Return URL:', returnUrl);
 
             const result = await stripe.confirmBizumPayment(clientSecret, {

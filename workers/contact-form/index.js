@@ -58,7 +58,7 @@ const EmailTemplates = {
         <p style="margin: 10px 0 0; font-style: italic;">"${data.message || 'Sense missatge'}"</p>
       </div>
       <div style="text-align: center; margin: 30px 0;">
-        <a href="https://wild-fitness.com/calendari.html" class="cta-button">📅 Veure Calendari d'Activitats</a>
+        <a href="https://wild-fitness.com/calendari" class="cta-button">📅 Veure Calendari d'Activitats</a>
       </div>
       <p>Estic emocionada de poder ajudar-te a assolir els teus objectius!</p>
     </div>
