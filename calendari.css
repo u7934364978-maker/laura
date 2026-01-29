@@ -24,6 +24,28 @@
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.hero-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.admin-icon, .btn-admin svg, .btn-submit svg, .label-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.type-icon {
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.25rem;
 }
 
 .calendar-hero .hero-subtitle {
@@ -629,9 +651,15 @@
 }
 
 .empty-icon {
-    font-size: 5rem;
     margin-bottom: 1rem;
     opacity: 0.5;
+    display: flex;
+    justify-content: center;
+}
+
+.empty-icon svg {
+    width: 5rem;
+    height: 5rem;
 }
 
 .empty-state h3 {

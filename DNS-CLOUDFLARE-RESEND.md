@@ -127,7 +127,12 @@ Este registro ayuda a prevenir que tus emails vayan a spam.
    - No agregues espacios ni saltos de línea
    - El valor completo del DKIM puede ser muy largo (200+ caracteres)
 
-4. **Limpia la cache DNS:**
+4. **Revisa errores comunes de formato:**
+   - **Doble barra diagonal (//):** Algunos paneles pueden introducir una doble barra por error (ej: `...tz0//hLr...`). Verifica que el valor en Cloudflare coincida exactamente con el de Resend.
+     - *Nota:* En nuestra auditoría detectamos que tu registro actual contiene `//`, lo cual podría ser la causa del error.
+   - **Etiqueta v=DKIM1:** Si el registro sigue sin verificarse, intenta añadir `v=DKIM1; ` (incluyendo el espacio) al principio del campo **Content** en Cloudflare.
+
+5. **Limpia la cache DNS:**
    ```bash
    # En tu computadora (Windows)
    ipconfig /flushdns

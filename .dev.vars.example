@@ -4,6 +4,16 @@
 # Obtén tu API Key en: https://resend.com/api-keys
 RESEND_API_KEY=re_TU_API_KEY_AQUI
 
+# Email remitente (FROM)
+# Opción 1 (RECOMENDADO): Usa tu dominio verificado
+FROM_EMAIL=Wild Fitness <noreply@wild-fitness.com>
+
+# Opción 2 (TEMPORAL): Usa dominio de prueba de Resend
+# FROM_EMAIL=onboarding@resend.dev
+
+# Email para recibir notificaciones de contactos
+ADMIN_EMAIL=info@wild-fitness.com
+
 # ==============================================
 # STRIPE API KEYS (Pagos)
 # ==============================================
@@ -21,8 +31,27 @@ STRIPE_SECRET_KEY=sk_test_TU_CLAVE_SECRETA_AQUI
 # ==============================================
 # SUPABASE (Base de datos)
 # ==============================================
-# Obtén las credenciales en: https://supabase.com/dashboard/project/_/settings/api
-# IMPORTANTE: Estas credenciales ya están configuradas en supabase-config.js
-# Solo necesitas configurar Supabase si usas variables de entorno del lado del servidor
+# OBLIGATORIO - para guardar contactos en base de datos
+# Obtén las credenciales en: https://supabase.com/dashboard/project/remyvruwpvvcestvjlsa/settings/api
+
+# URL del proyecto Supabase
 SUPABASE_URL=https://remyvruwpvvcestvjlsa.supabase.co
+
+# Anon Key (para frontend - ya configurada en supabase-config.js)
 SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbXl2cnV3cHZ2Y2VzdHZqbHNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5MjA1NTYsImV4cCI6MjA4NDQ5NjU1Nn0.VUl2tuftugAEOvyy18DsO5Qfq4SPyFcXFcLb5Nn15nU
+
+# Service Role Key (bypasea RLS - solo usar en backend)
+# Obtener en: Supabase Dashboard → Settings → API → service_role key
+# ⚠️ IMPORTANTE: NUNCA la expongas en el frontend
+SUPABASE_SERVICE_ROLE_KEY=TU_SERVICE_ROLE_KEY_AQUI
+
+# ============================================
+# INSTRUCCIONES PARA VERIFICAR DOMINIO
+# ============================================
+# 
+# 1. Ve a https://resend.com/domains
+# 2. Añade el dominio: wild-fitness.com
+# 3. Configura los registros DNS (TXT records) en tu proveedor de dominio
+# 4. Espera la verificación (puede tardar de 5 min a 48 horas)
+# 5. Una vez verificado, usa FROM_EMAIL=Wild Fitness <noreply@wild-fitness.com>
+#

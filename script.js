@@ -168,7 +168,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for animation
 const animateElements = document.querySelectorAll(
-    '.schedule-content, .pricing, .gallery-grid, .contact-wrapper, .blog-grid, .feature-item, .about-content, .experience-section'
+    '.schedule-content, .pricing, .gallery-grid, .contact-wrapper, .blog-grid, .feature-item, .about-content, .experience-section, .specialty-card'
 );
 
 animateElements.forEach(el => {
@@ -251,9 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 if (img.complete && img.naturalHeight !== 0) {
+                    img.classList.remove('image-loading');
                     img.classList.add('image-loaded');
+                    observer.unobserve(img);
                 }
-                observer.unobserve(img);
             }
         });
     }, { threshold: 0.01 });
@@ -282,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const handleLoad = () => {
             img.classList.remove('image-loading');
             img.classList.add('image-loaded');
+            imageFadeObserver.unobserve(img);
             loadedImages++;
         };
         
@@ -400,30 +402,42 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                // Detectar si usamos Cloudflare Workers o Vercel API
-                // Configura la URL del Worker en producción o usa la API de Vercel como fallback
-                const API_URL = window.CONTACT_API_URL || '/api/send-welcome-email';
-                
-                console.log('📤 Enviando formulario a:', API_URL);
-                
-                // Enviar datos al Worker/API
-                const response = await fetch(API_URL, {
+                // 1. Guardar en Supabase vía API (bypasea RLS)
+                const saveResponse = await fetch('/api/save-contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
-                const result = await response.json();
-                console.log('📊 Respuesta:', result);
+                const saveResult = await saveResponse.json();
                 
-                if (result.success) {
+                if (!saveResult.success) {
+                    console.error('❌ Error al guardar contacto:', saveResult);
+                    throw new Error(saveResult.error || 'Error guardando el contacto');
+                }
+                
+                console.log('✅ Contacto guardado exitosamente');
+                
+                // 2. Enviar emails vía Vercel API
+                const emailResponse = await fetch('/api/send-welcome-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const emailResult = await emailResponse.json();
+                
+                if (emailResult.success) {
                     // Success state
                     statusDiv.textContent = '✅ Missatge enviat correctament! Et contactaré aviat.';
                     statusDiv.className = 'form-status success show';
                     contactForm.reset();
                 } else {
-                    console.error('❌ Detalls de l\'error API:', result.details || result.error);
-                    throw new Error(result.error || 'Error enviant el missatge');
+                    console.error('❌ Error enviando email:', emailResult.details || emailResult.error);
+                    // Aunque el email falle, el contacto se guardó, así que mostramos éxito parcial
+                    statusDiv.textContent = '✅ Missatge rebut! (Email pendent de configuració)';
+                    statusDiv.className = 'form-status success show';
+                    contactForm.reset();
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -464,3 +478,58 @@ if ('serviceWorker' in navigator) {
         //     .catch(err => console.log('✗ SW registration failed'));
     });
 }
+
+// ============================================
+// Page Index - Smooth Scroll & Active State
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    const indexLinks = document.querySelectorAll('.index-nav a');
+    const sections = Array.from(indexLinks).map(link => document.querySelector(link.getAttribute('href'))).filter(s => s !== null);
+    
+    // Smooth scroll for index links
+    indexLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const targetId = link.getAttribute('href');
+            if (targetId.startsWith('#')) {
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const indexHeight = document.querySelector('.page-index').offsetHeight;
+                    const extraPadding = 20;
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - headerHeight - indexHeight - extraPadding,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active class immediately
+                    indexLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            }
+        });
+    });
+
+    // Intersection Observer for highlighting index links on scroll
+    const observerOptions = {
+        root: null,
+        rootMargin: '-150px 0px -60% 0px',
+        threshold: 0
+    };
+
+    const indexObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                indexLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        if (section) indexObserver.observe(section);
+    });
+});

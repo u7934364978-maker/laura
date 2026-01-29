@@ -1,79 +1,84 @@
 -- ============================================
--- 🔧 CORRECCIÓN: Políticas RLS para contact_submissions
+-- FIX CRÍTICO: RLS PARA CONTACT SUBMISSIONS
 -- ============================================
--- Error: "new row violates row-level security policy"
--- Solución: Eliminar políticas existentes y crear nuevas correctas
--- ============================================
+-- Este script soluciona el error 42501: "new row violates row-level security policy"
+-- 
+-- PROBLEMA: La política "Allow public inserts" no está funcionando porque
+-- el rol 'anon' no tiene los permisos correctos a nivel de tabla
 
--- PASO 1: Eliminar todas las políticas existentes
+-- Paso 1: Verificar el estado actual
+SELECT tablename, policyname, permissive, roles, cmd
+FROM pg_policies 
+WHERE schemaname = 'public' AND tablename = 'contact_submissions';
+
+-- Paso 2: ELIMINAR políticas existentes que puedan estar causando conflictos
 DROP POLICY IF EXISTS "Allow public inserts" ON contact_submissions;
 DROP POLICY IF EXISTS "Allow admin read all" ON contact_submissions;
 DROP POLICY IF EXISTS "Allow admin updates" ON contact_submissions;
 DROP POLICY IF EXISTS "Allow admin deletes" ON contact_submissions;
-DROP POLICY IF EXISTS "Enable insert for anon users" ON contact_submissions;
-DROP POLICY IF EXISTS "Enable read for admins" ON contact_submissions;
 
--- PASO 2: Crear política de INSERT público (CRÍTICO)
--- Esta política permite que CUALQUIERA pueda insertar desde el frontend
-CREATE POLICY "public_insert_policy" ON contact_submissions
-  FOR INSERT 
-  TO anon, authenticated
+-- Paso 3: DESHABILITAR RLS temporalmente para verificar permisos
+ALTER TABLE contact_submissions DISABLE ROW LEVEL SECURITY;
+
+-- Paso 4: GARANTIZAR permisos a nivel de tabla PRIMERO
+-- Estos permisos son CRÍTICOS y deben ejecutarse ANTES de habilitar RLS
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
+GRANT ALL ON TABLE contact_submissions TO postgres, service_role;
+GRANT INSERT ON TABLE contact_submissions TO anon, authenticated;
+GRANT SELECT, UPDATE, DELETE ON TABLE contact_submissions TO authenticated;
+
+-- Paso 5: GARANTIZAR permisos en las secuencias (si existen)
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+
+-- Paso 6: RE-HABILITAR RLS
+ALTER TABLE contact_submissions ENABLE ROW LEVEL SECURITY;
+
+-- Paso 7: CREAR políticas SIMPLES y PERMISIVAS
+-- Política para INSERT - CUALQUIER usuario anónimo puede insertar
+CREATE POLICY "Enable insert for anon users"
+  ON contact_submissions
+  FOR INSERT
+  TO anon
   WITH CHECK (true);
 
--- PASO 3: Crear política de SELECT solo para admins autenticados
-CREATE POLICY "admin_select_policy" ON contact_submissions
-  FOR SELECT 
+-- Política para INSERT - usuarios autenticados también pueden insertar
+CREATE POLICY "Enable insert for authenticated users"
+  ON contact_submissions
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (true);
+
+-- Política para SELECT - solo admins pueden leer
+CREATE POLICY "Enable read for admin users"
+  ON contact_submissions
+  FOR SELECT
   TO authenticated
   USING (
-    auth.jwt() ->> 'email' IN (
-      'laura@wild-fitness.com', 
-      'info@wild-fitness.com',
-      'admin@wild-fitness.com'
-    )
+    auth.jwt() ->> 'email' IN ('laura@wild-fitness.com', 'info@wild-fitness.com')
   );
 
--- PASO 4: Crear política de UPDATE solo para admins
-CREATE POLICY "admin_update_policy" ON contact_submissions
+-- Política para UPDATE - solo admins pueden actualizar
+CREATE POLICY "Enable update for admin users"
+  ON contact_submissions
   FOR UPDATE
   TO authenticated
   USING (
-    auth.jwt() ->> 'email' IN (
-      'laura@wild-fitness.com', 
-      'info@wild-fitness.com',
-      'admin@wild-fitness.com'
-    )
+    auth.jwt() ->> 'email' IN ('laura@wild-fitness.com', 'info@wild-fitness.com')
   )
   WITH CHECK (
-    auth.jwt() ->> 'email' IN (
-      'laura@wild-fitness.com', 
-      'info@wild-fitness.com',
-      'admin@wild-fitness.com'
-    )
+    auth.jwt() ->> 'email' IN ('laura@wild-fitness.com', 'info@wild-fitness.com')
   );
 
--- PASO 5: Crear política de DELETE solo para admins
-CREATE POLICY "admin_delete_policy" ON contact_submissions
+-- Política para DELETE - solo admins pueden eliminar
+CREATE POLICY "Enable delete for admin users"
+  ON contact_submissions
   FOR DELETE
   TO authenticated
   USING (
-    auth.jwt() ->> 'email' IN (
-      'laura@wild-fitness.com', 
-      'info@wild-fitness.com',
-      'admin@wild-fitness.com'
-    )
+    auth.jwt() ->> 'email' IN ('laura@wild-fitness.com', 'info@wild-fitness.com')
   );
 
--- ============================================
--- VERIFICACIÓN: Probar que funciona
--- ============================================
-
--- Test 1: Verificar que RLS está habilitado
-SELECT tablename, rowsecurity 
-FROM pg_tables 
-WHERE tablename = 'contact_submissions';
--- Debería mostrar: rowsecurity = true
-
--- Test 2: Listar todas las políticas activas
+-- Paso 8: VERIFICAR configuración final
 SELECT 
   schemaname,
   tablename,
@@ -84,66 +89,37 @@ SELECT
   qual,
   with_check
 FROM pg_policies 
-WHERE tablename = 'contact_submissions';
+WHERE schemaname = 'public' AND tablename = 'contact_submissions'
+ORDER BY cmd, policyname;
 
--- Test 3: Probar INSERT público (como si fuera el formulario web)
--- Este insert debería funcionar SIN autenticación
-INSERT INTO contact_submissions (name, email, phone, location, service, message, status)
-VALUES (
-  'Test User',
-  'test@example.com',
-  '640915772',
-  'barcelona',
-  'trail',
-  'This is a test message from SQL',
-  'new'
-);
+-- Paso 9: PROBAR inserción pública
+-- Ejecuta esto desde el cliente (sin autenticación):
+-- INSERT INTO contact_submissions (name, email, phone, location, service, message)
+-- VALUES ('Test Usuario', 'test@example.com', '640915772', 'Barcelona', 'Trail', 'Mensaje de prueba desde SQL');
 
--- Si el INSERT de arriba funciona: ✅ RLS configurado correctamente
--- Si da error: ❌ Hay un problema con las políticas
-
--- Test 4: Verificar que el registro se insertó
-SELECT * FROM contact_submissions 
-WHERE email = 'test@example.com'
+-- Paso 10: VERIFICAR resultado
+SELECT id, name, email, created_at, status 
+FROM contact_submissions 
 ORDER BY created_at DESC 
-LIMIT 1;
+LIMIT 5;
 
 -- ============================================
--- LIMPIEZA (OPCIONAL): Eliminar registro de prueba
--- ============================================
--- DELETE FROM contact_submissions WHERE email = 'test@example.com';
-
--- ============================================
--- 📋 INSTRUCCIONES DE USO
+-- INSTRUCCIONES DE EJECUCIÓN
 -- ============================================
 /*
-CÓMO EJECUTAR ESTE SCRIPT:
+1. Ve a Supabase Dashboard → SQL Editor
+2. Copia y pega TODO este script
+3. Haz clic en "Run" (o Ctrl+Enter)
+4. Verifica que no haya errores en la consola
+5. Prueba el formulario de contacto desde la web
+6. Si aún falla, ejecuta este comando para verificar:
+   
+   SELECT * FROM pg_roles WHERE rolname IN ('anon', 'authenticated', 'service_role');
 
-1. Ve a Supabase Dashboard: https://supabase.com/dashboard
-2. Selecciona tu proyecto: yzlhczlqzvxjcnmonjaj
-3. Click en "SQL Editor" (menú lateral izquierdo)
-4. Click en "New Query"
-5. Copia y pega TODO este archivo
-6. Click en "Run" (o presiona Ctrl+Enter)
-7. Verifica que dice "Success" sin errores
-8. Prueba el formulario de contacto en el sitio web
-
-VERIFICAR QUE FUNCIONA:
-- Ve a: https://wild-fitness.com/contacte.html
-- Llena el formulario
-- Envía
-- Debería funcionar sin el error "row-level security policy"
-- Verifica en Supabase → Table Editor → contact_submissions
-
-NOTAS:
-✅ TO anon: Permite inserts desde usuarios NO autenticados (formulario web)
-✅ TO authenticated: Solo para admins con login
-✅ WITH CHECK (true): Permite CUALQUIER valor en el insert
-✅ Las políticas de SELECT/UPDATE/DELETE solo funcionan para admins autenticados
-
-SEGURIDAD:
-🔒 Usuarios anónimos (web): Solo pueden INSERT
-🔒 Usuarios anónimos: NO pueden leer, actualizar o eliminar
-🔒 Admins autenticados: Pueden hacer todo (SELECT, UPDATE, DELETE)
-🔒 Emails admin permitidos: laura@wild-fitness.com, info@wild-fitness.com
+7. Si el error persiste, contacta con soporte de Supabase
 */
+
+-- ============================================
+-- COMENTARIO FINAL
+-- ============================================
+COMMENT ON TABLE contact_submissions IS 'Tabla para formularios de contacto - RLS configurado correctamente para inserts públicos';
