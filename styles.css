@@ -2580,9 +2580,18 @@ input:focus {
 }
 
 .pricing-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+}
+
+.pricing-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .pricing-header h3 {
@@ -3226,9 +3235,18 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .exp-icon {
-    font-size: 2.5rem;
-    display: block;
-    margin-bottom: var(--spacing-sm);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-sm);
+    color: var(--secondary-color);
+}
+
+.exp-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .experience-item h4 {
@@ -3263,9 +3281,18 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .pillar-icon {
-    font-size: 2.5rem;
-    display: block;
-    margin-bottom: var(--spacing-sm);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-sm);
+    color: var(--secondary-color);
+}
+
+.pillar-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .pillar h4 {
@@ -3394,24 +3421,76 @@ input[type="checkbox"]:checked + label .checkbox-check {
     flex-grow: 1;
 }
 
-.specialty-features li {
-    padding: 0.6rem 0;
-    color: var(--text-secondary);
-    border-bottom: 1px solid var(--bg-light);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.specialty-features li:last-child {
+    border-bottom: none;
 }
 
-.specialty-features li::before {
-    content: '→';
-    color: var(--secondary-color);
-    font-weight: bold;
-    font-size: 0.8rem;
+.specialty-cta {
+    margin-top: auto;
+}
+
+/* ============================================
+   UNIFIED LIST MARKER SYSTEM
+   ============================================ */
+.specialty-features,
+.service-features,
+.pricing-features {
+    list-style: none;
+    padding: 0;
+}
+
+.specialty-features li,
+.service-features li,
+.pricing-features li {
+    position: relative;
+    padding-left: 1.8rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.specialty-features li::before,
+.service-features li::before,
+.pricing-features li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233fb5b5' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.specialty-features li {
+    padding: 0.6rem 0 0.6rem 1.8rem;
+    border-bottom: 1px solid var(--bg-light);
 }
 
 .specialty-features li:last-child {
     border-bottom: none;
+}
+
+/* Contact Form Icon and Checkbox Fixes */
+.checkbox-check,
+.btn-submit .btn-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox-check svg,
+.btn-submit .btn-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.input-icon svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
 }
 
 .specialty-cta {
@@ -3468,16 +3547,20 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .service-card {
-    background: var(--bg-light);
+    background: white;
     padding: var(--spacing-lg);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
+    border: 1px solid var(--bg-light);
+    display: flex;
+    flex-direction: column;
 }
 
 .service-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--secondary-color);
 }
 
 .service-header {
@@ -3488,7 +3571,14 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .service-icon {
-    font-size: 2rem;
+    width: 40px;
+    height: 40px;
+    color: var(--secondary-color);
+}
+
+.service-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .service-header h3 {
@@ -3520,10 +3610,25 @@ input[type="checkbox"]:checked + label .checkbox-check {
     padding: 0;
 }
 
-.footer-contact li,
-.footer-nav li,
-.footer-legal li {
-    margin-bottom: 0.5rem;
+.footer-contact li {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text-light);
+}
+
+.footer-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--secondary-color);
+    flex-shrink: 0;
+}
+
+.footer-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 .footer-contact a,
