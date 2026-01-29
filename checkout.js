@@ -1,25 +1,25 @@
-// Checkout.js - Payment Processing with Stripe
+// Checkout.js - Processament de pagaments amb Stripe
 
 // ============================================
-// CONFIGURACIÓN DE STRIPE - LIVE MODE
+// CONFIGURACIÓ DE STRIPE - LIVE MODE
 // ============================================
 // 
-// Cuenta Stripe: ACTIVADA
-// Modo: LIVE (Pagos Reales)
-// Última actualización: 2026-01-28
+// Compte Stripe: ACTIVAT
+// Mode: LIVE (Pagaments Reals)
+// Última actualització: 2026-01-28
 //
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf';
 
 if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY === 'PONER_TU_PK_TEST_AQUI') {
     console.error('ERROR: Stripe Publishable Key no configurada');
-    console.error('Contacta al administrador del sitio');
+    console.error('Contacta amb l\'administrador del lloc');
     alert('Error de configuració de pagaments. Per favor, contacta amb l\'administrador.');
 }
 
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 const elements = stripe.elements();
 
-// Configurar el elemento de tarjeta de Stripe
+// Configurar l'element de targeta de Stripe
 const cardElement = elements.create('card', {
     style: {
         base: {
@@ -38,7 +38,7 @@ const cardElement = elements.create('card', {
 
 cardElement.mount('#card-element');
 
-// Manejar errores de validación de tarjeta
+// Gestionar errors de validació de targeta
 cardElement.on('change', (event) => {
     const displayError = document.getElementById('card-errors');
     if (event.error) {
@@ -50,7 +50,7 @@ cardElement.on('change', (event) => {
     }
 });
 
-// Programas disponibles
+// Programes disponibles
 const programs = {
     'grup-fonteta': {
         name: 'Grup Fonteta',
@@ -103,18 +103,18 @@ const programs = {
     }
 };
 
-// Variables globales
+// Variables globals
 let currentPaymentMethod = 'card';
 let selectedProgram = null;
 
-// Inicializar página
+// Inicialitzar pàgina
 document.addEventListener('DOMContentLoaded', () => {
     loadSelectedProgram();
     setupPaymentMethods();
     setupForm();
 });
 
-// Cargar programa seleccionado desde URL
+// Carregar programa seleccionat des de la URL
 function loadSelectedProgram() {
     const urlParams = new URLSearchParams(window.location.search);
     const programId = urlParams.get('program') || 'pla-basic';
@@ -122,10 +122,10 @@ function loadSelectedProgram() {
     selectedProgram = programs[programId];
     
     if (!selectedProgram) {
-        console.error('Error: Programa no encontrado:', programId);
-        console.error('Programas disponibles:', Object.keys(programs).join(', '));
+        console.error('Error: Programa no trobat:', programId);
+        console.error('Programes disponibles:', Object.keys(programs).join(', '));
         
-        // Deshabilitar el formulario
+        // Deshabilitar el formulari
         const submitBtn = document.getElementById('submit-payment');
         if (submitBtn) {
             submitBtn.disabled = true;
@@ -141,7 +141,7 @@ function loadSelectedProgram() {
     calculateTotal(selectedProgram.price);
 }
 
-// Mostrar información del programa
+// Mostrar informació del programa
 function displayProgramInfo(program) {
     document.getElementById('programName').textContent = program.name;
     document.getElementById('programDescription').textContent = program.description;
@@ -149,33 +149,33 @@ function displayProgramInfo(program) {
     document.getElementById('programPeriod').textContent = program.period;
 }
 
-// Calcular totales (precios con IVA incluido)
+// Calcular totals (preus amb IVA inclòs)
 function calculateTotal(price) {
-    const total = price; // El precio ya incluye IVA
+    const total = price; // El preu ja inclou IVA
     
     document.getElementById('total').textContent = `€${total.toFixed(2)}`;
 }
 
-// Configurar métodos de pago
+// Configurar mètodes de pagament
 function setupPaymentMethods() {
     const paymentMethodBtns = document.querySelectorAll('.payment-method-btn');
     
     paymentMethodBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Remover clase active de todos
+            // Treure classe active de tots
             paymentMethodBtns.forEach(b => b.classList.remove('active'));
             
-            // Añadir clase active al seleccionado
+            // Afegir classe active al seleccionat
             btn.classList.add('active');
             
-            // Cambiar método de pago
+            // Canviar mètode de pagament
             currentPaymentMethod = btn.dataset.method;
             togglePaymentElements(currentPaymentMethod);
         });
     });
 }
 
-// Alternar elementos de pago
+// Alternar elements de pagament
 function togglePaymentElements(method) {
     const cardPayment = document.getElementById('card-payment');
     const bizumPayment = document.getElementById('bizum-payment');
@@ -189,14 +189,14 @@ function togglePaymentElements(method) {
     }
 }
 
-// Configurar formulario
+// Configurar formulari
 function setupForm() {
     const form = document.getElementById('payment-form');
     
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Validar que hay un programa seleccionado
+        // Validar que hi ha un programa seleccionat
         if (!selectedProgram) {
             showErrorModal('No s\'ha seleccionat cap programa. Si us plau, torna a la pàgina principal.');
             return;

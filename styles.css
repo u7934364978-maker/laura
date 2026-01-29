@@ -2784,30 +2784,8 @@ input:focus {
     margin-bottom: var(--spacing-lg);
 }
 
-.form-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
 .input-wrapper {
     position: relative;
-}
-
-.input-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-    pointer-events: none;
-    opacity: 0.6;
-    z-index: 1;
-}
-
-.input-wrapper input,
-.input-wrapper textarea,
-.input-wrapper select {
-    padding-left: 3rem;
 }
 
 .input-focus-border {
