@@ -4521,3 +4521,684 @@ html {
         padding: 0.3rem 0.6rem;
     }
 }
+
+/* 🟡 IMPORTANTE: Tablet Portrait - Breakpoint intermedio (2 columnas) */
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Hero ajustado para tablets */
+    .hero {
+        min-height: 650px;
+    }
+    
+    .hero-actions {
+        flex-direction: row;
+        justify-content: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .btn-primary,
+    .btn-whatsapp {
+        width: auto;
+        min-width: 180px;
+    }
+    
+    /* Grids intermedios de 2 columnas para tablets */
+    .benefits-grid,
+    .services-grid,
+    .specialties-grid,
+    .experience-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    .philosophy-pillars {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Extra Small Devices (iPhone SE, older Android) */
+@media (max-width: 375px) {
+    .hero-title {
+        font-size: 1.4rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn-primary,
+    .btn-whatsapp {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+    }
+    
+    .logo-text {
+        font-size: 1rem;
+    }
+}
+
+/* Tablet Portrait (iPad, Android tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .hero {
+        min-height: 70vh;
+    }
+    
+    .hero-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .btn-primary,
+    .btn-whatsapp {
+        width: auto;
+        min-width: 180px;
+    }
+    
+    .benefits-grid,
+    .services-grid,
+    .specialties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 🟢 PERFORMANCE: Reducir animaciones en mobile */
+@media (max-width: 768px) {
+    /* Desactivar zoom de hero image para mejor performance */
+    .hero-image img {
+        animation: none;
+    }
+    
+    /* Simplificar transiciones en mobile */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* 🟢 PERFORMANCE: Optimizar will-change solo cuando necesario */
+.nav-list.transitioning {
+    will-change: transform;
+}
+
+.nav-list:not(.transitioning) {
+    will-change: auto;
+}
+
+/* Landscape Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        min-height: 100vh;
+        padding: var(--spacing-sm);
+    }
+    
+    .hero-content {
+        max-width: 90%;
+    }
+    
+    .hero-title {
+        font-size: 1.4rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .hero-actions {
+        flex-direction: row;
+        gap: var(--spacing-sm);
+    }
+    
+    .btn-primary,
+    .btn-whatsapp {
+        width: auto;
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* 🔴 CRÍTICO: Tap targets mínimos 44x44px para todos los elementos táctiles */
+    .nav-link,
+    .btn-primary,
+    .btn-whatsapp,
+    .btn-submit,
+    button,
+    input[type="submit"],
+    a {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Remove hover effects on touch */
+    .benefit-card:hover,
+    .service-card:hover,
+    .specialty-card:hover,
+    .blog-card:hover {
+        transform: none;
+    }
+    
+    /* Active states instead of hover */
+    .btn-primary:active,
+    .btn-whatsapp:active,
+    .btn-submit:active {
+        transform: scale(0.95);
+        opacity: 0.9;
+    }
+    
+    .nav-link:active {
+        background: rgba(63, 181, 181, 0.1);
+        border-radius: 8px;
+    }
+}
+
+/* 🟢 MEJORA: Feedback visual mejorado para inputs en mobile */
+@media (max-width: 768px) {
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border: 2px solid var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(45, 125, 125, 0.1);
+        outline: none;
+    }
+    
+    input:invalid:not(:placeholder-shown),
+    textarea:invalid:not(:placeholder-shown) {
+        border-color: var(--error-color);
+    }
+    
+    input:valid:not(:placeholder-shown),
+    textarea:valid:not(:placeholder-shown) {
+        border-color: var(--success-color);
+    }
+}
+
+/* Safe Area for iPhone X and newer (notch) */
+@supports (padding: max(0px)) {
+    .header {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+    }
+    
+    .footer {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+    
+    .hero,
+    .section {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+}
+
+/* Fix for iOS Safari bottom bar */
+.hero {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+html {
+    height: -webkit-fill-available;
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Smooth scrolling for iOS */
+body {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Fix input zoom on iOS */
+@media screen and (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="search"],
+    input[type="password"],
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Better tap highlight */
+* {
+    -webkit-tap-highlight-color: rgba(63, 181, 181, 0.2);
+    -webkit-touch-callout: none;
+}
+
+a,
+button {
+    -webkit-tap-highlight-color: rgba(63, 181, 181, 0.3);
+}
+
+/* Disable double-tap zoom on iOS */
+button,
+a,
+input[type="submit"],
+input[type="button"] {
+    touch-action: manipulation;
+}
+
+
+/* ============================================
+   🟢 PERFORMANCE: Código Firefox iOS redundante eliminado
+   Se unificó en la regla universal mobile más abajo
+   ============================================ */
+
+/* ============================================
+   UNIVERSAL MOBILE HEADER FIX (Safari + Firefox iOS)
+   ============================================ */
+
+/* Force fixed positioning on all mobile browsers */
+@media screen and (max-width: 768px) {
+    .header {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1000;
+        padding-top: env(safe-area-inset-top, 0);
+    }
+    
+    /* Add spacing after header */
+    body {
+        padding-top: 70px;
+    }
+    
+    /* Hero adjustment */
+    .hero {
+        margin-top: 0 !important;
+        padding-top: calc(var(--spacing-xl) + env(safe-area-inset-top, 0));
+    }
+    
+    /* First section after header */
+    #inici {
+        scroll-margin-top: 70px;
+    }
+}
+
+/* Ensure header is always visible (all browsers) */
+.header {
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Additional safe area padding for notched devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+    @media screen and (max-width: 768px) {
+        .header {
+            padding-top: calc(0.75rem + env(safe-area-inset-top));
+        }
+        
+        body {
+            padding-top: calc(70px + env(safe-area-inset-top));
+        }
+        
+        .hero {
+            min-height: calc(100vh - 70px - env(safe-area-inset-top));
+        }
+    }
+}
+
+/* ============================================
+   PRICING SECTION - Programes i Preus
+   ============================================ */
+
+.pricing {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #f0f9f9 0%, #ffffff 100%);
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin: 50px 0;
+}
+
+.pricing-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(45, 125, 125, 0.15);
+}
+
+.pricing-card.featured {
+    border: 3px solid #2d7d7d;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9f9 100%);
+}
+
+.pricing-badge {
+    position: absolute;
+    top: 20px;
+    right: -35px;
+    background: linear-gradient(135deg, #2d7d7d 0%, #3fb5b5 100%);
+    color: white;
+    padding: 8px 45px;
+    font-size: 13px;
+    font-weight: 600;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.pricing-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.pricing-card h3 {
+    font-size: 28px;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.pricing-description {
+    font-size: 15px;
+    color: #64748b;
+}
+
+.pricing-price {
+    text-align: center;
+    padding: 25px 0;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e5e7eb;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 5px;
+}
+
+.price-currency {
+    font-size: 24px;
+    color: #2d7d7d;
+    font-weight: 600;
+}
+
+.price-amount {
+    font-size: 56px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.price-period {
+    font-size: 18px;
+    color: #64748b;
+}
+
+.pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px 0;
+}
+
+.pricing-features li {
+    padding: 12px 0;
+    color: #475569;
+    font-size: 15px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.pricing-features li:last-child {
+    border-bottom: none;
+}
+
+.pricing-cta {
+    text-align: center;
+}
+
+.btn-pricing {
+    display: inline-block;
+    width: 100%;
+    padding: 16px 24px;
+    background: white;
+    color: #2d7d7d;
+    border: 2px solid #2d7d7d;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-pricing:hover {
+    background: #2d7d7d;
+    color: white;
+    transform: scale(1.02);
+}
+
+.btn-pricing.btn-primary {
+    background: linear-gradient(135deg, #2d7d7d 0%, #3fb5b5 100%);
+    color: white;
+    border: none;
+}
+
+.btn-pricing.btn-primary:hover {
+    background: linear-gradient(135deg, #236363 0%, #2d8a8a 100%);
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(45, 125, 125, 0.3);
+}
+
+.pricing-note {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 12px;
+}
+
+/* Additional Services */
+.additional-services {
+    margin-top: 60px;
+    padding: 40px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.additional-services h3 {
+    text-align: center;
+    font-size: 28px;
+    color: #1e293b;
+    margin-bottom: 30px;
+}
+
+.services-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.service-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    background: #f0f9f9;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.service-item:hover {
+    background: #e6f7f7;
+    transform: translateX(5px);
+}
+
+.service-item .service-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+}
+
+.service-info {
+    flex: 1;
+}
+
+.service-info h4 {
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.service-info p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.service-price {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.service-price .price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2d7d7d;
+    display: block;
+}
+
+.service-price .price-unit {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.btn-service {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #2d7d7d 0%, #3fb5b5 100%);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.btn-service:hover {
+    background: linear-gradient(135deg, #236363 0%, #2d8a8a 100%);
+    transform: scale(1.05);
+}
+
+.pricing-footer {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 40px;
+    border-top: 2px solid #e5e7eb;
+}
+
+.pricing-footer p {
+    font-size: 18px;
+    color: #475569;
+    margin-bottom: 20px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 14px 32px;
+    background: white;
+    color: #2d7d7d;
+    border: 2px solid #2d7d7d;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #2d7d7d;
+    color: white;
+}
+
+/* Responsive Pricing */
+@media (max-width: 968px) {
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .services-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .service-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .service-price {
+        text-align: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .pricing {
+        padding: 60px 0;
+    }
+    
+    .pricing-card {
+        padding: 30px 20px;
+    }
+    
+    .price-amount {
+        font-size: 48px;
+    }
+    
+    .additional-services {
+        padding: 30px 20px;
+    }
+}

@@ -265,10 +265,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.modal-icon svg {
-    margin: 0 auto;
+    font-size: 24px;
 }
 
 .bizum-info p {

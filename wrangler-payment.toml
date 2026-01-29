@@ -1,0 +1,33 @@
+# Cloudflare Worker Configuration for Payment Processing
+# Wild Fitness - Stripe Payment Integration
+
+name = "wild-fitness-payments"
+main = "payment-worker.js"
+compatibility_date = "2024-01-20"
+
+# Worker type
+workers_dev = true
+
+# Routes (add your custom domain routes in production)
+# routes = [
+#   { pattern = "wildbreathing.com/api/payments/*", zone_name = "wildbreathing.com" }
+# ]
+
+# Environment Variables (configure via `wrangler secret put`)
+# STRIPE_SECRET_KEY - Your Stripe secret key (sk_test_... or sk_live_...)
+# STRIPE_WEBHOOK_SECRET - Webhook signing secret (whsec_...)
+# SUPABASE_URL - (Optional) Supabase project URL
+# SUPABASE_KEY - (Optional) Supabase API key
+
+[env.production]
+name = "wild-fitness-payments"
+vars = { ENVIRONMENT = "production" }
+
+[env.staging]
+name = "wild-fitness-payments-staging"
+vars = { ENVIRONMENT = "staging" }
+
+# Usage Model
+usage_model = "bundled"
+
+# Rate limiting configurado en el código del worker

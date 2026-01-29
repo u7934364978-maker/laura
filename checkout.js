@@ -39,6 +39,7 @@ const cardElement = elements.create('card', {
 cardElement.mount('#card-element');
 
 // Gestionar errors de validació de targeta
+
 cardElement.on('change', (event) => {
     const displayError = document.getElementById('card-errors');
     if (event.error) {
@@ -51,6 +52,7 @@ cardElement.on('change', (event) => {
 });
 
 // Programes disponibles
+
 const programs = {
     'grup-fonteta': {
         name: 'Grup Fonteta',
@@ -108,6 +110,7 @@ let currentPaymentMethod = 'card';
 let selectedProgram = null;
 
 // Inicialitzar pàgina
+
 document.addEventListener('DOMContentLoaded', () => {
     loadSelectedProgram();
     setupPaymentMethods();
@@ -142,6 +145,7 @@ function loadSelectedProgram() {
 }
 
 // Mostrar informació del programa
+
 function displayProgramInfo(program) {
     document.getElementById('programName').textContent = program.name;
     document.getElementById('programDescription').textContent = program.description;
@@ -149,14 +153,19 @@ function displayProgramInfo(program) {
     document.getElementById('programPeriod').textContent = program.period;
 }
 
-// Calcular totals (preus amb IVA inclòs)
+// Calcular totals amb IVA
 function calculateTotal(price) {
-    const total = price; // El preu ja inclou IVA
+    const total = price; // El preu ja inclou IVA segons la definició
+    const subtotal = Math.round((total / 1.21) * 100) / 100;
+    const iva = Math.round((total - subtotal) * 100) / 100;
     
+    document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2)}`;
+    document.getElementById('iva').textContent = `€${iva.toFixed(2)}`;
     document.getElementById('total').textContent = `€${total.toFixed(2)}`;
 }
 
 // Configurar mètodes de pagament
+
 function setupPaymentMethods() {
     const paymentMethodBtns = document.querySelectorAll('.payment-method-btn');
     
@@ -169,6 +178,7 @@ function setupPaymentMethods() {
             btn.classList.add('active');
             
             // Canviar mètode de pagament
+
             currentPaymentMethod = btn.dataset.method;
             togglePaymentElements(currentPaymentMethod);
         });
@@ -176,6 +186,7 @@ function setupPaymentMethods() {
 }
 
 // Alternar elements de pagament
+
 function togglePaymentElements(method) {
     const cardPayment = document.getElementById('card-payment');
     const bizumPayment = document.getElementById('bizum-payment');
@@ -190,6 +201,7 @@ function togglePaymentElements(method) {
 }
 
 // Configurar formulari
+
 function setupForm() {
     const form = document.getElementById('payment-form');
     
@@ -202,6 +214,7 @@ function setupForm() {
             return;
         }
         
+
         // Validar términos y condiciones
         const acceptTerms = document.getElementById('acceptTerms').checked;
         if (!acceptTerms) {
@@ -243,6 +256,7 @@ async function processCardPayment(name, email, phone) {
             throw new Error('No s\'ha seleccionat cap programa');
         }
         
+
         // 1. Crear Payment Intent en el servidor
         const paymentIntent = await createPaymentIntent({
             amount: calculateTotalAmount(),
@@ -262,6 +276,7 @@ async function processCardPayment(name, email, phone) {
             throw new Error('No s\'ha rebut el client secret del servidor');
         }
         
+
         // 2. Confirmar el pago con Stripe
         const { error, paymentIntent: confirmedPayment } = await stripe.confirmCardPayment(
             paymentIntent.clientSecret,
@@ -304,6 +319,7 @@ async function processBizumPayment(name, email, phone) {
         throw new Error('No s\'ha seleccionat cap programa');
     }
     
+
     try {
         // Bizum en Stripe se maneja mediante payment_method_types: ['card', 'bizum']
         // Nota: Bizum requiere configuración adicional con tu banco en España
@@ -347,6 +363,7 @@ async function createPaymentIntent(data) {
         // Llamar al Cloudflare Worker para crear el Payment Intent
         // El worker maneja la clave secreta de forma segura
         const workerUrl = '/api/create-payment-intent';
+
         
         const response = await fetch(workerUrl, {
             method: 'POST',
@@ -395,6 +412,7 @@ async function createPaymentIntent(data) {
     } catch (error) {
         console.error('Error creant Payment Intent:', error);
         console.error('Error details:', error.message);
+
         throw error;
     }
 }
@@ -406,6 +424,7 @@ function calculateTotalAmount() {
         throw new Error('No s\'ha seleccionat cap programa');
     }
     const total = selectedProgram.price; // El precio ya incluye IVA
+
     return Math.round(total * 100); // Convertir a centavos
 }
 
