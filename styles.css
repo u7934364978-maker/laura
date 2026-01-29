@@ -1487,16 +1487,17 @@ img.image-error {
     .hero-actions {
         flex-direction: column;
         width: 100%;
-        max-width: 280px;
+        max-width: 240px; /* Reducido de 280px */
         margin: 0 auto 1rem;
-        gap: 0.6rem;
+        gap: 0.5rem;
     }
 
     .btn-primary, .btn-whatsapp {
         width: 100%;
         justify-content: center;
-        padding: 0.8rem 1.5rem;
-        min-height: 44px;
+        padding: 0.7rem 1.25rem; /* Reducido de 0.8rem 1.5rem */
+        min-height: 40px; /* Reducido ligeramente */
+        font-size: 0.9rem; /* Fuente más pequeña */
     }
 
     /* 🔴 CRÍTICO: Optimitzar hero-badges en mòbil */
