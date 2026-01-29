@@ -478,3 +478,58 @@ if ('serviceWorker' in navigator) {
         //     .catch(err => console.log('✗ SW registration failed'));
     });
 }
+
+// ============================================
+// Page Index - Smooth Scroll & Active State
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    const indexLinks = document.querySelectorAll('.index-nav a');
+    const sections = Array.from(indexLinks).map(link => document.querySelector(link.getAttribute('href'))).filter(s => s !== null);
+    
+    // Smooth scroll for index links
+    indexLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const targetId = link.getAttribute('href');
+            if (targetId.startsWith('#')) {
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const indexHeight = document.querySelector('.page-index').offsetHeight;
+                    const extraPadding = 20;
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - headerHeight - indexHeight - extraPadding,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active class immediately
+                    indexLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            }
+        });
+    });
+
+    // Intersection Observer for highlighting index links on scroll
+    const observerOptions = {
+        root: null,
+        rootMargin: '-150px 0px -60% 0px',
+        threshold: 0
+    };
+
+    const indexObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                indexLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        if (section) indexObserver.observe(section);
+    });
+});
