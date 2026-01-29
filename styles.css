@@ -4400,3 +4400,47 @@ html {
 }
 
 
+
+/* SVG Icon Scaling and Alignment */
+.card-icon svg {
+    width: 48px;
+    height: 48px;
+    stroke: currentColor;
+}
+
+.whatsapp-card .card-icon svg {
+    color: white;
+}
+
+.detail-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--secondary-color);
+}
+
+.commitment-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-left: 0 !important;
+}
+
+.check-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--secondary-color);
+    flex-shrink: 0;
+}
+
+.footer-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--secondary-color);
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.footer-column ul li {
+    display: flex;
+    align-items: center;
+}
