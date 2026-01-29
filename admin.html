@@ -601,13 +601,15 @@
     <div class="admin-login-page" id="loginPage">
         <div class="admin-login-container">
             <div class="admin-login-header">
-                <div class="admin-login-logo">🔐</div>
+                <div class="admin-login-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 60px; height: 60px; color: #2d7d7d; margin: 0 auto;"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
                 <h1 class="admin-login-title">Panell d'Administració</h1>
                 <p class="admin-login-subtitle">Wild Fitness - Accés restringit</p>
             </div>
             
             <div class="login-error" id="loginError">
-                ❌ Credencials incorrectes. Si us plau, torna-ho a intentar.
+                Credencials incorrectes. Si us plau, torna-ho a intentar.
             </div>
             
             <form class="admin-login-form" id="adminLoginForm">
@@ -637,12 +639,12 @@
                 </div>
                 
                 <button type="submit" class="btn-login">
-                    🔓 Iniciar Sessió
+                    Iniciar Sessió
                 </button>
             </form>
             
             <div class="back-link">
-                <a href="calendari.html">← Tornar al Calendari Públic</a>
+                <a href="calendari.html">Tornar al Calendari Públic</a>
             </div>
         </div>
     </div>
@@ -700,7 +702,9 @@
                                 <div class="stat-label">Pròximes Activitats</div>
                                 <div class="stat-value" id="upcomingActivities">0</div>
                             </div>
-                            <div class="stat-icon">📅</div>
+                            <div class="stat-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 32px; height: 32px; color: #2d7d7d;"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                            </div>
                         </div>
                     </div>
                     
@@ -710,7 +714,9 @@
                                 <div class="stat-label">Places Disponibles</div>
                                 <div class="stat-value" id="availableSpots">0</div>
                             </div>
-                            <div class="stat-icon">✅</div>
+                            <div class="stat-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 32px; height: 32px; color: #2d7d7d;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -726,7 +732,8 @@
                 <div class="panel-header">
                     <h2 class="panel-title">Gestió d'Activitats</h2>
                     <button class="btn-primary" id="btnNewActivity">
-                        ➕ Nova Activitat
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+                        Nova Activitat
                     </button>
                 </div>
                 
@@ -784,11 +791,11 @@
                         <div class="form-group">
                             <label for="activityType">Tipus *</label>
                             <select id="activityType" required style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px;">
-                                <option value="trail">🏃 Trail Running</option>
-                                <option value="trekking">⛰️ Trekking</option>
-                                <option value="training">💪 Entrenament</option>
-                                <option value="yoga">🧘 Yoga</option>
-                                <option value="workshop">🎯 Workshop</option>
+                                <option value="trail">Trail Running</option>
+                                <option value="trekking">Trekking</option>
+                                <option value="training">Entrenament</option>
+                                <option value="yoga">Yoga</option>
+                                <option value="workshop">Workshop</option>
                             </select>
                         </div>
                         
@@ -839,7 +846,10 @@
                     
                     <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px;">
                         <button type="button" class="btn-secondary" id="cancelActivityForm">Cancel·lar</button>
-                        <button type="submit" class="btn-primary">💾 Guardar Activitat</button>
+                        <button type="submit" class="btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Guardar Activitat
+                        </button>
                     </div>
                 </form>
             </div>
@@ -1333,15 +1343,28 @@
                 const list = document.getElementById('modalParticipantsList');
                 
                 if (!activity.participants || activity.participants.length === 0) {
-                    list.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><h3>No hi ha participants</h3></div>';
+                    list.innerHTML = `
+                        <div class="empty-state" style="text-align: center; padding: 40px 20px;">
+                            <div class="empty-icon" style="margin-bottom: 15px; color: #94a3b8;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <h3 style="color: #64748b; font-size: 18px;">No hi ha participants</h3>
+                        </div>`;
                 } else {
                     list.innerHTML = activity.participants.map(p => `
-                        <div class="participant-item">
+                        <div class="participant-item" style="padding: 15px; border-bottom: 1px solid #f1f5f9;">
                             <div class="participant-info">
-                                <h4>${p.name}</h4>
-                                <p>📧 ${p.email}</p>
-                                ${p.phone ? `<p>📱 ${p.phone}</p>` : ''}
-                                ${p.notes ? `<p style="margin-top: 8px; font-style: italic;">${p.notes}</p>` : ''}
+                                <h4 style="margin-bottom: 5px; color: #1e293b;">${p.name}</h4>
+                                <p style="display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 14px; margin-bottom: 4px;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                    <a href="mailto:${p.email}" style="color: inherit; text-decoration: none;">${p.email}</a>
+                                </p>
+                                ${p.phone ? `
+                                <p style="display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 14px; margin-bottom: 4px;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <a href="tel:${p.phone}" style="color: inherit; text-decoration: none;">${p.phone}</a>
+                                </p>` : ''}
+                                ${p.notes ? `<p style="margin-top: 8px; font-style: italic; color: #64748b; font-size: 14px;">${p.notes}</p>` : ''}
                                 <p style="margin-top: 8px; font-size: 12px; color: #94a3b8;">Reservat: ${new Date(p.bookedAt).toLocaleString('ca-ES')}</p>
                             </div>
                         </div>

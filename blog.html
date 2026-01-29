@@ -29,7 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- TrustBox script -->
-    <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+    <script type="text/javascript" src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
     <!-- End TrustBox script -->
 </head>
 <body>
@@ -39,7 +39,6 @@
             <div class="header-content">
                 <div class="logo">
                     <a href="index.html" aria-label="Wild Fitness - Inici">
-                        <span class="logo-icon">🏔️</span>
                         <span class="logo-text">WILD FITNESS</span>
                     </a>
                 </div>
@@ -51,10 +50,10 @@
                         <li><a href="index.html#serveis" class="nav-link">Serveis</a></li>
                         <li><a href="blog.html" class="nav-link active">Blog</a></li>
                         <li><a href="calendari.html" class="nav-link">Calendari d'activitats</a></li>
+                        <li><a href="https://es.trustpilot.com/review/wild-fitness.com" class="nav-link" target="_blank" rel="noopener">Opiniones</a></li>
                         <li><a href="contacte.html" class="nav-link">Contacte</a></li>
                         <li><a href="contacte.html" class="nav-link nav-cta">
                             <span class="cta-text">Prova Gratuïta</span>
-                            <span class="cta-arrow">→</span>
                         </a></li>
                     </ul>
                 </nav>
@@ -78,7 +77,6 @@
         <div class="container">
             <div class="toc-wrapper">
                 <div class="toc-header">
-                    <span class="toc-icon">📚</span>
                     <h2>Índex d'Articles</h2>
                     <p>Navega ràpidament pels nostres articles</p>
                 </div>
@@ -88,43 +86,45 @@
                         <div class="toc-category">Entrenament</div>
                         <h3>Com Preparar-te per la Teva Primera Trail</h3>
                         <p>Guia completa per principiants 2026</p>
-                        <span class="toc-arrow">→</span>
+
                     </a>
 
                     <a href="#article-2" class="toc-card">
                         <div class="toc-category">Nutrició</div>
                         <h3>Nutrició Esportiva per Trail Runners</h3>
                         <p>Què menjar abans, durant i després</p>
-                        <span class="toc-arrow">→</span>
+
                     </a>
 
                     <a href="#article-3" class="toc-card">
                         <div class="toc-category">Força</div>
                         <h3>5 Exercicis de Força Essencials</h3>
                         <p>Exercicis específics per trail runners</p>
-                        <span class="toc-arrow">→</span>
+
                     </a>
 
                     <a href="#article-4" class="toc-card">
                         <div class="toc-category">Rutes</div>
                         <h3>Top 10 Rutes de Trail Running</h3>
                         <p>Les millors rutes a Catalunya</p>
-                        <span class="toc-arrow">→</span>
+
                     </a>
 
                     <a href="#article-5" class="toc-card">
                         <div class="toc-category">Motivació</div>
                         <h3>Els Beneficis d'Entrenar en Grup</h3>
                         <p>Per què entrenar acompanyat és millor</p>
-                        <span class="toc-arrow">→</span>
+
                     </a>
 
                     <a href="#article-6" class="toc-card toc-featured">
-                        <div class="toc-badge">⭐ NOU</div>
+                        <div class="toc-badge">
+                            NOU
+                        </div>
                         <div class="toc-category">Rutes</div>
                         <h3>Trail Running als Pirineus Catalans</h3>
                         <p>Guía completa 2026 dels Pirineus</p>
-                        <span class="toc-arrow">→</span>
+
                     </a>
                 </div>
 
@@ -3711,10 +3711,10 @@
                 <div class="footer-contact">
                     <h4>Contacte</h4>
                     <ul>
-                        <li>📞 <a href="tel:+34640915772">640 915 772</a></li>
-                        <li>💬 <a href="https://wa.me/34640915772">WhatsApp</a></li>
-                        <li>📧 <a href="mailto:info@wild-fitness.com">info@wild-fitness.com</a></li>
-                        <li>💳 Bizum: 640 915 772</li>
+                        <li><a href="tel:+34640915772">640 915 772</a></li>
+                        <li><a href="https://wa.me/34640915772" target="_blank" rel="noopener">WhatsApp</a></li>
+                        <li><a href="mailto:info@wild-fitness.com">info@wild-fitness.com</a></li>
+                        <li>Bizum: 640 915 772</li>
                     </ul>
                 </div>
                 
@@ -3751,32 +3751,9 @@
         </div>
     </footer>
 
-    <!-- Back to TOC Button -->
-    <a href="#" class="back-to-toc" id="backToTop" aria-label="Tornar a dalt">
-        ↑
-    </a>
+
 
     <script src="script.js"></script>
-    <script>
-        // Back to top button functionality
-        const backToTop = document.getElementById('backToTop');
-        
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        });
-
-        backToTop.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
 </body>
 </html>
 >

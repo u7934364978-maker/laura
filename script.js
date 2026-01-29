@@ -168,7 +168,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for animation
 const animateElements = document.querySelectorAll(
-    '.schedule-content, .pricing, .gallery-grid, .contact-wrapper, .blog-grid, .feature-item, .about-content, .experience-section'
+    '.schedule-content, .pricing, .gallery-grid, .contact-wrapper, .blog-grid, .feature-item, .about-content, .experience-section, .specialty-card'
 );
 
 animateElements.forEach(el => {
@@ -251,9 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 if (img.complete && img.naturalHeight !== 0) {
+                    img.classList.remove('image-loading');
                     img.classList.add('image-loaded');
+                    observer.unobserve(img);
                 }
-                observer.unobserve(img);
             }
         });
     }, { threshold: 0.01 });
@@ -282,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const handleLoad = () => {
             img.classList.remove('image-loading');
             img.classList.add('image-loaded');
+            imageFadeObserver.unobserve(img);
             loadedImages++;
         };
         

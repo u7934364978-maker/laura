@@ -1,19 +1,19 @@
 // Checkout.js - Payment Processing with Stripe
 
 // ============================================
-// ✅ CONFIGURACIÓN DE STRIPE - LIVE MODE
+// CONFIGURACIÓN DE STRIPE - LIVE MODE
 // ============================================
 // 
-// Cuenta Stripe: ACTIVADA ✅
+// Cuenta Stripe: ACTIVADA
 // Modo: LIVE (Pagos Reales)
 // Última actualización: 2026-01-28
 //
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SrimkKOKBlj0PU4E0Hwmgo6GmX9BwUVlskqk3CoTKj2jlJx32V8Bs1oMhSv4RdSXfMzxSHphXgtQ6rGYZdKqjlw00L6KLhGIf';
 
 if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY === 'PONER_TU_PK_TEST_AQUI') {
-    console.error('❌ ERROR: Stripe Publishable Key no configurada');
-    console.error('📝 Contacta al administrador del sitio');
-    alert('⚠️ Error de configuración de pagos. Por favor, contacta con el administrador.');
+    console.error('ERROR: Stripe Publishable Key no configurada');
+    console.error('Contacta al administrador del sitio');
+    alert('Error de configuració de pagaments. Per favor, contacta amb l\'administrador.');
 }
 
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
@@ -122,8 +122,8 @@ function loadSelectedProgram() {
     selectedProgram = programs[programId];
     
     if (!selectedProgram) {
-        console.error('❌ Error: Programa no encontrado:', programId);
-        console.error('❌ Programas disponibles:', Object.keys(programs).join(', '));
+        console.error('Error: Programa no encontrado:', programId);
+        console.error('Programas disponibles:', Object.keys(programs).join(', '));
         
         // Deshabilitar el formulario
         const submitBtn = document.getElementById('submit-payment');
@@ -254,11 +254,11 @@ async function processCardPayment(name, email, phone) {
             programName: selectedProgram.name
         });
         
-        console.log('✅ Payment Intent received:', paymentIntent);
-        console.log('✅ Client Secret:', paymentIntent.clientSecret);
+        console.log('Payment Intent received:', paymentIntent);
+        console.log('Client Secret:', paymentIntent.clientSecret);
         
         if (!paymentIntent || !paymentIntent.clientSecret) {
-            console.error('❌ Payment Intent inválido:', paymentIntent);
+            console.error('Payment Intent inválido:', paymentIntent);
             throw new Error('No s\'ha rebut el client secret del servidor');
         }
         
@@ -358,8 +358,8 @@ async function createPaymentIntent(data) {
         
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('❌ Response Status:', response.status);
-            console.error('❌ Response Body:', errorText);
+            console.error('Response Status:', response.status);
+            console.error('Response Body:', errorText);
             
             let errorData;
             try {
@@ -374,16 +374,16 @@ async function createPaymentIntent(data) {
         
         const paymentIntent = await response.json();
         
-        console.log('📦 Raw API Response:', paymentIntent);
-        console.log('🔑 clientSecret (camelCase):', paymentIntent.clientSecret);
-        console.log('🔑 client_secret (underscore):', paymentIntent.client_secret);
-        console.log('🆔 id:', paymentIntent.id);
+        console.log('Raw API Response:', paymentIntent);
+        console.log('clientSecret (camelCase):', paymentIntent.clientSecret);
+        console.log('client_secret (underscore):', paymentIntent.client_secret);
+        console.log('id:', paymentIntent.id);
         
         // La API devuelve clientSecret (camelCase), no client_secret
         const clientSecret = paymentIntent.clientSecret || paymentIntent.client_secret;
         
         if (!clientSecret) {
-            console.error('❌ API Response no contiene client_secret ni clientSecret:', paymentIntent);
+            console.error('API Response no contiene client_secret ni clientSecret:', paymentIntent);
             throw new Error('El servidor no ha devuelto el client_secret necesario');
         }
         
@@ -393,8 +393,8 @@ async function createPaymentIntent(data) {
         };
         
     } catch (error) {
-        console.error('❌ Error creant Payment Intent:', error);
-        console.error('❌ Error details:', error.message);
+        console.error('Error creant Payment Intent:', error);
+        console.error('Error details:', error.message);
         throw error;
     }
 }
@@ -402,7 +402,7 @@ async function createPaymentIntent(data) {
 // Calcular monto total en centavos (precio con IVA incluido)
 function calculateTotalAmount() {
     if (!selectedProgram) {
-        console.error('❌ Error: No hay programa seleccionado');
+        console.error('Error: No hay programa seleccionado');
         throw new Error('No s\'ha seleccionat cap programa');
     }
     const total = selectedProgram.price; // El precio ya incluye IVA
