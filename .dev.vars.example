@@ -6,7 +6,7 @@ RESEND_API_KEY=re_PqB74G7k_LannUNVYVZddLQUJhxJKZVBm
 
 # Email remitente (FROM)
 # Opción 1 (RECOMENDADO): Usa tu dominio verificado
-FROM_EMAIL=Wild Fitness <noreply@wild-fitness.com>
+FROM_EMAIL=Wild Fitness <noreply@updates.wild-fitness.com>
 
 # Opción 2 (TEMPORAL): Usa dominio de prueba de Resend
 # FROM_EMAIL=onboarding@resend.dev
