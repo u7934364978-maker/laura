@@ -2662,11 +2662,7 @@ input:focus {
 }
 
 .pricing-features li {
-    padding: 0.75rem 0;
     color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
     font-size: 1rem;
     border-bottom: 1px solid var(--border-color);
 }
@@ -3444,9 +3440,10 @@ input[type="checkbox"]:checked + label .checkbox-check {
 .service-features li,
 .pricing-features li {
     position: relative;
-    padding-left: 1.8rem;
-    margin-bottom: 0.5rem;
+    padding-left: 2rem; /* Augmentat per evitar solapament */
+    margin-bottom: 0.6rem;
     display: block;
+    line-height: 1.5;
 }
 
 .specialty-features li::before,
@@ -3464,7 +3461,7 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .specialty-features li {
-    padding: 0.6rem 0 0.6rem 1.8rem;
+    padding: 0.6rem 0 0.6rem 2rem;
     border-bottom: 1px solid var(--bg-light);
 }
 
@@ -3597,7 +3594,6 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .service-features li {
-    padding: 0.5rem 0;
     color: var(--text-secondary);
 }
 
