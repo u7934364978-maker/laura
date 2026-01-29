@@ -3017,6 +3017,20 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 /* ============================================
+   TESTIMONIALS (TRUSTPILOT)
+   ============================================ */
+.testimonials {
+    padding: var(--spacing-xl) 0;
+    background: var(--bg-white);
+    border-top: 1px solid var(--border-color);
+}
+
+.testimonials .trustpilot-widget {
+    margin-top: var(--spacing-md);
+    min-height: 140px;
+}
+
+/* ============================================
    PHOTO GALLERY
    ============================================ */
 .photo-gallery {
