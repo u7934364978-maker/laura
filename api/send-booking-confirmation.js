@@ -4,7 +4,7 @@ export const config = {
 };
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = 'Wild Fitness <hola@wild-fitness.com>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Wild Fitness <noreply@updates.wild-fitness.com>';
 
 const EmailTemplates = {
   bookingConfirmation: (booking, activity) => {

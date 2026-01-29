@@ -5186,6 +5186,13 @@ input[type="button"] {
 }
 
 @media (max-width: 640px) {
+    .btn-secondary {
+        padding: 10px 20px;
+        font-size: 15px;
+        width: auto;
+        display: inline-block;
+    }
+    
     .pricing {
         padding: 60px 0;
     }

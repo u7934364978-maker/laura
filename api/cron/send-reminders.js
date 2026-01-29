@@ -4,8 +4,8 @@ export const config = {
 };
 
 const CONFIG = {
-  fromEmail: 'Wild Fitness <hola@wild-fitness.com>',
-  adminEmail: 'info@wild-fitness.com',
+  fromEmail: process.env.FROM_EMAIL || 'Wild Fitness <noreply@updates.wild-fitness.com>',
+  adminEmail: process.env.ADMIN_EMAIL || 'info@wild-fitness.com',
   resendApiUrl: 'https://api.resend.com/emails'
 };
 

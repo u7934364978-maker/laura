@@ -9,7 +9,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 // Para usar Resend correctamente, necesitas:
 // 1. Verificar el dominio wild-fitness.com en https://resend.com/domains
 // 2. O usar un dominio alternativo verificado (ej: noreply@resend.dev para pruebas)
-const FROM_EMAIL = process.env.FROM_EMAIL || 'onboarding@resend.dev';  // ✅ Dominio por defecto verificado
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Wild Fitness <noreply@updates.wild-fitness.com>';  // ✅ Dominio verificado en Resend
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'info@wild-fitness.com';
 
 const EmailTemplates = {
