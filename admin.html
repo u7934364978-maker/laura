@@ -1006,10 +1006,10 @@
                 loadActivities();
                 updateDashboard();
                 
-                // Suscribirse a cambios en tiempo real de Supabase
+                // Subscriure's a canvis en temps real de Supabase
                 subscribeToActivities((payload) => {
-                    console.log('🔄 Cambio en tiempo real detectado:', payload.eventType);
-                    loadActivities(); // Recargar actividades cuando hay cambios
+                    console.log('🔄 Canvi en temps real detectat:', payload.eventType);
+                    loadActivities(); // Recarregar activitats quan hi ha canvis
                 });
             }
             
@@ -1022,34 +1022,34 @@
             }
             
             async function loadActivities() {
-                console.log('🔄 Cargando actividades desde Supabase...');
+                console.log('🔄 Carregant activitats des de Supabase...');
                 
-                // Intentar cargar desde Supabase
+                // Intentar carregar des de Supabase
                 const supabaseActivities = await getActivities();
                 
                 if (supabaseActivities && supabaseActivities.length > 0) {
                     activities = supabaseActivities;
-                    console.log(`✅ ${activities.length} actividades cargadas desde Supabase`);
+                    console.log(`✅ ${activities.length} activitats carregades des de Supabase`);
                     updateDashboard();
                     return;
                 }
                 
-                // Fallback: cargar desde localStorage si Supabase no está configurado
-                console.log('⚠️ Supabase no disponible, usando localStorage como fallback');
+                // Fallback: carregar des de localStorage si Supabase no està configurat
+                console.log('⚠️ Supabase no disponible, usant localStorage com a fallback');
                 const stored = localStorage.getItem('wild_fitness_activities');
                 activities = stored ? JSON.parse(stored) : [];
-                console.log(`📦 ${activities.length} actividades cargadas desde localStorage`);
+                console.log(`📦 ${activities.length} activitats carregades des de localStorage`);
                 updateDashboard();
             }
             
             async function saveActivities() {
-                console.log('💾 Guardando actividades...');
+                console.log('💾 Guardant activitats...');
                 
-                // Guardar en localStorage como backup
+                // Guardar a localStorage com a backup
                 localStorage.setItem('wild_fitness_activities', JSON.stringify(activities));
                 
-                // Nota: Las actividades ya se guardan en Supabase individualmente
-                // con createActivity, updateActivity, deleteActivityFromDB
+                // Nota: Les activitats ja es guarden a Supabase individualment
+                // amb createActivity, updateActivity, deleteActivityFromDB
                 
                 // Broadcast a otras pestañas
                 try {
@@ -1247,10 +1247,10 @@
                 
                 try {
                     if (currentEditingId) {
-                        // EDITAR actividad existente
-                        console.log('✏️ Editando actividad:', currentEditingId);
+                        // EDITAR activitat existent
+                        console.log('✏️ Editant activitat:', currentEditingId);
                         
-                        // Mantener enrolled y participants
+                        // Mantenir enrolled i participants
                         const existing = activities.find(a => a.id === currentEditingId);
                         if (existing) {
                             activityData.enrolled = existing.enrolled;
@@ -1260,7 +1260,7 @@
                         const updated = await updateActivity(currentEditingId, activityData);
                         
                         if (updated) {
-                            // Actualizar en el array local
+                            // Actualitzar a l'array local
                             const index = activities.findIndex(a => a.id === currentEditingId);
                             if (index !== -1) {
                                 activities[index] = updated;
@@ -1268,12 +1268,12 @@
                             closeActivityModal();
                             alert('✅ Activitat actualitzada correctament!');
                         } else {
-                            alert('❌ Error al actualizar la activitat. Intenta de nou.');
+                            alert('❌ Error en actualitzar l\'activitat. Torna-ho a intentar.');
                             return;
                         }
                     } else {
-                        // CREAR nueva actividad
-                        console.log('➕ Creando nueva actividad');
+                        // CREAR nova activitat
+                        console.log('➕ Creant nova activitat');
                         
                         activityData.enrolled = 0;
                         const created = await createActivity(activityData);
@@ -1283,17 +1283,17 @@
                             closeActivityModal();
                             alert('✅ Activitat creada correctament!');
                         } else {
-                            alert('❌ Error al crear la activitat. Intenta de nou.');
+                            alert('❌ Error en crear l\'activitat. Torna-ho a intentar.');
                             return;
                         }
                     }
                     
-                    // Guardar en localStorage como backup y actualizar UI
+                    // Guardar a localStorage com a backup i actualitzar UI
                     await saveActivities();
                     
                 } catch (error) {
                     console.error('❌ Error:', error);
-                    alert('❌ Error al guardar la activitat: ' + error.message);
+                    alert('❌ Error en guardar l\'activitat: ' + error.message);
                 }
             }
             
@@ -1320,7 +1320,7 @@
             window.deleteActivity = async function(id) {
                 if (confirm('⚠️ Estàs segur que vols eliminar aquesta activitat?')) {
                     try {
-                        console.log('🗑️ Eliminando actividad:', id);
+                        console.log('🗑️ Eliminant activitat:', id);
                         const success = await deleteActivityFromDB(id);
                         
                         if (success) {
@@ -1330,7 +1330,7 @@
                         }
                     } catch (error) {
                         console.error('❌ Error:', error);
-                        alert('❌ Error al eliminar la activitat: ' + error.message);
+                        alert('❌ Error en eliminar l\'activitat: ' + error.message);
                     }
                 }
             };

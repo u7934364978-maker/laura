@@ -3454,7 +3454,8 @@ input[type="checkbox"]:checked + label .checkbox-check {
     content: '';
     position: absolute;
     left: 0;
-    top: 0.2rem;
+    top: 50%;
+    transform: translateY(-50%);
     width: 1.2rem;
     height: 1.2rem;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233fb5b5' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");

@@ -37,7 +37,7 @@
     <section class="checkout-section">
         <div class="container">
             <div class="checkout-container">
-                <!-- Resumen del pedido -->
+                <!-- Resum de la comanda -->
                 <div class="order-summary">
                     <h2>Resum de la Comanda</h2>
                     
@@ -65,12 +65,12 @@
                     </div>
                 </div>
 
-                <!-- Formulario de pago -->
+                <!-- Formulari de pagament -->
                 <div class="payment-form">
                     <h2>Informació de Pagament</h2>
 
                     <form id="payment-form">
-                        <!-- Información del cliente -->
+                        <!-- Informació del client -->
                         <div class="form-section">
                             <h3>Dades Personals</h3>
                             
@@ -90,7 +90,7 @@
                             </div>
                         </div>
 
-                        <!-- Método de pago -->
+                        <!-- Mètode de pagament -->
                         <div class="form-section">
                             <h3>Mètode de Pagament</h3>
                             
@@ -99,7 +99,7 @@
                                     <span>Targeta de Crèdit/Dèbit</span>
                                 </button>
                                 
-                                <!-- Bizum deshabilitado temporalmente - Requiere activación en Stripe Dashboard -->
+                                <!-- Bizum deshabilitat temporalment - Requereix activació a Stripe Dashboard -->
                                 <!-- 
                                 <button type="button" class="payment-method-btn" data-method="bizum">
                                     <div class="bizum-icon">
@@ -110,12 +110,12 @@
                                 -->
                             </div>
 
-                            <!-- Elemento de Stripe para tarjeta -->
+                            <!-- Element de Stripe per a targeta -->
                             <div id="card-payment" class="payment-element-container">
                                 <div class="form-group">
                                     <label>Informació de la Targeta</label>
                                     <div id="card-element">
-                                        <!-- Stripe Card Element se insertará aquí -->
+                                        <!-- Stripe Card Element s'inserirà aquí -->
                                     </div>
                                     <div id="card-errors" role="alert"></div>
                                 </div>
@@ -141,7 +141,7 @@
                             </div>
                         </div>
 
-                        <!-- Términos y condiciones -->
+                        <!-- Termes i condicions -->
                         <div class="form-section">
                             <div class="form-group checkbox-group">
                                 <label class="checkbox-label">
@@ -151,7 +151,7 @@
                             </div>
                         </div>
 
-                        <!-- Botón de pago -->
+                        <!-- Botó de pagament -->
                         <button type="submit" class="btn btn-primary btn-pay" id="submit-payment">
                             <span class="btn-text">Pagar Ara</span>
                             <span class="btn-loader" style="display: none;">
@@ -176,7 +176,7 @@
         </div>
     </section>
 
-    <!-- Modal de éxito -->
+    <!-- Modal d'èxit -->
     <div id="success-modal" class="modal" style="display: none;">
         <div class="modal-content success">
             <h2>Pagament Completat!</h2>
@@ -186,7 +186,7 @@
         </div>
     </div>
 
-    <!-- Modal de error -->
+    <!-- Modal d'error -->
     <div id="error-modal" class="modal" style="display: none;">
         <div class="modal-content error">
             <h2>Error en el Pagament</h2>

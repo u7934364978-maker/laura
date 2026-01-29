@@ -4,7 +4,7 @@
 ![Status](https://img.shields.io/badge/Status-Active-4CAF50?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Web-D84315?style=for-the-badge)
 
-## 🏔️ Sobre el Proyecto
+## 🏔️ Sobre el Projecte
 
 **Wild Fitness** és la plataforma web professional de Laura Ramírez, entrenadora personal independent especialitzada en entrenament de força funcional i trail running. Certificada oficialment pel Govern de Catalunya (ROPEC 062645).
 
@@ -18,94 +18,94 @@ Laura Ramírez és entrenadora personal independent i guia de muntanya certifica
 - Guia Baixa i Mitjana Muntanya
 - Entrenadora Funcional
 
-## ✨ Características
+## ✨ Característiques
 
-- **🎨 Diseño UX Mejorado**: Experiencia de usuario intuitiva y visualmente agradable
-- **📱 Diseño Responsive**: Optimizado para todos los dispositivos (móvil, tablet, desktop)
-- **⚡ Performance Optimizada**: Carga rápida con animaciones fluidas
-- **🎭 Microinteracciones**: Feedback visual en cada interacción del usuario
-- **♿ Accesibilidad WCAG 2.1**: Navegación por teclado y lectores de pantalla
-- **📧 Formulario Inteligente**: Validación en tiempo real con iconos visuales
-- **🎯 Animaciones Suaves**: Transiciones CSS y JavaScript optimizadas
-- **🔄 Loading States**: Estados de carga claros en formularios y botones
-- **💾 Gestión de Clientes**: Almacenamiento automático en Formspree o Google Sheets
-- **🎨 Paleta Turquesa**: Colores modernos y profesionales
-- **🏷️ Badges de Credibilidad**: ROPEC, 50+ alumnos, contenido exclusivo
-- **📊 SEO Optimizado**: Configurado para máxima visibilidad en buscadores
+- **🎨 Disseny UX Millorat**: Experiència d'usuari intuïtiva i visualment agradable
+- **📱 Disseny Responsive**: Optimitzat per a tots els dispositius (mòbil, tauleta, escriptori)
+- **⚡ Rendiment Optimitzat**: Càrrega ràpida amb animacions fluides
+- **🎭 Microinteraccions**: Feedback visual en cada interacció de l'usuari
+- **♿ Accessibilitat WCAG 2.1**: Navegació per teclat i lectors de pantalla
+- **📧 Formulari Intel·ligent**: Validació en temps real amb icones visuals
+- **🎯 Animacions Suaus**: Transicions CSS i JavaScript optimitzades
+- **🔄 Estats de Càrrega**: Estats de càrrega clars en formularis i botons
+- **💾 Gestió de Clients**: Emmagatzematge automàtic a Formspree o Google Sheets
+- **🎨 Paleta Turquesa**: Colors moderns i professionals
+- **🏷️ Badges de Credibilitat**: ROPEC, 50+ alumnes, contingut exclusiu
+- **📊 SEO Optimitzat**: Configurat per a màxima visibilitat en cercadors
 
-## 🎯 Mejoras de UX Implementadas
+## 🎯 Millores de UX Implementades
 
-### 🖱️ Interactividad
-- **Efectos Ripple**: Animación de onda en botones al hacer clic
-- **Hover States**: Respuesta visual inmediata en todos los elementos interactivos
-- **Scroll Suave**: Navegación fluida entre secciones
-- **Header Dinámico**: Se oculta/muestra automáticamente al hacer scroll
+### 🖱️ Interactivitat
+- **Efectes Ripple**: Animació d'ona en botons al fer clic
+- **Estats Hover**: Resposta visual immediata en tots els elements interactius
+- **Scroll Suau**: Navegació fluida entre seccions
+- **Header Dinàmic**: S'amaga/mostra automàticament al fer scroll
 
-### ✅ Formulario de Contacto
-- **Validación en Tiempo Real**: Feedback instantáneo mientras escribes
-- **Iconos de Validación**: Checkmarks verdes y X rojas
-- **Contador de Caracteres**: Para el campo de mensaje
-- **Estado de Carga**: Spinner animado al enviar
-- **Efecto Confetti**: Celebración al enviar con éxito
-- **Mensajes Animados**: Éxito y error con animaciones
+### ✅ Formulari de Contacte
+- **Validació en Temps Real**: Feedback instantani mentre escrius
+- **Icones de Validació**: Checkmarks verds i X vermelles
+- **Comptador de Caràcters**: Per al camp de missatge
+- **Estat de Càrrega**: Spinner animat en enviar
+- **Efecte Confetti**: Celebració en enviar amb èxit
+- **Missatges Animats**: Èxit i error amb animacions
 
-### 🎨 Animaciones
-- **Parallax Sutil**: Imagen del hero con zoom suave
-- **Fade In Up**: Secciones aparecen al hacer scroll
-- **Badge Bounce**: Los badges rebotan sutilmente
-- **Button Pulse**: El botón principal pulsa para llamar la atención
-- **Smooth Transitions**: Todas las transiciones son fluidas (cubic-bezier)
+### 🎨 Animacions
+- **Parallax Subtil**: Imatge de l'hero amb zoom suau
+- **Fade In Up**: Les seccions apareixen al fer scroll
+- **Badge Bounce**: Els badges reboten subtilment
+- **Button Pulse**: El botó principal polsa per cridar l'atenció
+- **Smooth Transitions**: Totes les transicions són fluides (cubic-bezier)
 
-### ♿ Accesibilidad
-- **Navegación por Teclado**: Tab, Enter, Escape funcionan correctamente
-- **Focus Visible**: Borde claro en elementos enfocados
-- **ARIA Labels**: Etiquetas para lectores de pantalla
-- **Contraste WCAG 2.1**: Todos los textos cumplen nivel AA
-- **Skip Links**: Saltar al contenido principal
+### ♿ Accessibilitat
+- **Navegació per Teclat**: Tab, Enter, Escape funcionen correctament
+- **Focus Visible**: Borda clar en elements enfocats
+- **ARIA Labels**: Etiquetes per a lectors de pantalla
+- **Contrast WCAG 2.1**: Tots els textos compleixen el nivell AA
+- **Skip Links**: Saltar al contingut principal
 
 ### 📱 Responsive
-- **Mobile First**: Diseñado primero para móvil
-- **Touch Friendly**: Botones grandes y espaciados
-- **Viewport Optimizado**: Funciona en pantallas desde 320px
-- **Imágenes Adaptativas**: Se ajustan al tamaño de pantalla
+- **Mobile First**: Dissenyat primer per a mòbil
+- **Touch Friendly**: Botons grans i espaiats
+- **Viewport Optimitzat**: Funciona en pantalles des de 320px
+- **Imatges Adaptatives**: S'ajusten a la mida de la pantalla
 
-## 🚀 Tecnologías
+## 🚀 Tecnologies
 
-- **HTML5**: Estructura semántica y accesible
-- **CSS3**: Diseño moderno con variables CSS y flexbox/grid
-- **JavaScript Vanilla**: Sin dependencias, código limpio y eficiente
-- **Google Fonts**: Tipografías Montserrat y Open Sans
-- **GitHub Pages**: Hosting gratuito y confiable
+- **HTML5**: Estructura semàntica i accessible
+- **CSS3**: Disseny modern amb variables CSS i flexbox/grid
+- **JavaScript Vanilla**: Sense dependències, codi net i eficient
+- **Google Fonts**: Tipografies Montserrat i Open Sans
+- **Vercel**: Hosting professional amb funcions serverless
 
-## 📂 Estructura del Proyecto
+## 📂 Estructura del Projecte
 
 ```
 wild-fitness/
-├── index.html          # Página principal
-├── blog.html           # Página de blog
-├── styles.css          # Estilos CSS
+├── index.html          # Pàgina principal
+├── blog.html           # Pàgina de blog
+├── styles.css          # Estils CSS
 ├── script.js           # JavaScript
-├── CNAME              # Configuración de dominio personalizado
-├── FORMULARIO-CONTACTO.md  # Guía de configuración del formulario
-└── README.md          # Documentación
+├── CNAME              # Configuració de domini personalitzat
+├── CONFIGURACION-FORMULARIO-CONTACTO.md  # Guia de configuració del formulari
+└── README.md          # Documentació
 ```
 
-## 🌐 Despliegue
+## 🌐 Desplegament
 
 **Plataforma:** Vercel
-**Dominio:** wild-fitness.com
+**Domini:** wild-fitness.com
 
-El sitio se despliega automáticamente en Vercel cuando se hace push a la rama principal. Vercel proporciona:
-- ✅ Despliegues automáticos desde Git
-- ✅ Funciones serverless (API para envío de emails)
-- ✅ SSL automático y CDN global
-- ✅ Preview deployments para cada PR
+El lloc es desplega automàticament a Vercel quan es fa push a la branca principal. Vercel proporciona:
+- ✅ Desplegaments automàtics des de Git
+- ✅ Funcions serverless (API per a enviament d'emails)
+- ✅ SSL automàtic i CDN global
+- ✅ Preview deployments per a cada PR
 
-**📖 Guía completa:** Ver [`DESPLIEGUE-VERCEL.md`](DESPLIEGUE-VERCEL.md)
+**📖 Guia completa:** Veure [`DESPLIEGUE-VERCEL.md`](DESPLIEGUE-VERCEL.md)
 
-### Configuración DNS (Cloudflare)
+### Configuració DNS (Cloudflare)
 
-Registros DNS necesarios:
+Registres DNS necessaris:
 ```
 A @ 185.199.108.153
 A @ 185.199.109.153
@@ -117,151 +117,39 @@ CNAME www wild-fitness.com
 ### SSL/TLS (Cloudflare)
 
 - **Encryption Mode**: Full (strict)
-- **Always Use HTTPS**: Activado
+- **Always Use HTTPS**: Activat
 - **TLS Version**: 1.2+
-- **HSTS**: Habilitado
+- **HSTS**: Habilitat
 
-## 🎨 Paleta de Colores
+## 🎨 Paleta de Colors
 
-- **Primary Teal**: `#2d7d7d` (Verde azulado profundo)
-- **Secondary Turquoise**: `#3fb5b5` (Turquesa brillante)
-- **Accent Light**: `#5fcaca` (Turquesa claro)
+- **Primary Teal**: `#2d7d7d` (Verd blavós profund)
+- **Secondary Turquoise**: `#3fb5b5` (Turquesa brillant)
+- **Accent Light**: `#5fcaca` (Turquesa clar)
 - **Overlay**: `rgba(45, 125, 125, 0.75)` (Capa turquesa)
-- **Text**: `#1e293b` (Negro principal)
-- **Background**: `#f0f9f9` (Gris-turquesa muy claro)
+- **Text**: `#1e293b` (Negre principal)
+- **Background**: `#f0f9f9` (Gris-turquesa molt clar)
 
-## 📱 Secciones
+## 📱 Seccions
 
-1. **Hero Section**: Impacto visual con imagen de montaña y overlay turquesa
-2. **Badges de Credibilidad**: Certificación ROPEC, 50+ alumnos, contenido exclusivo
-3. **Botones de Acción**: Prova Gratuïta y WhatsApp directo
-4. **Features**: 4 características principales del servicio
-5. **Programas**: 3 niveles de entrenamiento con precios
-6. **Sobre Mí**: Historia del entrenador y certificaciones
-7. **Testimonios**: 3 historias reales de clientes
-8. **Galería**: Imágenes de entrenamiento
-9. **Blog Preview**: Últimos artículos del blog
-10. **📧 Formulario de Contacto Completo**: Con gestión de datos externa
-11. **CTA**: Llamada a la acción para consulta gratuita
-12. **Footer**: Links, contacto y legal
+1. **Hero Section**: Impacte visual amb imatge de muntanya i overlay turquesa
+2. **Badges de Credibilitat**: Certificació ROPEC, 50+ alumnes, contingut exclusiu
+3. **Botons d'Acció**: Prova Gratuïta i WhatsApp directe
+4. **Característiques**: 4 característiques principals del servei
+5. **Programes**: 3 nivells d'entrenament amb preus
+6. **Sobre Mi**: Història de l'entrenadora i certificacions
+7. **Testimonis**: 3 històries reals de clients
+8. **Galeria**: Imatges d'entrenament
+9. **Blog Preview**: Últims articles del blog
+10. **📧 Formulari de Contacte Complet**: Amb gestió de dades externa
+11. **CTA**: Crida a l'acció per a consulta gratuïta
+12. **Peu de pàgina**: Links, contacte i legal
 
-## 🔧 Personalización
+## 🔧 Personalització
 
-### 📧 Configurar el Formulario de Contacto
+### 📧 Configurar el Formulari de Contacte
 
-**Estado actual:** ✅ **Sistema completo implementado con Resend + Supabase**
-
-El formulario de contacto está configurado para:
-1. 💾 **Guardar datos en Supabase** - Gestión de contactos en base de datos
-2. 📧 **Enviar email al usuario** - Confirmación automática vía Resend
-3. 🔔 **Notificar al admin** - Email a info@wild-fitness.com con los datos
-
-**📖 Guías de configuración:**
-- **Despliegue en Vercel:** [`DESPLIEGUE-VERCEL.md`](DESPLIEGUE-VERCEL.md) - ⭐ Opción 1
-- **Despliegue con Cloudflare Workers:** [`DESPLIEGUE-CLOUDFLARE-WORKERS.md`](DESPLIEGUE-CLOUDFLARE-WORKERS.md) - ⭐ Opción 2 (Alternativa)
-- **Configuración completa:** [`CONFIGURACION-FORMULARIO-CONTACTO.md`](CONFIGURACION-FORMULARIO-CONTACTO.md)
-- **DNS de Cloudflare:** [`DNS-CLOUDFLARE-RESEND.md`](DNS-CLOUDFLARE-RESEND.md)
-
-**Opciones de despliegue:**
-
-### Opción 1: Vercel (Más fácil)
-1. ✅ Supabase ya está configurado
-2. 🔑 Obtener API Key de Resend
-3. ⚠️ Configurar DNS en Cloudflare (DKIM, SPF, MX)
-4. 🚀 Agregar `RESEND_API_KEY` en Vercel Environment Variables
-5. 🧪 Desplegar y probar
-
-### Opción 2: Cloudflare Workers (Más rápido)
-1. ✅ Supabase ya está configurado
-2. 🔑 Obtener API Key de Resend
-3. ⚠️ Configurar DNS en Cloudflare (DKIM, SPF, MX)
-4. 📦 Instalar Wrangler CLI: `npm install -g wrangler`
-5. 🚀 Desplegar Worker: `cd workers/contact-form && wrangler deploy`
-6. 🔧 Configurar URL en `config.js`
-
-### Actualizar Información de Contacto
-
-Edita estos valores en `index.html`:
-
-```html
-<!-- Email -->
-<a href="mailto:TU_EMAIL@wild-fitness.com">TU_EMAIL@wild-fitness.com</a>
-
-<!-- WhatsApp -->
-<a href="https://wa.me/34TU_NUMERO">+34 XXX XXX XXX</a>
-```
-
-### Cambiar Precios
-
-En la sección de programas, actualiza:
-
-```html
-<span class="price-amount">€XX</span>
-```
-
-### Agregar Imágenes Reales
-
-Reemplaza los placeholders con imágenes reales:
-
-1. Crea carpeta `/images`
-2. Agrega tus fotos
-3. Actualiza las rutas en CSS/HTML
-
-## 📊 SEO
-
-- **Title**: Wild Fitness - Entrenamiento de Montaña Profesional
-- **Description**: Programas de entrenamiento para montaña, trail running y fitness outdoor
-- **Keywords**: entrenamiento montaña, trail running, fitness outdoor, hiking training
-
-## 🔒 Seguridad
-
-- HTTPS forzado via Cloudflare
-- Sin dependencias externas vulnerables
-- Validación de formularios
-- Headers de seguridad configurados
-
-## 📈 Analytics (Opcional)
-
-Para agregar Google Analytics, añade antes de `</head>`:
-
-```html
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID');
-</script>
-```
-
-## 🚀 Próximas Mejoras
-
-- [x] Formulario de contacto completo con BD externa
-- [x] Diseño turquesa/teal moderno
-- [x] Hero section mejorado con badges
-- [ ] Blog de consejos de entrenamiento ✅ (Implementado)
-- [ ] Sistema de reservas online
-- [ ] Área de cliente privada
-- [ ] Calculadora de nivel fitness
-- [ ] Integración con Strava
-- [ ] Tienda online de planes
-- [ ] CRM integrado para gestión de clientes
-
-## 📝 Licencia
-
-© 2024 Wild Fitness. Todos los derechos reservados.
-
-## 👤 Contacto
-
-- **Email**: info@wildbreathing.com
-- **Web**: https://wildbreathing.com
-- **WhatsApp**: +34 640 915 772
-- **Bizum**: 640 915 772
-- **Ubicación**: Girona & Barcelona
+Veure [`CONFIGURACION-FORMULARIO-CONTACTO.md`](CONFIGURACION-FORMULARIO-CONTACTO.md) per a instruccions detallades sobre com configurar l'enviament de formularis a Google Sheets o Formspree.
 
 ---
-
-**Hecho con 💚 para los amantes de la montaña**
-
-🏔️ **Wild Fitness** - Laura Ramírez | Entrenadora Personal & Guia de Muntanya
+Desenvolupat amb ❤️ per Wild Fitness
