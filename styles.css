@@ -3334,22 +3334,25 @@ input[type="checkbox"]:checked + label .checkbox-check {
 }
 
 .specialty-icon {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     margin-bottom: var(--spacing-md);
     color: var(--primary-color);
     background: var(--bg-light);
-    padding: 12px;
-    border-radius: var(--radius-md);
+    padding: 16px;
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: var(--transition);
+    border: 3px solid transparent;
 }
 
 .specialty-card:hover .specialty-icon {
     background: var(--primary-color);
     color: white;
+    transform: scale(1.1) rotate(5deg);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .specialty-icon svg {
