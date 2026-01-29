@@ -2,7 +2,7 @@
 # RESEND API (Envío de emails)
 # ==============================================
 # Obtén tu API Key en: https://resend.com/api-keys
-RESEND_API_KEY=re_TU_API_KEY_AQUI
+RESEND_API_KEY=re_PqB74G7k_LannUNVYVZddLQUJhxJKZVBm
 
 # Email remitente (FROM)
 # Opción 1 (RECOMENDADO): Usa tu dominio verificado
