@@ -4,7 +4,7 @@ export const config = {
 };
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const FROM_EMAIL = 'Wild Fitness <noreply@wild-fitness.com>';
+const FROM_EMAIL = 'Wild Fitness <hola@wild-fitness.com>';
 const ADMIN_EMAIL = 'info@wild-fitness.com';
 
 const EmailTemplates = {
