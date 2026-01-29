@@ -4,7 +4,7 @@ export const config = {
 };
 
 const CONFIG = {
-  fromEmail: 'Wild Fitness <noreply@wild-fitness.com>',
+  fromEmail: 'Wild Fitness <hola@wild-fitness.com>',
   adminEmail: 'info@wild-fitness.com',
   resendApiUrl: 'https://api.resend.com/emails'
 };
