@@ -1758,6 +1758,10 @@ a, button, .feature-item, .gallery-item img {
         z-index: 100;
         overflow-y: auto;
     }
+
+    .nav-list.active {
+        transform: translateX(0);
+    }
     
     /* Asegurar que los li sean visibles */
     .nav-list li {
